@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "@evilmartians/lefthook": "^1.1.1",
-    "lerna": "^5.4.3"
+    "lerna": "^5.4.3",
+    "react-router-dom": "^6.10.0"
   },
   "dependencies": {
     "yarn": "^1.22.19"

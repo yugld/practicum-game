@@ -1,18 +1,18 @@
-import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 
-function App() {
-  useEffect(() => {
-    const fetchServerData = async () => {
-      const url = `http://localhost:${__SERVER_PORT__}`
-      const response = await fetch(url)
-      const data = await response.json()
-      console.log(data)
-    }
+import AuthRoot from './pages/auth';
 
-    fetchServerData()
-  }, [])
-  return <div className="App">Вот тут будет жить ваше приложение :)</div>
+function App() {
+  return (
+    <main className="App">
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={ <AuthRoot /> }></Route>
+      </Routes>
+      </BrowserRouter>
+    </main>
+  );
 }
 
 export default App
