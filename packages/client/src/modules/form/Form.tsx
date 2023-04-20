@@ -5,7 +5,7 @@ interface IFormProps {
   title: string, 
   body: ReactNode, 
   actions: ReactNode,
-  onSubmit: FormEvent<HTMLFormElement>,
+  onSubmit: (e: FormEvent) => void,
 }
 
 const Form: FC<IFormProps> = (props: IFormProps) => {
