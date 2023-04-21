@@ -1,4 +1,4 @@
-import './App.css'
+import './App.less'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/login/Login'
 import MainHeader from './layout/header/MainHeader'
