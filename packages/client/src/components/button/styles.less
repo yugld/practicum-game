@@ -1,3 +1,19 @@
-.button{
-  border: 1px solid red;
+@import '../../assets/base/variables.less';
+
+.button {
+  height: 45px;
+  border-radius: 30px;
+  padding: 0 30px;
+  background-color: @ui-login-page-background;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten(@ui-login-page-background, 10%);
+  }
+
+  span {
+    font-size: 18px;
+    color: white;
+  }
 }
