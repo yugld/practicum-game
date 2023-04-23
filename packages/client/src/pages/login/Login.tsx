@@ -4,6 +4,7 @@ import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
 
 import './styles.less';
+import Link from '../../components/link';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -16,7 +17,6 @@ const Login = () => {
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const value = (e.currentTarget as HTMLInputElement).value;
     const fieldName = (e.currentTarget as HTMLInputElement).id;
-    console.log(value);
 
     if (fieldName === 'username') {
       setUsername(value);
@@ -34,19 +34,22 @@ const Login = () => {
         body={
           <div>
             <Input
-              id='username'
+              id="username"
               placeholder="Введите логин"
               onChange={handleChange}
               value={username} />
             <Input
-              id='password'
+              id="password"
               placeholder="Введите пароль"
               onChange={handleChange}
               value={password} />
           </div>
         }
         actions={
-          <Button text={<span>Авторизация</span>} />
+          <>
+            <Button text={<span>Авторизация</span>} />
+            <Link href="/registration" text="Нет аккаунта?"/>
+          </>
         }
       />
     </main>
