@@ -1,5 +1,5 @@
+import { ReactNode } from 'react'
 import './styles.less';
-import {  ReactNode } from 'react'
 
 export function Form(props: {title: string, body: ReactNode, actions: ReactNode}){
   return <div className="form">

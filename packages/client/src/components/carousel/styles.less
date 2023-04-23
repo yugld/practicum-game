@@ -1,0 +1,27 @@
+@import '../../assets/base/colors.less';
+
+.carousel {
+    max-width: 20%;
+    padding: 20px 60px;
+    background-color: fade(@ui-color[@orange][@9], 50%);
+    border-radius: 4px;
+
+    &__slide {
+        border-radius: 4px;
+
+        &_info {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: @ui-color[@gray][@1];
+        }
+    }
+}
+
+.slick-slide img {
+    width: 200px;
+    margin: auto;
+}
