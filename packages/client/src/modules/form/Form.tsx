@@ -1,5 +1,5 @@
-import './styles.less';
 import {  FC, FormEvent, ReactNode } from 'react'
+import './styles.less';
 
 interface IFormProps {
   title: string, 
