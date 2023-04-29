@@ -14,6 +14,11 @@ const basicTheme = createTheme({
                 }
             }
         },
+        MuiTextField: {
+            root: {
+                marginBottom: '40px',
+            }
+        }
     },
 });
 

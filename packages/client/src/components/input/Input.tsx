@@ -1,3 +1,5 @@
+import TextField from '@material-ui/core/TextField';
+
 import { ChangeEventHandler, FC } from 'react';
 import './styles.less';
 
@@ -6,15 +8,22 @@ interface IInputProps {
   placeholder: string,
   onChange: ChangeEventHandler<HTMLInputElement>,
   value: string,
+  isError: boolean,
+  helperText: string,
 }
 
 const Input: FC<IInputProps> = (props: IInputProps) => {
   return (
-    <input id={props.id} 
+    <TextField
+      error={props.isError}
+      id={props.id}
       className="input" 
-      placeholder={props.placeholder} 
+      placeholder={props.placeholder}
+      value={props.value}
+      helperText={props.helperText}
+      variant="outlined"
       onChange={props.onChange}
-      value={props.value}/>
+    />
   );
 }
 
