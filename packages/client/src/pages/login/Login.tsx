@@ -1,4 +1,4 @@
-import { Button } from '../../components/button/Button'
+import { CustomizedButton } from '../../components/button/Button'
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
@@ -47,7 +47,7 @@ const Login = () => {
         }
         actions={
           <>
-            <Button text={<span>Авторизация</span>} />
+            <CustomizedButton text={<span>Авторизация</span>} />
             <Link href="/registration" text="Нет аккаунта?"/>
           </>
         }
