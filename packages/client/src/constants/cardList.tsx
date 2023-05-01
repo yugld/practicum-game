@@ -1,52 +1,60 @@
-import princessCard from "../assets/images/card_princess.jpg"
+import { CardType } from '../pages/game/types'
 
-export const cardList = [
+export const cardList: CardType[] = [
     {
         value: 1,
+        count: 5,
         title: '1: Стражница',
-        imgSrc: princessCard,
+        imgSrc: (theme = 'light') => `/src/assets/images/1-${theme}.png`,
         text: 'Выберите соперника и назовите значение карты, отличное от 1. Если у этого игрока на руке есть карта с названным значением, он выбывает из раунда.'
     },
     {
         value: 2,
+        count:2,
         title: '2: Священник',
-        imgSrc: princessCard,
-        text: 'Можете посмотреть карту любого из соперников.'
+        imgSrc: (theme = 'light') => `/src/assets/images/2-${theme}.png`,
+        text: 'Можете посмотреть карту соперника.'
     },
     {
         value: 3,
+        count: 2,
         title: '3: Барон',
-        imgSrc: princessCard,
-        text: 'Выберите соперника и тайно сравните карты у вас на руках. Обладатель карты с меньшим значением оказывается выбывает из раунда.'
+        imgSrc: (theme = 'light') => `/src/assets/images/3-${theme}.png`,
+        text: 'Сравните с соперником карты на руках. Обладатель карты с меньшим значением оказывается выбывает из раунда.'
     },
     {
         value: 4,
+        count: 2,
         title: '4: Служанка',
-        imgSrc: princessCard,
+        imgSrc: (theme = 'light') => `/src/assets/images/4-${theme}.png`,
         text: 'Вы до начала своего следующего хода защищены от всех свойств карт соперников.'
     },
     {
         value: 5,
+        count: 2,
         title: '5: Принц',
-        imgSrc: princessCard,
-        text: 'Выберите любого игрока (можно и себя). Этот игрок сбрасывает с руки карту, не применяя её свойство, и берёт новую.'
+        imgSrc: (theme = 'light') => `/src/assets/images/5-${theme}.png`,
+        text: 'Противник сбрасывает с руки карту, не применяя её свойство, и берёт новую.'
     },
     {
         value: 6,
+        count: 1,
         title: '6: Король',
-        imgSrc: princessCard,
-        text: 'Выберите соперника и обменяйтесь с ним картами.'
+        imgSrc: (theme = 'light') => `/src/assets/images/6-${theme}.png`,
+        text: 'Обменяйтесь с ним картами с соперником.'
     },
     {
         value: 7,
+        count: 1,
         title: '7: Графиня',
-        imgSrc: princessCard,
+        imgSrc: (theme = 'light') => `/src/assets/images/7-${theme}.png`,
         text: 'Вы должны сбросить эту карту, если она оказалась у вас на руках вместе с королем или принцем.'
     },
     {
         value: 8,
+        count: 1,
         title: '8: Принцесса',
-        imgSrc: princessCard,
+        imgSrc: (theme = 'light') => `/src/assets/images/8-${theme}.png`,
         text: 'Если вы сбрасываете эту карту, то выбываете из раунда.'
     }
 ]

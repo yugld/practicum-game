@@ -3,8 +3,15 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './assets/styles.css'
 
+// const ThemeContext = React.createContext('light');
+
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  // <React.StrictMode>
+  //   <App />
+  // </React.StrictMode>
+  // <ThemeContext.Provider value="light">
+  //   <App />
+  // </ThemeContext.Provider>
+  <App />
 )
