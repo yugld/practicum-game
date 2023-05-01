@@ -20,21 +20,24 @@ export default function EditPassword() {
   }
   const handleClose = () => {
     setOpen(false)
+    setOldPassword('')
+    setNewPassword('')
   }
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log({ newPassword })
     userApi
       .editPassword({ newPassword, oldPassword } as ChangePasswordData)
       .then(() => {
-        console.log(`change password ${newPassword}`)
+        alert(`change password ${newPassword}`)
         handleClose()
       })
       .catch(({ response }) => {
         const reason = response?.data?.reason
         if (reason) {
-          console.log(reason)
+          alert(reason)
+          handleClose()
         }
       })
   }
@@ -50,7 +53,7 @@ export default function EditPassword() {
               margin="dense"
               onChange={e => setOldPassword(e.target.value)}
               value={oldPassword}
-              type="password"
+              type="string"
               fullWidth
               required
             />
@@ -59,13 +62,13 @@ export default function EditPassword() {
               margin="dense"
               onChange={e => setNewPassword(e.target.value)}
               value={newPassword}
-              type="password"
+              type="string"
               fullWidth
               required
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Омена</Button>
+            <Button onClick={handleClose}>Отмена</Button>
             <Button type="submit">Сохранить</Button>
           </DialogActions>
         </form>

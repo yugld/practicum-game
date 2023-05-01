@@ -148,42 +148,47 @@ const Profile = () => {
                             onChange={e => setFirstName(e.target.value)}
                             value={first_name}
                             fullWidth
-                            required></TextField>
+                            required
+                            sx={{ mb: 1 }}/>
                         <FormLabel>Фамилия</FormLabel>
                         <TextField
                             type="text"
                             onChange={e => setSecondName(e.target.value)}
                             value={second_name}
                             fullWidth
-                            required></TextField>
+                            required
+                            sx={{ mb: 1 }}/>
                         <FormLabel>Отображаемое имя</FormLabel>
                         <TextField
                             type="text"
                             onChange={e => setDisplayName(e.target.value)}
                             value={display_name}
                             fullWidth
-                            required></TextField>
+                            required
+                            sx={{ mb: 1 }}/>
                         <FormLabel>Логин</FormLabel>
                         <TextField
                             type="text"
                             onChange={e => setLogin(e.target.value)}
                             value={login}
                             fullWidth
-                            required></TextField>
+                            required
+                            sx={{ mb: 1 }}/>
                         <FormLabel>E-mail</FormLabel>
                         <TextField
                             type="text"
                             onChange={e => setEmail(e.target.value)}
                             value={email}
                             fullWidth
-                            required></TextField>
+                            required
+                            sx={{ mb: 1 }}/>
                         <FormLabel>Телефон</FormLabel>
                         <TextField
                             type="tel"
                             onChange={e => setPhone(e.target.value)}
                             value={phone}
                             fullWidth
-                            required></TextField>
+                            required/>
                     </div>
                     <div className="profile__buttons">
                         <Button type="submit">Сохранить данные</Button>
