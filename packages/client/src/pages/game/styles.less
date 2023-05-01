@@ -1,0 +1,72 @@
+@import '../../assets/base/colors.less';
+@import '../../assets/base/variables.less';
+
+.game-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    color: @ui-color[@orange][@9];
+    height: 100%;
+
+    &__description {
+        max-width: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border-radius: 4px;
+        background-color: fade(@ui-color[@orange][@1], 70%);
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        width: 40%;
+    }
+
+    &__dialog {
+        min-width: 500px;
+
+        &_footer {
+            display: flex;
+            gap: 20px;
+            padding: 16px 24px;
+        }
+    }
+}
+
+.button-filled {
+    height: 45px;
+    border-radius: 30px;
+    padding: 0 30px;
+    background-color: @ui-page-background;
+    width: 100%;
+    font-size: 18px;
+    color: white;
+    text-transform: none;
+    cursor: pointer;
+  
+    &:hover {
+        background-color: lighten(@ui-page-background, 10%);
+    }
+}
+
+.button-text {
+    height: 45px;
+    padding: 0 10px;
+    background-color: transparent;
+    color: @ui-color[@orange][@9];
+    width: 100%;
+    font-size: 18px;
+    text-transform: none;
+    cursor: pointer;
+
+    &:hover {
+        color: lighten(@ui-color[@orange][@9], 10%);
+        background-color: transparent;
+    }
+}

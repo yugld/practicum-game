@@ -24,4 +24,4 @@ export const Carousel = () => {
             </Slider>
         </div>
     );
-  };
+};
