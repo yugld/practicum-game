@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import Button from '@mui/material/Button';
-import Input from '@mui/material/Input';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import { useNavigate } from 'react-router-dom';
+import {
+    Button,
+    Input,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
+} from '@mui/material';
 import { useFlag } from '../../hooks/useFlag';
-import { DialogProps } from '../../typings/dialog.types';
 
 import "./styles.less"
 import "../../assets/base/index.less"
@@ -14,6 +16,7 @@ import "../../assets/base/index.less"
 export const GameStart = () => {
     const [visible, openDialog, closeDialog] = useFlag(false);
     const [inputValue, setInputValue] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         console.log(inputValue);
@@ -25,72 +28,76 @@ export const GameStart = () => {
         setInputValue('');
     }
 
-    const initialDialogState: DialogProps = {
-        id: '',
-        title: '',
-        submitText: ''
-    }
-
-    const [dialog, setDialog] = useState(initialDialogState);
-
-    const openNewGameDialog = () => {
-        setDialog({
-            id: 'new',
-            title: 'Введите название комнаты',
-            submitText: 'Создать комнату'
-        });
-
-        openDialog();
-    }
-
-    const openJoinGameDialog = () => {
-        setDialog({
-            id: 'join',
-            title: 'Введите id комнаты',
-            submitText: 'Войти в комнату'
-        });
-
-        openDialog();
-    }
-
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
     }
 
+    const goToRoom = (id: string) => {
+        navigate(`/rooms/${id}`)
+    }
+
     return (
         <div className="page game-page">
-            <div className="game-page__description">
-                <h3>Игровой процесс</h3>
-                <p>
-                    У каждого игрока на руках находится по одной карте.
-                    Игроки по очереди берут еще по одной карте и разыгрывают одну из своих двух карт, применяя её свойство.
-                    Если вас вынуждают сбросить карту (например, эффектом Принца), ее действие не разыгрывается.
-                    Все сыгранные и сброшенные карты отображаются в верхней части экрана.
-                </p>
-                <p>
-                    Игрок, оставшийся с картой с наибольшим номером в конце или выбивший остальных игроков, выигрывает раунд.
-                    Если несколько игроков в конце раунда имеют на руках карты с одинаковым значением, он выбывают.
-                    Чтобы победить во всей игре, для 2 игроков необходимо выиграть 7 раундов, для 3-4 игроков - 4 раунда.
-                </p>
+            <div className="game-page__wrapper">
+                <div className="game-page__container">
+                    <div className="game-page__description">
+                        <h3>Игровой процесс</h3>
+                        <p>
+                            У каждого игрока на руках находится по одной карте.
+                            Игроки по очереди берут еще по одной карте и разыгрывают одну из своих двух карт, применяя её свойство.
+                            Если вас вынуждают сбросить карту (например, эффектом Принца), ее действие не разыгрывается.
+                            Все сыгранные и сброшенные карты отображаются в верхней части экрана.
+                        </p>
+                        <p>
+                            Игрок, оставшийся с картой с наибольшим номером в конце или выбивший остальных игроков, выигрывает раунд.
+                            Если несколько игроков в конце раунда имеют на руках карты с одинаковым значением, он выбывают.
+                            Чтобы победить во всей игре, для 2 игроков необходимо выиграть 7 раундов, для 3-4 игроков - 4 раунда.
+                        </p>
 
-                <h3>Другие детали</h3>
-                <p>
-                    При игре с 3-4 игроками в начале каждого раунда из колоды взакрытую сбрасывается случайная карта.
-                    При игре с 2 игроками в каждом раунде 3 дополнительные карты сбрасываются рубашкой вверх.
-                </p>
-            </div>
-            <div className="game-page__buttons">
-                <Button className="button-filled" onClick={openNewGameDialog}>Начать новую игру</Button>
-                <Button className="button-filled" onClick={openJoinGameDialog}>Присоединиться к игре</Button>
+                        <h3>Другие детали</h3>
+                        <p>
+                            При игре с 3-4 игроками в начале каждого раунда из колоды взакрытую сбрасывается случайная карта.
+                            При игре с 2 игроками в каждом раунде 3 дополнительные карты сбрасываются рубашкой вверх.
+                        </p>
+                    </div>
+
+                    <Button className="game-page__button button-filled" onClick={openDialog}>Начать новую игру</Button>
+                </div>
+
+                <div className="game-page__rooms">
+                    <h3>Доступные комнаты</h3>
+                    <div className="game-page__room">
+                        <p>First test room</p>
+                        <Button
+                            className="game-page__button-small button-filled"
+                            onClick={() => goToRoom('1')}
+                        >
+                            Войти
+                        </Button>
+                    </div>
+                    <div className="game-page__room" id='2'>
+                        <p>Second test room</p>
+                        <Button
+                            className="game-page__button-small button-filled"
+                            onClick={() => goToRoom('2')}
+                        >
+                            Войти
+                        </Button>
+                    </div>
+                </div>
             </div>
 
             <Dialog open={visible} onClose={handleClose} maxWidth='md'>
-                <DialogTitle>{dialog.title}</DialogTitle>
+                <DialogTitle>Введите название комнаты</DialogTitle>
                 <DialogContent className='game-page__dialog'>
-                    <Input onChange={onInputChange} autoFocus />
+                    <Input
+                        className='game-page__dialog_input'
+                        onChange={onInputChange}
+                        autoFocus
+                    />
                 </DialogContent>
                 <DialogActions className='game-page__dialog_footer'>
-                    <Button className='button-filled' onClick={handleSubmit}>{dialog.submitText}</Button>
+                    <Button className='button-filled' onClick={handleSubmit}>Создать комнату</Button>
                     <Button className='button-text' onClick={handleClose}>Отмена</Button>
                 </DialogActions>
             </Dialog>

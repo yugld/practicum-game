@@ -1,50 +1,26 @@
 @import '../../assets/base/colors.less';
 @import '../../assets/base/variables.less';
 
-.button-filled {
-    height: 45px;
-    border-radius: 30px;
-    padding: 0 30px;
-    background-color: @ui-page-background;
-    width: 100%;
-    font-size: 18px;
-    color: white;
-    text-transform: none;
-    cursor: pointer;
-  
-    &:hover {
-        background-color: lighten(@ui-page-background, 10%);
-    }
-}
-
-.button-text {
-    height: 45px;
-    padding: 0 10px;
-    background-color: transparent;
-    color: @ui-color[@orange][@9];
-    width: 100%;
-    font-size: 18px;
-    text-transform: none;
-    cursor: pointer;
-
-    &:hover {
-        color: lighten(@ui-color[@orange][@9], 10%);
-        background-color: transparent;
-    }
-}
-
-.game-page {
+.room-page {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     color: @ui-color[@orange][@9];
     height: 100%;
+    gap: 100px;
 
-    &__wrapper {
+    &__header {
+        width: 50%;
         display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 100px;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        &-buttons {
+            width: 70%;
+            display: flex;
+            gap: 30px;
+        }
     }
 
     &__container {
