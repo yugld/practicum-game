@@ -15,10 +15,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        math: "always",
+        math: 'always',
         relativeUrls: true,
-        javascriptEnabled: true
+        javascriptEnabled: true,
       },
     },
-  }
+  },
 })
