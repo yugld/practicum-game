@@ -1,23 +1,27 @@
-import { Theme, createTheme } from '@material-ui/core/styles';
+import { Theme, createTheme } from '@mui/material/styles';
 
 const basicTheme = createTheme({
-    overrides: {
+    components: {
         MuiButton: {
-            root: {
-                borderRadius: '30px',
-                textTransform: 'none',
-            },
-            containedPrimary: {
-                backgroundColor: '#873800',
-                "&:hover": {
-                    backgroundColor: '#ba4d00',
+            styleOverrides: {
+                root: {
+                    borderRadius: '30px',
+                    textTransform: 'none',
+                },
+                containedPrimary: {
+                    backgroundColor: '#873800',
+                    "&:hover": {
+                        backgroundColor: '#ba4d00',
+                    }
                 }
-            }
+            },
         },
         MuiTextField: {
-            root: {
-                marginBottom: '40px',
-            }
+            styleOverrides: {
+                root: {
+                    marginBottom: '40px',
+                }
+            },
         }
     },
 });

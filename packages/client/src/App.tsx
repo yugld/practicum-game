@@ -9,7 +9,7 @@ import GameRules from './pages/gameRules/GameRules'
 import Game from './pages/game/Game'
 import Home from './pages/home/Home'
 import './App.less'
-import { ThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
 
 function App() {
