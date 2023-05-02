@@ -23,50 +23,12 @@
         }
     }
 
-    &__container {
-        max-width: 50%;
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        justify-content: center;
-        align-items: center;
-    }
-
-    &__description {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        padding: 20px;
+    &__players {
+        width: 30%;
+        padding: 20px 40px;
         border-radius: 4px;
         background-color: fade(@ui-color[@orange][@1], 70%);
-    }
-
-    &__rooms {
-        width: 20%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        padding: 20px;
-        border-radius: 4px;
-        background-color: fade(@ui-color[@orange][@1], 70%);
-    }
-
-    &__room {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 20px;
-    }
-
-    &__button {
-        width: 300px;
-
-        &-small {
-            width: 100px;
-        }
+        list-style-type: decimal;
     }
 
     &__dialog {

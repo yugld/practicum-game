@@ -1,6 +1,14 @@
 import princessCard from "../assets/images/card_princess.jpg"
 
-export const cardList = [
+export type Card = {
+    value: number,
+    title: string,
+    imgSrc: string,
+    text: string,
+    count: number
+}
+
+export const cardList: Card[] = [
     {
         value: 1,
         title: '1: Стражница',
