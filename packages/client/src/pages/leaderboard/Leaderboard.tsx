@@ -1,3 +1,3 @@
 export default function Leaderboard() {
-    return <h1>Страница лидерборда</h1>;
+  return <h1>Страница лидерборда</h1>
 }
