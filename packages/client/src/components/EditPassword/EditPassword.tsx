@@ -8,12 +8,25 @@ import {
   Dialog
 } from '@mui/material'
 import { userApi } from '../../api/userApi'
-import { ChangePasswordData } from '../../api/types'
+import { ChangeEvent, useState } from 'react'
 
 export default function EditPassword() {
   const [open, setOpen] = React.useState(false)
-  const [oldPassword, setOldPassword] = React.useState('')
-  const [newPassword, setNewPassword] = React.useState('')
+  const [oldPassword, setOldPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = (e.currentTarget as HTMLInputElement).value
+    const fieldName = (e.currentTarget as HTMLInputElement).id
+    switch (fieldName) {
+        case 'oldPassword':
+          setOldPassword(value)
+            break;
+        case 'newPassword':
+          setNewPassword(value)
+            break;
+    }
+}
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -28,7 +41,7 @@ export default function EditPassword() {
     event.preventDefault()
     console.log({ newPassword })
     userApi
-      .editPassword({ newPassword, oldPassword } as ChangePasswordData)
+      .editPassword({ newPassword, oldPassword })
       .then(() => {
         alert(`change password ${newPassword}`)
         handleClose()
@@ -51,8 +64,9 @@ export default function EditPassword() {
             <FormLabel>Старый пароль</FormLabel>
             <TextField
               margin="dense"
-              onChange={e => setOldPassword(e.target.value)}
+              onChange={handleChange}
               value={oldPassword}
+              id='oldPassword'
               type="string"
               fullWidth
               required
@@ -60,8 +74,9 @@ export default function EditPassword() {
             <FormLabel>Новый пароль</FormLabel>
             <TextField
               margin="dense"
-              onChange={e => setNewPassword(e.target.value)}
+              onChange={handleChange}
               value={newPassword}
+              id='newPassword'
               type="string"
               fullWidth
               required

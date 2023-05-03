@@ -1,6 +1,5 @@
-import { ChangeEventHandler, useEffect, useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TUserOmit } from '../../api/types'
 import { userApi } from '../../api/userApi'
 import { Button, TextField, Avatar, FormControl, FormLabel, IconButton } from '@mui/material'
 import EditPassword from '../../components/EditPassword/EditPassword'
@@ -18,7 +17,7 @@ const Profile = () => {
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         userApi
             .editUser({
@@ -28,7 +27,7 @@ const Profile = () => {
                 login,
                 email,
                 phone,
-            } as TUserOmit)
+            })
             .then(() => {
                 console.log('Change userData')
             })
@@ -39,6 +38,31 @@ const Profile = () => {
                     console.log(reason)
                 }
             })
+    }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = (e.currentTarget as HTMLInputElement).value
+        const fieldName = (e.currentTarget as HTMLInputElement).id
+        switch (fieldName) {
+            case 'first_name':
+                setFirstName(value)
+                break;
+            case 'second_name':
+                setSecondName(value)
+                break;
+            case 'display_name':
+                setDisplayName(value)
+                break;
+            case 'login':
+                setLogin(value)
+                break;
+            case 'email':
+                setEmail(value)
+                break;
+            case 'phone':
+                setPhone(value)
+                break;
+        }
     }
 
     const onLogout = () => {
@@ -145,50 +169,56 @@ const Profile = () => {
                         <FormLabel>Имя</FormLabel>
                         <TextField
                             type="text"
-                            onChange={e => setFirstName(e.target.value)}
+                            onChange={handleChange}
                             value={first_name}
+                            id='first_name'
                             fullWidth
                             required
-                            sx={{ mb: 1 }}/>
+                            sx={{ mb: 1 }} />
                         <FormLabel>Фамилия</FormLabel>
                         <TextField
                             type="text"
-                            onChange={e => setSecondName(e.target.value)}
+                            onChange={handleChange}
                             value={second_name}
+                            id='second_name'
                             fullWidth
                             required
-                            sx={{ mb: 1 }}/>
+                            sx={{ mb: 1 }} />
                         <FormLabel>Отображаемое имя</FormLabel>
                         <TextField
                             type="text"
-                            onChange={e => setDisplayName(e.target.value)}
+                            onChange={handleChange}
                             value={display_name}
+                            id='display_name'
                             fullWidth
                             required
-                            sx={{ mb: 1 }}/>
+                            sx={{ mb: 1 }} />
                         <FormLabel>Логин</FormLabel>
                         <TextField
                             type="text"
-                            onChange={e => setLogin(e.target.value)}
+                            onChange={handleChange}
                             value={login}
+                            id='login'
                             fullWidth
                             required
-                            sx={{ mb: 1 }}/>
+                            sx={{ mb: 1 }} />
                         <FormLabel>E-mail</FormLabel>
                         <TextField
                             type="text"
                             onChange={e => setEmail(e.target.value)}
                             value={email}
+                            id='email'
                             fullWidth
                             required
-                            sx={{ mb: 1 }}/>
+                            sx={{ mb: 1 }} />
                         <FormLabel>Телефон</FormLabel>
                         <TextField
-                            type="tel"
+                            type='tel'
                             onChange={e => setPhone(e.target.value)}
                             value={phone}
+                            id='tel'
                             fullWidth
-                            required/>
+                            required />
                     </div>
                     <div className="profile__buttons">
                         <Button type="submit">Сохранить данные</Button>
