@@ -7,9 +7,10 @@ import Profile from './pages/profile/Profile'
 import Leaderboard from './pages/leaderboard/Leaderboard'
 import Forum from './pages/forum/Forum'
 import GameRules from './pages/gameRules/GameRules'
-import { GameStart } from './pages/game/GameStart'
+import { GameStart } from './pages/gameStart/GameStart'
 import { Home } from './pages/home/Home'
 import { GameRoom } from './pages/room/GameRoom'
+import { GameEnd } from './pages/gameEnd/GameEnd'
 import './App.less'
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
           <Route path="/leaderboard" element={<Leaderboard/>}/>
           <Route path="/forum" element={ <Forum/>}/>
           <Route path="/rules" element={<GameRules/>}/>
-          <Route path="/game" element={<GameStart/>}/>
+          <Route path="/game/start" element={<GameStart/>}/>
+          <Route path="/game/end" element={<GameEnd/>}/>
           <Route path="/rooms/:roomId" element={<GameRoom/>}/>
         </Routes>
       </BrowserRouter>

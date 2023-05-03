@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import {
     Button,
     Input,
@@ -14,6 +14,7 @@ import "./styles.less"
 
 export const GameRoom = () => {
     const params = useParams<Record<string, any>>();
+    const navigate = useNavigate();
     const roomId = params.roomId;
 
     const [visible, openDialog, closeDialog] = useFlag(false);
@@ -33,13 +34,17 @@ export const GameRoom = () => {
         setInputValue(event.target.value);
     }
 
+    const goToGameEndPage = () => {
+        navigate(`/game/end`)
+    }
+
     return (
         <div className="page room-page">
             <div className="room-page__header">
                 <h3 className="room-page__header-title">Комната {roomId} (будет название комнаты)</h3>
                 <div className="room-page__header-buttons">
                     <Button className="button-filled" onClick={openDialog}>Добавить игрока</Button>
-                    <Button className="button-filled">Начать игру</Button>
+                    <Button className="button-filled" onClick={goToGameEndPage}>Начать игру</Button>
                 </div>
             </div>
             <ol className="room-page__players" type="1">
