@@ -1,7 +1,6 @@
 import TextField from '@mui/material/TextField';
 
 import { ChangeEventHandler, FC } from 'react';
-import './styles.less';
 
 interface IInputProps {
   id: string,
@@ -17,7 +16,6 @@ const Input: FC<IInputProps> = (props: IInputProps) => {
     <TextField
       error={props.isError}
       id={props.id}
-      className="input" 
       placeholder={props.placeholder}
       value={props.value}
       helperText={props.helperText}

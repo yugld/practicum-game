@@ -19,7 +19,7 @@ const basicTheme = createTheme({
         MuiTextField: {
             styleOverrides: {
                 root: {
-                    marginBottom: '40px',
+                    marginBottom: '20px',
                 }
             },
         }
