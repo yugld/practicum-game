@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { StyledEngineProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import MainHeader from './layout/header/MainHeader'
 import Login from './pages/login/Login'
 import Registration from './pages/registration/Registration'
@@ -10,9 +11,9 @@ import GameRules from './pages/gameRules/GameRules'
 import { GameStart } from './pages/game/GameStart'
 import { Home } from './pages/home/Home'
 import { GameRoom } from './pages/room/GameRoom'
-import './App.less'
-import { ThemeProvider } from '@mui/material/styles'
+import { NotFound } from './pages/notFound/NotFound'
 import theme from './theme'
+import './App.less'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <BrowserRouter>
           <MainHeader />
           <Routes>
+            <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
