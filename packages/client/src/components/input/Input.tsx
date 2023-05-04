@@ -1,23 +1,28 @@
-import { ChangeEventHandler, FC } from 'react'
-import './styles.less'
+import TextField from '@mui/material/TextField';
+
+import { ChangeEventHandler, FC } from 'react';
 
 interface IInputProps {
-  id: string
-  placeholder: string
-  onChange: ChangeEventHandler<HTMLInputElement>
-  value: string
+  id: string,
+  placeholder: string,
+  onChange: ChangeEventHandler<HTMLInputElement>,
+  value: string,
+  isError: boolean,
+  helperText: string,
 }
 
 const Input: FC<IInputProps> = (props: IInputProps) => {
   return (
-    <input
+    <TextField
+      error={props.isError}
       id={props.id}
-      className="input"
       placeholder={props.placeholder}
-      onChange={props.onChange}
       value={props.value}
+      helperText={props.helperText}
+      variant="outlined"
+      onChange={props.onChange}
     />
-  )
+  );
 }
 
 export default Input
