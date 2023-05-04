@@ -19,22 +19,22 @@ function App() {
   return <div className="app">
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
-      <BrowserRouter>
-          <MainHeader/>
+        <BrowserRouter>
+          <MainHeader />
           <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/registration" element={<Registration/>}/>
-            <Route path="/profile" element={<Profile/>}/>
-            <Route path="/leaderboard" element={<Leaderboard/>}/>
-            <Route path="/forum" element={ <Forum/>}/>
-            <Route path="/rules" element={<GameRules/>}/>
-            <Route path="/game" element={<GameStart/>}/>
-          <Route path="/rooms/:roomId" element={<GameRoom/>}/>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/rules" element={<GameRules />} />
+            <Route path="/game" element={<GameStart />} />
+            <Route path="/rooms/:roomId" element={<GameRoom />} />
           </Routes>
         </BrowserRouter>
+      </ThemeProvider>
     </StyledEngineProvider>
-    </ThemeProvider>
   </div>
 }
 
