@@ -27,4 +27,4 @@ const Input: FC<IInputProps> = (props: IInputProps) => {
   );
 }
 
-export default Input;
+export default Input

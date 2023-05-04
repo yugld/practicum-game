@@ -1,3 +1,3 @@
 export default function ServerError() {
-    return <h1>Страница 500</h1>;
+  return <h1>Страница 500</h1>
 }

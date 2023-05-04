@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 
 import { ReactNode } from 'react'
-import './styles.less';
+import './styles.less'
 
 export function CustomizedButton(props: { text: ReactNode }) {
   return (
