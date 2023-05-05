@@ -6,8 +6,6 @@ export function ToggleTheme () {
   const { applyTheme } = useContext(ThemeContext)
 
   return <ThemeContext.Consumer>
-
-
     { () => (
       <Button
         onClick={ applyTheme }>Toggle </Button>

@@ -1,4 +1,5 @@
-import Slider, { Settings } from "react-slick"
+import Slider from "react-slick"
+import { Settings } from "react-slick"
 import { cardList } from "../../constants/cardList";
 import { Card } from "../card/Card";
 import "./styles.less"

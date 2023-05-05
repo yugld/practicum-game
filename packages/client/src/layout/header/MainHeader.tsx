@@ -1,18 +1,15 @@
 import { Link } from 'react-router-dom'
 import './styles.less'
 import { AppBar, Container, Toolbar, Menu, MenuItem, Tooltip, IconButton, Avatar } from '@mui/material'
-
-import React from 'react'
+import { useState, MouseEvent } from 'react'
 import { ToggleTheme } from './ToggleTheme'
 
-const pages = [ 'Products', 'Pricing', 'Blog' ]
 const settings = [ 'Profile', 'Logout' ]
 
 
 export default function MainHeader () {
-  const [ anchorElNav, setAnchorElNav ] = React.useState<null | HTMLElement>(null)
-  const [ anchorElUser, setAnchorElUser ] = React.useState<null | HTMLElement>(null)
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const [ anchorElUser, setAnchorElUser ] = useState<null | HTMLElement>(null)
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
 
@@ -33,7 +30,7 @@ export default function MainHeader () {
           <Link className='page-links__item' to='/forum'>Форум</Link>
           <Link className='page-links__item' to='/rules'>Правила</Link>
           <Link className='page-links__item' to='/game'>Игра</Link>
-          <Link  className="main-header__item" to="/game/start">Начало игры</Link>
+          <Link  className="page-links__item" to="/game/start">Начало игры</Link>
         </div>
         <div className='main-header__dropdown-menu'>
           <ToggleTheme/>

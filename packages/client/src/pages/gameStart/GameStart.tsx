@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
@@ -22,13 +22,13 @@ export const GameStart = () => {
         console.log(inputValue);
         handleClose();
     }
-    
+
     const handleClose = () => {
         closeDialog();
         setInputValue('');
     }
 
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
     }
 

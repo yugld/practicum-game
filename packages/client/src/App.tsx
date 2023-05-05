@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { StyledEngineProvider } from '@mui/material/styles'
-import { ThemeProvider } from '@mui/material/styles'
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
 import MainHeader from './layout/header/MainHeader'
 import Login from './pages/login/Login'
 import Registration from './pages/registration/Registration'
@@ -14,13 +13,13 @@ import { GameRoom } from './pages/room/GameRoom'
 import { NotFound } from './pages/notFound/NotFound'
 import { GameEnd } from './pages/gameEnd/GameEnd'
 import theme from './theme'
-import React from 'react'
+import { useContext } from 'react'
 import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
 import Game from './pages/game/Game'
 import './App.less'
 
 function App () {
-  const { isDarkTheme } = React.useContext(ThemeContext)
+  const { isDarkTheme } = useContext(ThemeContext)
   return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
