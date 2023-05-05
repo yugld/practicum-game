@@ -63,7 +63,7 @@ export default function Game () {
 
   useEffect(() => {
     if (!board) return
-    board.current?.setDimensionsCanvas()
+
     canvasRef.current?.addEventListener('click', (event) => {
       const returnedCard = board.current?.handleClickOnCard(event)
 

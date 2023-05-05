@@ -12,8 +12,4 @@ export default class Player {
         this.numberOfTokens = 0
         this.cardOnHand = {} as CardType
     }
-
-    setCardOnHand(card: CardType){
-        this.cardOnHand = card
-    }
 }
