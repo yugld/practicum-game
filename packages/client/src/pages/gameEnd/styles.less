@@ -1,0 +1,27 @@
+@import '../../assets/base/colors.less';
+@import '../../assets/base/variables.less';
+
+.game-end-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: @ui-color[@orange][@9];
+    height: 100%;
+    gap: 300px;
+
+    &__title {
+        padding: 20px;
+        border-radius: 4px;
+        background-color: fade(@ui-color[@orange][@1], 70%);
+    }
+
+    &__buttons {
+        display: flex;
+        gap: 50px;
+    }
+
+    &__button {
+        width: 300px;
+    }
+}
