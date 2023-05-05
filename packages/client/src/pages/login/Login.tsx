@@ -1,14 +1,17 @@
-import { Button } from '../../components/button/Button'
+import { CustomizedButton } from '../../components/button/Button'
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
 
 import './styles.less';
 import Link from '../../components/link';
+import { validateForm } from '../../utils/formValidation';
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setuUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -20,9 +23,11 @@ const Login = () => {
 
     if (fieldName === 'username') {
       setUsername(value);
+      setuUsernameError(validateForm({ type: 'login', value }));
     }
     else if (fieldName === 'password') {
       setPassword(value);
+      setPasswordError(validateForm({ type: 'password', value }));
     }
   }
 
@@ -37,18 +42,22 @@ const Login = () => {
               id="username"
               placeholder="Введите логин"
               onChange={handleChange}
+              isError={usernameError ? true : false}
+              helperText={usernameError}
               value={username} />
             <Input
               id="password"
               placeholder="Введите пароль"
               onChange={handleChange}
+              isError={passwordError ? true : false}
+              helperText={passwordError}
               value={password} />
           </div>
         }
         actions={
           <>
-            <Button text={<span>Авторизация</span>} />
-            <Link href="/registration" text="Нет аккаунта?"/>
+            <CustomizedButton text={<span>Авторизация</span>} />
+            <Link href="/registration" text="Нет аккаунта?" />
           </>
         }
       />

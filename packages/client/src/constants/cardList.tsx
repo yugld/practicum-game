@@ -5,21 +5,21 @@ export const cardList: CardType[] = [
         value: 1,
         count: 5,
         title: '1: Стражница',
-        imgSrc: (theme = 'light') => `/src/assets/images/1-${theme}.png`,
+        imgSrc: (theme = 'light') => `/src/assets/images/1-${theme}.svg`,
         text: 'Выберите соперника и назовите значение карты, отличное от 1. Если у этого игрока на руке есть карта с названным значением, он выбывает из раунда.'
     },
     {
         value: 2,
         count:2,
         title: '2: Священник',
-        imgSrc: (theme = 'light') => `/src/assets/images/2-${theme}.png`,
+        imgSrc: (theme = 'light') => `/src/assets/images/2-${theme}.svg`,
         text: 'Можете посмотреть карту соперника.'
     },
     {
         value: 3,
         count: 2,
         title: '3: Барон',
-        imgSrc: (theme = 'light') => `/src/assets/images/3-${theme}.png`,
+        imgSrc: (theme = 'light') => `/src/assets/images/3-${theme}.svg`,
         text: 'Сравните с соперником карты на руках. Обладатель карты с меньшим значением оказывается выбывает из раунда.'
     },
     {

@@ -1,8 +1,7 @@
 .game-page {
   display: flex;
   height: 100%;
-  margin-top: 60px;
-
+  overflow-y: auto;
   &__body{
     width: 70%;
     display: flex;
@@ -16,42 +15,81 @@
     }
   }
   &__sidebar{
+    position: sticky;
+    top: 0;
+    right: 0;
     width: 29%;
-    background-color: #fff;
+    background-color: var(@ui-main-background__base);
     padding: 20px;
     box-sizing: border-box;
-    .select-card-panel {
 
-      max-width: 100%;
-
-      .card-list {
+    height: 100%;
+    overflow-y: auto;
+    .sidebar-header {
+      padding: 0 20px;
+      background-color: var(@ui-secondary-background__base);;
+    }
+    .sidebar-body {
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      &__content {
+        width: 100%;
+      }
+      &__status-play {
+        padding: 0 20px;
+      }
+      &__actions {
+        width: 100%;
+      .result-message {
         margin-top: 20px;
-        &__item {
-          border: 1px solid lightgray;
-          border-radius: 6px;
-          height: 30px;
-          padding: 0 20px;
-          margin-bottom: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          &:hover {
-            cursor: pointer;
-            opacity: 0.5;
-          }
-          .item-value {
-            width: 40px;
-          }
-          .item-count {
-            width: 40px
-          }
+        padding: 0 20px;
+      }
+       button {
+         margin-top: 20px;
+       }
+      }
+      &__choice-card {
 
-          &--selected {
-            background-color: pink;
+      }
+      .select-card-panel {
+        max-width: 100%;
+        &__header {
+          padding:0  20px;
+        }
+        .card-list {
+          &__item {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            &:hover {
+              cursor: pointer;
+              opacity: 0.5;
+            }
+            .item-value {
+              width: 40px;
+            }
+            .item-count {
+              width: 40px
+            }
           }
+        }
+        button {
+          margin-top: 20px;
+        }
+      }
+
+      .player-card {
+        margin-top: 20px;
+        img {
+          width: 80%;
         }
       }
     }
+
   }
   &__descriptions {
 
@@ -59,6 +97,7 @@
   &__actions{
     display: flex;
     justify-content: center;
+    margin-top: 20px;
     .buttons {
       max-width: 300px;
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Board from './models/Board'
 import CardDeck from './models/CardDeck'
 import Players from './models/Players'
-import { Button } from '../../components/button/Button'
+import { CustomizedButton } from '../../components/button/Button'
 import './styles.less'
 import SidebarPanel from './components/SidebarPanel'
 import { CardType, GameProgress, ResultMessageType, ResultMessageTypeEnum } from './types'
@@ -29,10 +29,11 @@ export default function Game () {
     }
   }))
 
-  const [ gameProgress, setGameProgress ] = useState(GameProgress.choice)
-
+  // Инициализация очереди игроков
   const queue = new Queue()
   players.forEach((player: Player) => queue.enqueue(player))
+
+  const [ gameProgress, setGameProgress ] = useState(GameProgress.choice)
 
   const getActivePlayer = () => {
     const player = queue.dequeue()
@@ -241,8 +242,8 @@ export default function Game () {
           <span className='description-card'></span>
         </div>
         <div className='buttons'>
-          { gameProgress === GameProgress.choice &&
-            <Button text='Сбросить карту' onClick={ () => selectedCard() } /> }
+          { gameProgress === GameProgress.choice && !isSelectCard &&
+            <CustomizedButton text='Сбросить карту' onClick={ () => selectedCard() } /> }
         </div>
       </div>
     </div>

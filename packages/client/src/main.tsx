@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import './assets/styles.css'
+import './assets/styles.less'
+import { ThemeWrapper } from './ThemeWrapper'
 
 // const ThemeContext = React.createContext('light');
 
@@ -13,5 +14,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <ThemeContext.Provider value="light">
   //   <App />
   // </ThemeContext.Provider>
-  <App />
+    <ThemeWrapper><App /></ThemeWrapper>
+
 )
