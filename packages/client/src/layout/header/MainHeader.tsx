@@ -33,6 +33,7 @@ export default function MainHeader () {
           <Link className='page-links__item' to='/forum'>Форум</Link>
           <Link className='page-links__item' to='/rules'>Правила</Link>
           <Link className='page-links__item' to='/game'>Игра</Link>
+          <Link  className="main-header__item" to="/game/start">Начало игры</Link>
         </div>
         <div className='main-header__dropdown-menu'>
           <ToggleTheme/>
@@ -60,6 +61,4 @@ export default function MainHeader () {
       </Toolbar>
     </Container>
   </AppBar>
-
-
 }
