@@ -18,8 +18,8 @@ const Login = () => {
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    const value = (e.currentTarget as HTMLInputElement).value;
-    const fieldName = (e.currentTarget as HTMLInputElement).id;
+    const value = (e.currentTarget as HTMLInputElement).value
+    const fieldName = (e.currentTarget as HTMLInputElement).id
 
     if (fieldName === 'username') {
       setUsername(value);
@@ -62,7 +62,7 @@ const Login = () => {
         }
       />
     </main>
-  );
+  )
 }
 
-export default Login;
+export default Login

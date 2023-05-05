@@ -1,11 +1,11 @@
-import Slider from "react-slick"
+import Slider, { Settings } from "react-slick"
 import { cardList } from "../../constants/cardList";
 import { Card } from "../card/Card";
 import "./styles.less"
 import { THEME } from '../../pages/game/models/Board'
 
 export const Carousel = () => {
-    const settings = {
+    const settings: Settings = {
         dots: false,
         fade: true,
         infinite: true,
@@ -25,4 +25,4 @@ export const Carousel = () => {
             </Slider>
         </div>
     );
-  };
+};

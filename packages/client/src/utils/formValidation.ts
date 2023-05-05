@@ -84,12 +84,12 @@ function validateEmail(value: string): string {
     }
 
     const emailRegexp = /^(.+)@(.+)\.(.+)$/;
-    const latinRegexp = /^[a-zA-Z-_]+@[a-zA-Z-_]+\.[a-zA-Z]+$/;
+    const latinAndNumbersRegexp = /^[0-9a-zA-Z-_]+@[a-zA-Z-_]+\.[a-zA-Z]+$/;
     if (!emailRegexp.test(value)) {
         return 'e-mail is incorrect';
     }
-    if (!latinRegexp.test(value)) {
-        return 'Email should contain only latin symbols, "-", "_"';
+    if (!latinAndNumbersRegexp.test(value)) {
+        return 'Email should contain only numbers, latin symbols, "-", "_"';
     }
 
     return '';

@@ -8,7 +8,8 @@ export default {
   globals: {
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
+  setupFiles: ['<rootDir>/src/setupTests.js'],
   moduleNameMapper: {
-    '\\.(css|less)$': 'identity-obj-proxy',
+    '\\.(css|less|jpg|svg|png)$': 'identity-obj-proxy',
   },
 }
