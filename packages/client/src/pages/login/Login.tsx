@@ -1,5 +1,5 @@
 import { CustomizedButton } from '../../components/button/Button'
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
@@ -15,6 +15,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [usernameError, setuUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [formError, setFormError] = useState("");
   const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent) {
@@ -37,14 +38,17 @@ const Login = () => {
     setPasswordError(passwordError);
 
     if (!loginError && !passwordError) {
-      login(loginData).then(() => {
-        localStorage.setItem('isAuthenticated', String(true));
-        navigate('/', { replace: true });
-      });
+      login(loginData)
+        .then(() => {
+          localStorage.setItem('isAuthenticated', String(true));
+          navigate('/', { replace: true });
+        })
+        .catch((reason) => setFormError(reason));
     }
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    setFormError('');
     const value = (e.currentTarget as HTMLInputElement).value
     const fieldName = (e.currentTarget as HTMLInputElement).id
 
@@ -82,6 +86,7 @@ const Login = () => {
                 isError={passwordError ? true : false}
                 helperText={passwordError}
                 value={password} />
+              {formError && <span className='form-error'>{formError}</span>}
             </div>
           }
           actions={

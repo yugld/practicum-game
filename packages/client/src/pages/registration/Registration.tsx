@@ -2,12 +2,13 @@ import { CustomizedButton } from '../../components/button/Button'
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
-import { Navigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 import './styles.less';
 import Link from '../../components/link';
 import { validateForm } from '../../utils/formValidation';
 import { isAuth } from '../../utils/isAuthenticated';
+import { registration } from '../../services/auth';
 
 const Registration = () => {
   const [firstName, setFirstName] = useState('')
@@ -25,8 +26,56 @@ const Registration = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const [formError, setFormError] = useState("");
+  const navigate = useNavigate();
+
   function handleSubmit(e: FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
+
+    interface RegisterData {
+      first_name: string,
+      second_name: string,
+      login: string,
+      email: string,
+      password: string,
+      phone: string
+    };
+
+    const registrationData: RegisterData = {
+      first_name: firstName,
+      second_name: secondName,
+      login: login,
+      email: email,
+      password: password,
+      phone: phone,
+    }
+
+    const loginError = validateForm({ type: 'login', value: login });
+    setLoginError(loginError);
+
+    const emailError = validateForm({ type: 'email', value: email });
+    setEmailError(emailError);
+
+    const nameError = validateForm({ type: 'name', value: firstName });
+    setFirstNameError(nameError);
+
+    const secondNameError = validateForm({ type: 'name', value: secondName });
+    setSecondNameError(secondNameError);
+
+    const phoneError = validateForm({ type: 'phone', value: phone });
+    setPhoneError(phoneError);
+
+    const passwordError = validateForm({ type: 'password', value: password });
+    setPasswordError(passwordError);
+
+    if (!loginError && !emailError && !nameError && !secondNameError && !phoneError && !passwordError) {
+      registration(registrationData)
+        .then(() => {
+          localStorage.setItem('isAuthenticated', String(true));
+          navigate('/', { replace: true });
+        })
+        .catch((reason) => setFormError(reason));
+    }
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -61,7 +110,6 @@ const Registration = () => {
       setPasswordRepeat(value);
     }
   }
-  console.log(props.isAuthenticated);
 
   if (isAuth()) {
     return <Navigate replace to="/" />;
@@ -122,11 +170,12 @@ const Registration = () => {
                 isError={false}
                 helperText=''
                 value={passwordRepeat} />
+                {formError && <span className='form-error'>{formError}</span>}
             </div>
           }
           actions={
             <>
-              <CustomizedButton text={<span>Зарегистрироваться</span>} />
+              <CustomizedButton text={<span>Зарегистрироваться</span>} onClick={handleSubmit} />
               <Link href="/login" text="Уже есть аккаунт?" />
             </>
           }
