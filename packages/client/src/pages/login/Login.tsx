@@ -6,6 +6,7 @@ import Input from '../../components/input/Input';
 import './styles.less';
 import Link from '../../components/link';
 import { validateForm } from '../../utils/formValidation';
+import { login } from '../../services/auth';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -15,6 +16,26 @@ const Login = () => {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
+
+    interface LoginData {
+      login: string,
+      password: string
+    };
+
+    const loginData: LoginData = {
+      login: username,
+      password: password,
+    }
+
+    const loginError = validateForm({ type: 'login', value: username });
+    setuUsernameError(loginError);
+
+    const passwordError = validateForm({ type: 'password', value: password });
+    setPasswordError(passwordError);
+
+    if (!loginError && !passwordError) {
+      login(loginData);
+    }
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -56,7 +77,7 @@ const Login = () => {
         }
         actions={
           <>
-            <CustomizedButton text={<span>Авторизация</span>} />
+            <CustomizedButton text={<span>Авторизация</span>} onClick={handleSubmit} />
             <Link href="/registration" text="Нет аккаунта?" />
           </>
         }
