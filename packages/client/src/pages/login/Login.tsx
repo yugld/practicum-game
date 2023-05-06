@@ -1,5 +1,6 @@
 import { CustomizedButton } from '../../components/button/Button'
-import { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
 
@@ -7,12 +8,14 @@ import './styles.less';
 import Link from '../../components/link';
 import { validateForm } from '../../utils/formValidation';
 import { login } from '../../services/auth';
+import { isAuth } from '../../utils/isAuthenticated';
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setuUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -34,7 +37,10 @@ const Login = () => {
     setPasswordError(passwordError);
 
     if (!loginError && !passwordError) {
-      login(loginData);
+      login(loginData).then(() => {
+        localStorage.setItem('isAuthenticated', String(true));
+        navigate('/', { replace: true });
+      });
     }
   }
 
@@ -52,38 +58,42 @@ const Login = () => {
     }
   }
 
-  return (
-    <main className="page login-page">
-      <Form
-        title="Вход"
-        onSubmit={handleSubmit}
-        body={
-          <div>
-            <Input
-              id="username"
-              placeholder="Введите логин"
-              onChange={handleChange}
-              isError={usernameError ? true : false}
-              helperText={usernameError}
-              value={username} />
-            <Input
-              id="password"
-              placeholder="Введите пароль"
-              onChange={handleChange}
-              isError={passwordError ? true : false}
-              helperText={passwordError}
-              value={password} />
-          </div>
-        }
-        actions={
-          <>
-            <CustomizedButton text={<span>Авторизация</span>} onClick={handleSubmit} />
-            <Link href="/registration" text="Нет аккаунта?" />
-          </>
-        }
-      />
-    </main>
-  )
+  if (isAuth()) {
+    return <Navigate replace to="/" />;
+  } else {
+    return (
+      <main className="page login-page">
+        <Form
+          title="Вход"
+          onSubmit={handleSubmit}
+          body={
+            <div>
+              <Input
+                id="username"
+                placeholder="Введите логин"
+                onChange={handleChange}
+                isError={usernameError ? true : false}
+                helperText={usernameError}
+                value={username} />
+              <Input
+                id="password"
+                placeholder="Введите пароль"
+                onChange={handleChange}
+                isError={passwordError ? true : false}
+                helperText={passwordError}
+                value={password} />
+            </div>
+          }
+          actions={
+            <>
+              <CustomizedButton text={<span>Авторизация</span>} onClick={handleSubmit} />
+              <Link href="/registration" text="Нет аккаунта?" />
+            </>
+          }
+        />
+      </main>
+    )
+  }
 }
 
 export default Login

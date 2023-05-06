@@ -2,10 +2,12 @@ import { CustomizedButton } from '../../components/button/Button'
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
+import { Navigate } from 'react-router-dom';
 
 import './styles.less';
 import Link from '../../components/link';
 import { validateForm } from '../../utils/formValidation';
+import { isAuth } from '../../utils/isAuthenticated';
 
 const Registration = () => {
   const [firstName, setFirstName] = useState('')
@@ -59,74 +61,79 @@ const Registration = () => {
       setPasswordRepeat(value);
     }
   }
+  console.log(props.isAuthenticated);
 
-  return (
-    <main className="page registration-page">
-      <Form
-        title="Регистрация"
-        onSubmit={handleSubmit}
-        body={
-          <div>
-            <Input
-              id='firstName'
-              placeholder="Имя"
-              onChange={handleChange}
-              isError={firstNameError ? true : false}
-              helperText={firstNameError}
-              value={firstName} />
-            <Input
-              id='secondName'
-              placeholder="Фамилия"
-              onChange={handleChange}
-              isError={secondNameError ? true : false}
-              helperText={secondNameError}
-              value={secondName} />
-            <Input
-              id='login'
-              placeholder="Логин"
-              onChange={handleChange}
-              isError={loginError ? true : false}
-              helperText={loginError}
-              value={login} />
-            <Input
-              id='phone'
-              placeholder="Телефон"
-              onChange={handleChange}
-              isError={phoneError ? true : false}
-              helperText={phoneError}
-              value={phone} />
-            <Input
-              id='email'
-              placeholder="Почта"
-              onChange={handleChange}
-              isError={emailError ? true : false}
-              helperText={emailError}
-              value={email} />
-            <Input
-              id='password'
-              placeholder="Пароль"
-              onChange={handleChange}
-              isError={passwordError ? true : false}
-              helperText={passwordError}
-              value={password} />
-            <Input
-              id='passwordRepeat'
-              placeholder="Пароль (ещё раз)"
-              onChange={handleChange}
-              isError={false}
-              helperText=''
-              value={passwordRepeat} />
-          </div>
-        }
-        actions={
-          <>
-            <CustomizedButton text={<span>Зарегистрироваться</span>} />
-            <Link href="/login" text="Уже есть аккаунт?" />
-          </>
-        }
-      />
-    </main >
-  )
+  if (isAuth()) {
+    return <Navigate replace to="/" />;
+  } else {
+    return (
+      <main className="page registration-page">
+        <Form
+          title="Регистрация"
+          onSubmit={handleSubmit}
+          body={
+            <div>
+              <Input
+                id='firstName'
+                placeholder="Имя"
+                onChange={handleChange}
+                isError={firstNameError ? true : false}
+                helperText={firstNameError}
+                value={firstName} />
+              <Input
+                id='secondName'
+                placeholder="Фамилия"
+                onChange={handleChange}
+                isError={secondNameError ? true : false}
+                helperText={secondNameError}
+                value={secondName} />
+              <Input
+                id='login'
+                placeholder="Логин"
+                onChange={handleChange}
+                isError={loginError ? true : false}
+                helperText={loginError}
+                value={login} />
+              <Input
+                id='phone'
+                placeholder="Телефон"
+                onChange={handleChange}
+                isError={phoneError ? true : false}
+                helperText={phoneError}
+                value={phone} />
+              <Input
+                id='email'
+                placeholder="Почта"
+                onChange={handleChange}
+                isError={emailError ? true : false}
+                helperText={emailError}
+                value={email} />
+              <Input
+                id='password'
+                placeholder="Пароль"
+                onChange={handleChange}
+                isError={passwordError ? true : false}
+                helperText={passwordError}
+                value={password} />
+              <Input
+                id='passwordRepeat'
+                placeholder="Пароль (ещё раз)"
+                onChange={handleChange}
+                isError={false}
+                helperText=''
+                value={passwordRepeat} />
+            </div>
+          }
+          actions={
+            <>
+              <CustomizedButton text={<span>Зарегистрироваться</span>} />
+              <Link href="/login" text="Уже есть аккаунт?" />
+            </>
+          }
+        />
+      </main >
+    )
+  }
 }
 
 export default Registration

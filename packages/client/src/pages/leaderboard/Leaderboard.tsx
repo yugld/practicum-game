@@ -1,3 +1,10 @@
+import { Navigate } from 'react-router-dom';
+import { isAuth } from '../../utils/isAuthenticated';
+
 export default function Leaderboard() {
-  return <h1>Страница лидерборда</h1>
+  if (!isAuth()) {
+    return <Navigate replace to="/login" />;
+  } else {
+    return <h1>Страница лидерборда</h1>
+  }
 }

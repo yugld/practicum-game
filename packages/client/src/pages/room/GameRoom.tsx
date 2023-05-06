@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom"
+import { useParams, Navigate } from "react-router-dom"
 import {
     Button,
     Input,
@@ -11,6 +11,7 @@ import {
 import { useFlag } from '../../hooks/useFlag';
 
 import "./styles.less"
+import { isAuth } from "../../utils/isAuthenticated";
 
 export const GameRoom = () => {
     const params = useParams<Record<string, any>>();
@@ -23,7 +24,7 @@ export const GameRoom = () => {
         console.log(inputValue);
         handleClose();
     }
-    
+
     const handleClose = () => {
         closeDialog();
         setInputValue('');
@@ -33,34 +34,38 @@ export const GameRoom = () => {
         setInputValue(event.target.value);
     }
 
-    return (
-        <div className="page room-page">
-            <div className="room-page__header">
-                <h3 className="room-page__header-title">Комната {roomId} (будет название комнаты)</h3>
-                <div className="room-page__header-buttons">
-                    <Button className="button-filled" onClick={openDialog}>Добавить игрока</Button>
-                    <Button className="button-filled">Начать игру</Button>
+    if (!isAuth()) {
+        return <Navigate replace to="/login" />;
+    } else {
+        return (
+            <div className="page room-page">
+                <div className="room-page__header">
+                    <h3 className="room-page__header-title">Комната {roomId} (будет название комнаты)</h3>
+                    <div className="room-page__header-buttons">
+                        <Button className="button-filled" onClick={openDialog}>Добавить игрока</Button>
+                        <Button className="button-filled">Начать игру</Button>
+                    </div>
                 </div>
-            </div>
-            <ol className="room-page__players" type="1">
-                <li className="room-page__player">Первый игрок</li>
-                <li className="room-page__player">Второй игрок</li>
-            </ol>
+                <ol className="room-page__players" type="1">
+                    <li className="room-page__player">Первый игрок</li>
+                    <li className="room-page__player">Второй игрок</li>
+                </ol>
 
-            <Dialog open={visible} onClose={handleClose} maxWidth='md'>
-                <DialogTitle>Введите логин пользователя</DialogTitle>
-                <DialogContent className='room-page__dialog'>
-                    <Input
-                        className='room-page__dialog_input'
-                        onChange={onInputChange}
-                        autoFocus
-                    />
-                </DialogContent>
-                <DialogActions className='room-page__dialog_footer'>
-                    <Button className='button-filled' onClick={handleSubmit}>Добавить</Button>
-                    <Button className='button-text' onClick={handleClose}>Отмена</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    )
+                <Dialog open={visible} onClose={handleClose} maxWidth='md'>
+                    <DialogTitle>Введите логин пользователя</DialogTitle>
+                    <DialogContent className='room-page__dialog'>
+                        <Input
+                            className='room-page__dialog_input'
+                            onChange={onInputChange}
+                            autoFocus
+                        />
+                    </DialogContent>
+                    <DialogActions className='room-page__dialog_footer'>
+                        <Button className='button-filled' onClick={handleSubmit}>Добавить</Button>
+                        <Button className='button-text' onClick={handleClose}>Отмена</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        )
+    }
 }

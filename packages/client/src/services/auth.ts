@@ -17,10 +17,6 @@ type LoginPayload = {
 export const login = async (data: LoginPayload) => {
     return authApi
             .login(data)
-            .then(() => {
-                console.log('logged in')
-                // transform user ? 
-            })
             .catch(({ response }) => {
                 const reason = response?.data?.reason;
 
