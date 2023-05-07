@@ -14,26 +14,38 @@ import { NotFound } from './pages/notFound/NotFound'
 import { GameEnd } from './pages/gameEnd/GameEnd'
 import './App.less'
 
+import { StyledEngineProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
+import { BrowserRouter } from 'react-router-dom'
+import theme from './theme'
+
 function App() {
-  const { pathname } = useLocation();
+  //const { pathname } = useLocation();
 
   return (
-    <div className="app">
-      {pathname !== '/login' && pathname !== '/registration' && <MainHeader />}
-      <Routes>
-        {/* <Route path="*" element={<NotFound />} /> */}
-        <Route path="/" element={<Home/>} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/registration" element={<Registration/>} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/leaderboard" element={<Leaderboard/>} />
-        <Route path="/forum" element={<Forum/>} />
-        <Route path="/rules" element={<GameRules/>} />
-        <Route path="/game/start" element={<GameStart />} />
-        <Route path="/game/end" element={<GameEnd/>}/>
-        <Route path="/rooms/:roomId" element={<GameRoom/>} />
-      </Routes>
-    </div>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <div className="app">
+            {/* {pathname !== '/login' && pathname !== '/registration' && <MainHeader />} */}
+            <MainHeader />
+            <Routes>
+              {/* <Route path="*" element={<NotFound />} /> */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/forum" element={<Forum />} />
+              <Route path="/rules" element={<GameRules />} />
+              <Route path="/game/start" element={<GameStart />} />
+              <Route path="/game/end" element={<GameEnd />} />
+              <Route path="/rooms/:roomId" element={<GameRoom />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 
