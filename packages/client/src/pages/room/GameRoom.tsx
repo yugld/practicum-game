@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useParams, Navigate } from "react-router-dom"
+import { useNavigate, Navigate, useParams } from "react-router-dom";
+
 import {
     Button,
     Input,
@@ -15,6 +16,7 @@ import { isAuth } from "../../utils/isAuthenticated";
 
 export const GameRoom = () => {
     const params = useParams<Record<string, any>>();
+    const navigate = useNavigate();
     const roomId = params.roomId;
 
     const [visible, openDialog, closeDialog] = useFlag(false);
@@ -34,6 +36,10 @@ export const GameRoom = () => {
         setInputValue(event.target.value);
     }
 
+    const goToGameEndPage = () => {
+        navigate(`/game/end`)
+    }
+
     if (!isAuth()) {
         return <Navigate replace to="/login" />;
     } else {
@@ -43,7 +49,7 @@ export const GameRoom = () => {
                     <h3 className="room-page__header-title">Комната {roomId} (будет название комнаты)</h3>
                     <div className="room-page__header-buttons">
                         <Button className="button-filled" onClick={openDialog}>Добавить игрока</Button>
-                        <Button className="button-filled">Начать игру</Button>
+                        <Button className="button-filled" onClick={goToGameEndPage}>Начать игру</Button>
                     </div>
                 </div>
                 <ol className="room-page__players" type="1">

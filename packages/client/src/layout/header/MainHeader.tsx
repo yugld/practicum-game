@@ -8,6 +8,6 @@ export default function MainHeader() {
         <Link className="main-header__item" to="/leaderboard">Лидерборд</Link>
         <Link className="main-header__item" to="/forum">Форум</Link>
         <Link className="main-header__item" to="/rules">Правила</Link>
-        <Link  className="main-header__item" to="/game">Игра</Link>
+        <Link  className="main-header__item" to="/game/start">Игра</Link>
     </header>;
 }

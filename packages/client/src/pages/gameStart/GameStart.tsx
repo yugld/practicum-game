@@ -41,10 +41,10 @@ export const GameStart = () => {
         return <Navigate replace to="/login" />;
     } else {
         return (
-            <div className="page game-page">
-                <div className="game-page__wrapper">
-                    <div className="game-page__container">
-                        <div className="game-page__description">
+            <div className="page game-start-page">
+                <div className="game-start-page__wrapper">
+                    <div className="game-start-page__container">
+                        <div className="game-start-page__description">
                             <h3>Игровой процесс</h3>
                             <p>
                                 У каждого игрока на руках находится по одной карте.
@@ -65,24 +65,24 @@ export const GameStart = () => {
                             </p>
                         </div>
 
-                        <Button className="game-page__button button-filled" onClick={openDialog}>Начать новую игру</Button>
+                        <Button className="game-start-page__button button-filled" onClick={openDialog}>Начать новую игру</Button>
                     </div>
 
-                    <div className="game-page__rooms">
+                    <div className="game-start-page__rooms">
                         <h3>Доступные комнаты</h3>
-                        <div className="game-page__room">
+                        <div className="game-start-page__room">
                             <p>First test room</p>
                             <Button
-                                className="game-page__button-small button-filled"
+                                className="game-start-page__button-small button-filled"
                                 onClick={() => goToRoom('1')}
                             >
                                 Войти
                             </Button>
                         </div>
-                        <div className="game-page__room" id='2'>
+                        <div className="game-start-page__room" id='2'>
                             <p>Second test room</p>
                             <Button
-                                className="game-page__button-small button-filled"
+                                className="game-start-page__button-small button-filled"
                                 onClick={() => goToRoom('2')}
                             >
                                 Войти
@@ -93,14 +93,14 @@ export const GameStart = () => {
 
                 <Dialog open={visible} onClose={handleClose} maxWidth='md'>
                     <DialogTitle>Введите название комнаты</DialogTitle>
-                    <DialogContent className='game-page__dialog'>
+                    <DialogContent className='game-start-page__dialog'>
                         <Input
-                            className='game-page__dialog_input'
+                            className='game-start-page__dialog_input'
                             onChange={onInputChange}
                             autoFocus
                         />
                     </DialogContent>
-                    <DialogActions className='game-page__dialog_footer'>
+                    <DialogActions className='game-start-page__dialog_footer'>
                         <Button className='button-filled' onClick={handleSubmit}>Создать комнату</Button>
                         <Button className='button-text' onClick={handleClose}>Отмена</Button>
                     </DialogActions>
