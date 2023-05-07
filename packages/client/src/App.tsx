@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom'
-import { useLocation } from "react-router";
 import MainHeader from './layout/header/MainHeader'
 import Login from './pages/login/Login'
 import Registration from './pages/registration/Registration'
@@ -30,7 +29,7 @@ function App() {
             {/* {pathname !== '/login' && pathname !== '/registration' && <MainHeader />} */}
             <MainHeader />
             <Routes>
-              {/* <Route path="*" element={<NotFound />} /> */}
+              <Route path="*" element={<NotFound />} />
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
