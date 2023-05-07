@@ -1,8 +1,8 @@
-import {Component, ErrorInfo} from 'react';
+import {Component, ErrorInfo, ReactNode} from 'react';
 import ServerError from '../../pages/serverError/ServerError';
 
 interface Props {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 interface State {
