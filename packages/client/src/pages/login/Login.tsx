@@ -63,7 +63,7 @@ const Login = () => {
   }
 
   if (isAuth()) {
-    return <Navigate replace to="/" />;
+    return <Navigate replace to="/game/start" />;
   } else {
     return (
       <main className="page login-page">

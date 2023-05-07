@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom'
-import { useLocation } from "react-router";
 import MainHeader from './layout/header/MainHeader'
 import Login from './pages/login/Login'
 import Registration from './pages/registration/Registration'
@@ -15,11 +14,9 @@ import { GameEnd } from './pages/gameEnd/GameEnd'
 import './App.less'
 
 function App() {
-  const { pathname } = useLocation();
-
   return (
     <div className="app">
-      {pathname !== '/login' && pathname !== '/registration' && <MainHeader />}
+      <MainHeader />
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home/>} />
