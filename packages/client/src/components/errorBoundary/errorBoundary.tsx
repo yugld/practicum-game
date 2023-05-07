@@ -1,4 +1,4 @@
-import React, {ErrorInfo} from 'react';
+import {Component, ErrorInfo} from 'react';
 import ServerError from '../../pages/serverError/ServerError';
 
 interface Props {
@@ -10,7 +10,7 @@ interface State {
     errorInfo: ErrorInfo | null;
 }
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+export default class ErrorBoundary extends Component<Props, State> {
     static getDerivedStateFromError(error: Error) {
         return { error };
     }
