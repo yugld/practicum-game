@@ -6,7 +6,7 @@ import theme from './theme'
 import App from './App'
 import { render, screen } from '@testing-library/react'
 
-const appContent = 'Регистрация'
+const appContent = 'Вход';
 
 // @ts-ignore
 global.fetch = jest.fn(() =>
