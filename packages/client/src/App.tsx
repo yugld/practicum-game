@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
 import { useLocation } from "react-router";
-import { Routes, Route } from 'react-router-dom'
 import MainHeader from './layout/header/MainHeader'
 import Login from './pages/login/Login'
 import Registration from './pages/registration/Registration'
