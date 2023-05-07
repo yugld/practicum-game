@@ -21,7 +21,7 @@ function App() {
     <div className="app">
       {pathname !== '/login' && pathname !== '/registration' && <MainHeader />}
       <Routes>
-        <Route path="*" element={<NotFound />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
         <Route path="/" element={<Home/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/registration" element={<Registration/>} />
