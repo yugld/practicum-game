@@ -1,10 +1,7 @@
-import { Navigate } from 'react-router-dom';
-import { isAuth } from '../../utils/isAuthenticated';
+import { withAuthorizationCheck } from '../../utils/authorizedPage';
 
-export default function Forum() {
-  if (!isAuth()) {
-    return <Navigate replace to="/login" />;
-  } else {
-    return <h1>Страница форума</h1>
-  }
+function Forum() {
+  return <h1>Страница форума</h1>
 }
+
+export default withAuthorizationCheck(Forum);
