@@ -70,7 +70,6 @@ const Profile = () => {
         userApi
             .logOut()
             .then(() => {
-                //props.setAuthenticated(false);
                 localStorage.setItem('isAuthenticated', String(false));
                 navigate('/login', { replace: true });
             })

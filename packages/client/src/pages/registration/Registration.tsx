@@ -68,7 +68,7 @@ const Registration = () => {
     const passwordError = validateForm({ type: 'password', value: password });
     setPasswordError(passwordError);
 
-    if (!loginError && !emailError && !nameError && !secondNameError && !phoneError && !passwordError) {
+    if ([loginError, emailError, nameError, secondNameError, phoneError, passwordError].some(Boolean)) {
       registration(registrationData)
         .then(() => {
           localStorage.setItem('isAuthenticated', String(true));
