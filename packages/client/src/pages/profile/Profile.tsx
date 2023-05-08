@@ -1,11 +1,11 @@
 import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { userApi } from '../../api/userApi'
 import { Button, TextField, Avatar, FormControl, FormLabel, IconButton } from '@mui/material'
 import EditPassword from '../../components/EditPassword/EditPassword'
 
 import './Profile.less'
-import { isAuth } from '../../utils/isAuthenticated'
+import { withAuthorizationCheck } from '../../utils/authorizedPage'
 
 const Profile = () => {
     const navigate = useNavigate()
@@ -140,104 +140,100 @@ const Profile = () => {
         }
     }
 
-    if (!isAuth()) {
-        return <Navigate replace to="/login" />;
-    } else {
-        return (
-            <main className="page profile">
-                <div className="profile__avatar">
-                    <input
-                        id="avatar"
-                        type="file"
-                        className="avatar__input"
-                        onChange={handleOnChange}
-                    />
-                    <label htmlFor="avatar" className="avatar__label">
-                        <IconButton
-                            color="primary"
-                            aria-label="upload picture"
-                            component="span">
-                            <Avatar
-                                className=""
-                                sx={{ width: 130, height: 130 }}
-                                src={avatar && URL.createObjectURL(avatar)}>
-                                {first_name || 'Anon'}
-                            </Avatar>
-                        </IconButton>
-                    </label>
+    return (
+        <main className="page profile">
+            <div className="profile__avatar">
+                <input
+                    id="avatar"
+                    type="file"
+                    className="avatar__input"
+                    onChange={handleOnChange}
+                />
+                <label htmlFor="avatar" className="avatar__label">
+                    <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span">
+                        <Avatar
+                            className=""
+                            sx={{ width: 130, height: 130 }}
+                            src={avatar && URL.createObjectURL(avatar)}>
+                            {first_name || 'Anon'}
+                        </Avatar>
+                    </IconButton>
+                </label>
+            </div>
+            <form onSubmit={handleSubmit}>
+                <div className="profile__title">
+                    {display_name}
                 </div>
-                <form onSubmit={handleSubmit}>
-                    <div className="profile__title">
-                        {display_name}
+                <FormControl>
+                    <div className='profile__inputs'>
+                        <FormLabel>Имя</FormLabel>
+                        <TextField
+                            type="text"
+                            onChange={handleChange}
+                            value={first_name}
+                            id='first_name'
+                            fullWidth
+                            required
+                            sx={{ mb: 1 }} />
+                        <FormLabel>Фамилия</FormLabel>
+                        <TextField
+                            type="text"
+                            onChange={handleChange}
+                            value={second_name}
+                            id='second_name'
+                            fullWidth
+                            required
+                            sx={{ mb: 1 }} />
+                        <FormLabel>Отображаемое имя</FormLabel>
+                        <TextField
+                            type="text"
+                            onChange={handleChange}
+                            value={display_name}
+                            id='display_name'
+                            fullWidth
+                            required
+                            sx={{ mb: 1 }} />
+                        <FormLabel>Логин</FormLabel>
+                        <TextField
+                            type="text"
+                            onChange={handleChange}
+                            value={login}
+                            id='login'
+                            fullWidth
+                            required
+                            sx={{ mb: 1 }} />
+                        <FormLabel>E-mail</FormLabel>
+                        <TextField
+                            type="text"
+                            onChange={e => setEmail(e.target.value)}
+                            value={email}
+                            id='email'
+                            fullWidth
+                            required
+                            sx={{ mb: 1 }} />
+                        <FormLabel>Телефон</FormLabel>
+                        <TextField
+                            type='tel'
+                            onChange={e => setPhone(e.target.value)}
+                            value={phone}
+                            id='tel'
+                            fullWidth
+                            required />
                     </div>
-                    <FormControl>
-                        <div className='profile__inputs'>
-                            <FormLabel>Имя</FormLabel>
-                            <TextField
-                                type="text"
-                                onChange={handleChange}
-                                value={first_name}
-                                id='first_name'
-                                fullWidth
-                                required
-                                sx={{ mb: 1 }} />
-                            <FormLabel>Фамилия</FormLabel>
-                            <TextField
-                                type="text"
-                                onChange={handleChange}
-                                value={second_name}
-                                id='second_name'
-                                fullWidth
-                                required
-                                sx={{ mb: 1 }} />
-                            <FormLabel>Отображаемое имя</FormLabel>
-                            <TextField
-                                type="text"
-                                onChange={handleChange}
-                                value={display_name}
-                                id='display_name'
-                                fullWidth
-                                required
-                                sx={{ mb: 1 }} />
-                            <FormLabel>Логин</FormLabel>
-                            <TextField
-                                type="text"
-                                onChange={handleChange}
-                                value={login}
-                                id='login'
-                                fullWidth
-                                required
-                                sx={{ mb: 1 }} />
-                            <FormLabel>E-mail</FormLabel>
-                            <TextField
-                                type="text"
-                                onChange={e => setEmail(e.target.value)}
-                                value={email}
-                                id='email'
-                                fullWidth
-                                required
-                                sx={{ mb: 1 }} />
-                            <FormLabel>Телефон</FormLabel>
-                            <TextField
-                                type='tel'
-                                onChange={e => setPhone(e.target.value)}
-                                value={phone}
-                                id='tel'
-                                fullWidth
-                                required />
-                        </div>
-                        <div className="profile__buttons">
-                            <Button type="submit">Сохранить данные</Button>
-                            <EditPassword />
-                            <Button color="error" onClick={onLogout}>
-                                Выйти
-                            </Button>
-                        </div>
-                    </FormControl>
-                </form>
-            </main>
-        )
-    }
+                    <div className="profile__buttons">
+                        <Button type="submit">Сохранить данные</Button>
+                        <EditPassword />
+                        <Button color="error" onClick={onLogout}>
+                            Выйти
+                        </Button>
+                    </div>
+                </FormControl>
+            </form>
+        </main>
+    )
 }
 
-export default Profile
+export default withAuthorizationCheck(Profile);
