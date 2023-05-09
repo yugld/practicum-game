@@ -12,8 +12,9 @@ import { useFlag } from '../../hooks/useFlag';
 
 import "./styles.less"
 import "../../assets/base/index.less"
+import { withAuthorizationCheck } from '../../utils/authorizedPage';
 
-export const GameStart = () => {
+const GameStart = () => {
     const [visible, openDialog, closeDialog] = useFlag(false);
     const [inputValue, setInputValue] = useState('');
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const GameStart = () => {
         console.log(inputValue);
         handleClose();
     }
-    
+
     const handleClose = () => {
         closeDialog();
         setInputValue('');
@@ -104,3 +105,5 @@ export const GameStart = () => {
         </div>
     )
 }
+
+export default withAuthorizationCheck(GameStart);

@@ -5,6 +5,7 @@ import { Button, TextField, Avatar, FormControl, FormLabel, IconButton } from '@
 import EditPassword from '../../components/EditPassword/EditPassword'
 
 import './Profile.less'
+import { withAuthorizationCheck } from '../../utils/authorizedPage'
 
 const Profile = () => {
     const navigate = useNavigate()
@@ -69,7 +70,8 @@ const Profile = () => {
         userApi
             .logOut()
             .then(() => {
-                navigate('/', { replace: true })
+                localStorage.setItem('isAuthenticated', String(false));
+                navigate('/login', { replace: true });
             })
             .catch(({ response }) => {
                 const reason = response?.data?.reason
@@ -233,4 +235,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default withAuthorizationCheck(Profile);
