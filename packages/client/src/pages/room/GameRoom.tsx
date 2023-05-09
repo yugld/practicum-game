@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom";
+
 import {
     Button,
     Input,
@@ -11,8 +12,9 @@ import {
 import { useFlag } from '../../hooks/useFlag';
 
 import "./styles.less"
+import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
-export const GameRoom = () => {
+const GameRoom = () => {
     const params = useParams<Record<string, any>>();
     const navigate = useNavigate();
     const roomId = params.roomId;
@@ -24,7 +26,7 @@ export const GameRoom = () => {
         console.log(inputValue);
         handleClose();
     }
-    
+
     const handleClose = () => {
         closeDialog();
         setInputValue('');
@@ -69,3 +71,5 @@ export const GameRoom = () => {
         </div>
     )
 }
+
+export default withAuthorizationCheck(GameRoom);

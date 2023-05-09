@@ -1,7 +1,12 @@
+import { StyledEngineProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
+import { BrowserRouter } from 'react-router-dom'
+import theme from './theme'
+
 import App from './App'
 import { render, screen } from '@testing-library/react'
 
-const appContent = 'Регистрация'
+const appContent = 'Об игре';
 
 // @ts-ignore
 global.fetch = jest.fn(() =>
@@ -9,6 +14,14 @@ global.fetch = jest.fn(() =>
 )
 
 test('Example test', async () => {
-  render(<App />)
+  render(
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  )
   expect(screen.getByText(appContent)).toBeDefined()
 })
