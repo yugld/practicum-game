@@ -22,27 +22,21 @@ import './App.less'
 function App () {
   const { isDarkTheme } = useContext(ThemeContext)
   return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={ theme }>
-        <BrowserRouter>
-          <MainHeader />
-          <Routes>
-            <Route path='*' element={ <NotFound /> } />
-            <Route path='/' element={ <Home /> } />
-            <Route path='/login' element={ <Login /> } />
-            <Route path='/registration' element={ <Registration /> } />
-            <Route path='/profile' element={ <Profile /> } />
-            <Route path='/leaderboard' element={ <Leaderboard /> } />
-            <Route path='/forum' element={ <Forum /> } />
-            <Route path='/rules' element={ <GameRules /> } />
-            <Route path='/game' element={ <Game /> } />
-            <Route path='/game/start' element={ <GameStart /> } />
-            <Route path='/game/end' element={ <GameEnd /> } />
-            <Route path='/rooms/:roomId' element={ <GameRoom /> } />
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <MainHeader />
+    <Routes>
+      <Route path='*' element={ <NotFound /> } />
+      <Route path='/' element={ <Home /> } />
+      <Route path='/login' element={ <Login /> } />
+      <Route path='/registration' element={ <Registration /> } />
+      <Route path='/profile' element={ <Profile /> } />
+      <Route path='/leaderboard' element={ <Leaderboard /> } />
+      <Route path='/forum' element={ <Forum /> } />
+      <Route path='/rules' element={ <GameRules /> } />
+      <Route path='/game' element={ <Game /> } />
+      <Route path='/game/start' element={ <GameStart /> } />
+      <Route path='/game/end' element={ <GameEnd /> } />
+      <Route path='/rooms/:roomId' element={ <GameRoom /> } />
+    </Routes>
   </div>
 }
 
