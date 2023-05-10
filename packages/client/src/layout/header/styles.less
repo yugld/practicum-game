@@ -1,23 +1,27 @@
 @import '../../assets/base/variables.less';
 
-.main-header {
+.page-links {
   display: flex;
   padding: 0 6px;
   width: 100%;
-  height: 60px;
-  position: fixed;
 
-  background-color: @ui-main-header-background__base;
   &__item {
     display: flex;
     justify-content: center;
     align-items: center;
 
     padding: 8px 12px;
+
     &:hover {
-      cursor: pointer;
+      cursor: pointer ;
       border-radius: 4px;
-      background-color: rgba(@ui-main-header-link-background__base, 0.3);
+      background-color: var(@ui-main-background__base);
     }
+  }
+}
+
+.main-header {
+  &__dropdown-menu {
+    display: flex;
   }
 }

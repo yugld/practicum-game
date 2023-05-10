@@ -11,27 +11,32 @@ import { Home } from './pages/home/Home'
 import { default as GameRoom } from './pages/room/GameRoom'
 import { NotFound } from './pages/notFound/NotFound'
 import { GameEnd } from './pages/gameEnd/GameEnd'
+
+import { useContext } from 'react'
+import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
+import Game from './pages/game/Game'
 import './App.less'
 
-function App() {
-  return (
-    <div className="app">
-      <MainHeader />
-      <Routes>
-        <Route path="*" element={<NotFound />} />
-        <Route path="/" element={<Home/>} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/registration" element={<Registration/>} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/leaderboard" element={<Leaderboard/>} />
-        <Route path="/forum" element={<Forum/>} />
-        <Route path="/rules" element={<GameRules/>} />
-        <Route path="/game/start" element={<GameStart />} />
-        <Route path="/game/end" element={<GameEnd/>}/>
-        <Route path="/rooms/:roomId" element={<GameRoom/>} />
-      </Routes>
-    </div>
-  );
+function App () {
+  const { isDarkTheme } = useContext(ThemeContext)
+  return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
+    <MainHeader />
+    <Routes>
+      <Route path='*' element={ <NotFound /> } />
+      <Route path='/' element={ <Home /> } />
+      <Route path='/login' element={ <Login /> } />
+      <Route path='/registration' element={ <Registration /> } />
+      <Route path='/profile' element={ <Profile /> } />
+      <Route path='/leaderboard' element={ <Leaderboard /> } />
+      <Route path='/forum' element={ <Forum /> } />
+      <Route path='/rules' element={ <GameRules /> } />
+      <Route path='/game' element={ <Game /> } />
+      <Route path='/game/start' element={ <GameStart /> } />
+      <Route path='/game/end' element={ <GameEnd /> } />
+      <Route path='/rooms/:roomId' element={ <GameRoom /> } />
+    </Routes>
+  </div>
 }
 
 export default App
+
