@@ -14,4 +14,24 @@ export interface ChangePasswordData {
   newPassword: string
 }
 
+export interface RegisterRequestData {
+  first_name: string,
+  second_name: string,
+  login: string,
+  email: string,
+  password: string,
+  phone: string,
+}
+
+export interface LoginRequestData {
+  login: string,
+  password: string,
+}
+
+export type APIError = {
+  reason: string,
+}
+
+export type ResponseData = object | APIError; 
+
 export type TUserOmit = Omit<IUser, 'id' | 'avatar'>

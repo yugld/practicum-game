@@ -30,10 +30,10 @@ export default function MainHeader () {
           <Link className='page-links__item' to='/forum'>Форум</Link>
           <Link className='page-links__item' to='/rules'>Правила</Link>
           <Link className='page-links__item' to='/game'>Игра</Link>
-          <Link  className="page-links__item" to="/game/start">Начало игры</Link>
+          <Link className='page-links__item' to='/game/start'>Начало игры</Link>
         </div>
         <div className='main-header__dropdown-menu'>
-          <ToggleTheme/>
+          <ToggleTheme />
           <Tooltip title='Open settings'>
             <IconButton onClick={ handleOpenUserMenu } id='basic-button' aria-haspopup='true'>
               <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />

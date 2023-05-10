@@ -5,11 +5,11 @@ export default class Player {
     user: UserType
     isProtect = false
     numberOfTokens: number
-    cardOnHand: CardType
+    cardOnHand: CardType | null
 
     constructor(props: { user: UserType}){
         this.user = props.user
         this.numberOfTokens = 0
-        this.cardOnHand = {} as CardType
+        this.cardOnHand = null
     }
 }

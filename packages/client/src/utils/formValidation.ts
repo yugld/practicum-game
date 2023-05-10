@@ -10,7 +10,7 @@ function generalStringValidation(value: string, minLettersCount: number): string
         return 'Value can not be empty';
     }
     if (value.length < minLettersCount) {
-        return `Value should contains more than ${minLettersCount - 1} letters`;
+        return `Value should contain more than ${minLettersCount - 1} letters`;
     }
 
     return '';
