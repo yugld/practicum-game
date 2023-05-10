@@ -70,7 +70,7 @@ export default function SidebarPanel (props: Props) {
           { props.discardedCard?.value === 2 && props.gameProgress === GameProgress.confirm &&
             <div className='player-card'>
               <h5>Карта игрока { getNotActivePlayer().user.name }</h5>
-              <img src={ getNotActivePlayer().cardOnHand.imgSrc('light') }
+              <img src={ getNotActivePlayer().cardOnHand?.imgSrc('light') }
                    style={ { height: '100px', width: 'auto' } } />
             </div>
           }
