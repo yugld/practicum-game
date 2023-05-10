@@ -14,7 +14,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     static getDerivedStateFromError(error: Error) {
         return { error };
     }
-    
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -28,8 +28,6 @@ export default class ErrorBoundary extends Component<Props, State> {
             error: error,
             errorInfo: errorInfo
         });
-
-        console.log(error, errorInfo);
     }
 
     render() {
