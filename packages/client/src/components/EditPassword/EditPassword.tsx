@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   Button,
   TextField,
@@ -8,25 +7,25 @@ import {
   Dialog
 } from '@mui/material'
 import { userApi } from '../../api/userApi'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 
-export default function EditPassword() {
-  const [open, setOpen] = React.useState(false)
-  const [oldPassword, setOldPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
+export default function EditPassword () {
+  const [ open, setOpen ] = useState(false)
+  const [ oldPassword, setOldPassword ] = useState('')
+  const [ newPassword, setNewPassword ] = useState('')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = (e.currentTarget as HTMLInputElement).value
     const fieldName = (e.currentTarget as HTMLInputElement).id
     switch (fieldName) {
-        case 'oldPassword':
-          setOldPassword(value)
-            break;
-        case 'newPassword':
-          setNewPassword(value)
-            break;
+      case 'oldPassword':
+        setOldPassword(value)
+        break
+      case 'newPassword':
+        setNewPassword(value)
+        break
     }
-}
+  }
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -37,13 +36,13 @@ export default function EditPassword() {
     setNewPassword('')
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log({ newPassword })
     userApi
       .editPassword({ newPassword, oldPassword })
       .then(() => {
-        alert(`change password ${newPassword}`)
+        alert(`change password ${ newPassword }`)
         handleClose()
       })
       .catch(({ response }) => {
@@ -57,34 +56,34 @@ export default function EditPassword() {
 
   return (
     <>
-      <Button onClick={handleClickOpen}>Изменить пароль</Button>
-      <Dialog open={open} onClose={handleClose}>
-        <form onSubmit={handleSubmit}>
+      <Button onClick={ handleClickOpen }>Изменить пароль</Button>
+      <Dialog open={ open } onClose={ handleClose }>
+        <form onSubmit={ handleSubmit }>
           <DialogContent>
             <FormLabel>Старый пароль</FormLabel>
             <TextField
-              margin="dense"
-              onChange={handleChange}
-              value={oldPassword}
+              margin='dense'
+              onChange={ handleChange }
+              value={ oldPassword }
               id='oldPassword'
-              type="string"
+              type='string'
               fullWidth
               required
             />
             <FormLabel>Новый пароль</FormLabel>
             <TextField
-              margin="dense"
-              onChange={handleChange}
-              value={newPassword}
+              margin='dense'
+              onChange={ handleChange }
+              value={ newPassword }
               id='newPassword'
-              type="string"
+              type='string'
               fullWidth
               required
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Отмена</Button>
-            <Button type="submit">Сохранить</Button>
+            <Button onClick={ handleClose }>Отмена</Button>
+            <Button type='submit'>Сохранить</Button>
           </DialogActions>
         </form>
       </Dialog>
