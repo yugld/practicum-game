@@ -1,0 +1,47 @@
+@import '../../assets/base/colors.less';
+@import '../../assets/base/variables.less';
+
+.room-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: @ui-color[@orange][@9];
+    height: 100%;
+    gap: 100px;
+
+    &__header {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        &-buttons {
+            width: 70%;
+            display: flex;
+            gap: 30px;
+        }
+    }
+
+    &__players {
+        width: 30%;
+        padding: 20px 40px;
+        border-radius: 4px;
+        background-color: fade(@ui-color[@orange][@1], 70%);
+        list-style-type: decimal;
+    }
+
+    &__dialog {
+        min-width: 500px;
+
+        &_input {
+            width: 100%;
+        }
+
+        &_footer {
+            display: flex;
+            gap: 20px;
+            padding: 16px 24px;
+        }
+    }
+}

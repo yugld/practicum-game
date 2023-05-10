@@ -1,0 +1,119 @@
+.game-page {
+  display: flex;
+  height: 100%;
+  overflow-y: auto;
+
+  &__body {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+
+    .game-board {
+      width: 100%;
+      height: 400px;
+    }
+  }
+
+  &__sidebar {
+    position: sticky;
+    top: 0;
+    right: 0;
+    width: 30%;
+    background-color: var(@ui-main-background__base);
+    padding: 20px;
+    box-sizing: border-box;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+
+    .sidebar-header {
+      padding: 0 20px;
+      background-color: var(@ui-secondary-background__base);;
+    }
+
+    .sidebar-body {
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      &__content {
+        width: 100%;
+      }
+
+      &__status-play {
+        padding: 0 20px;
+      }
+
+      &__actions {
+        width: 100%;
+
+        .result-message {
+          margin-top: 20px;
+          padding: 0 20px;
+        }
+
+        button {
+          margin-top: 20px;
+        }
+      }
+
+      .select-card-panel {
+        max-width: 100%;
+
+        &__header {
+          padding: 0 20px;
+        }
+
+        .card-list {
+          &__item {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &:hover {
+              cursor: pointer;
+              opacity: 0.5;
+            }
+
+            .item-value {
+              width: 40px;
+            }
+
+            .item-count {
+              width: 40px
+            }
+          }
+        }
+
+        button {
+          margin-top: 20px;
+        }
+      }
+
+      .player-card {
+        margin-top: 20px;
+
+        img {
+          width: 80%;
+        }
+      }
+    }
+
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    .buttons {
+      max-width: 300px;
+
+    }
+  }
+}
