@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
@@ -29,7 +29,7 @@ const GameStart = () => {
         setInputValue('');
     }
 
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
     }
 
