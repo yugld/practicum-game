@@ -10,7 +10,6 @@ interface ThemeContentType {
 
 export const ThemeContext = createContext<ThemeContentType>({} as ThemeContentType)
 
-
 export function ThemeWrapper ({ children }: { children: any }) {
   const [ isDarkTheme, setTheme ] = useState(false)
   const applyTheme = () => {

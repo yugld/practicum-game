@@ -13,44 +13,45 @@ import usePreviousValueOfVariable from '../../hooks/usePreviousValueOfVariable'
 import { CHARACTER_VALUES } from '../../constants/cardList'
 
 export const users = [ { id: 1, name: 'Maria' }, { id: 2, name: 'Daria' } ]
-
 export const currentUser = users[0]
-
-// Инициализация очереди игроков
-const queue = new Queue()
-
 
 export default function Game () {
   // Инициализация колоды из 16 карт
   let initDeck = CardDeck.init(cardList)
+
+// Инициализация очереди игроков
+  let queue: Queue | null = null
+
   const takeRandomCard = () => {
 
     const { newDeck, selectedCard } = CardDeck.takeRandomCardFromDeck(initDeck)
     initDeck = newDeck
     return selectedCard
   }
-  const [ players, setPlayers ] = useState<Player[]>(() =>  Players.init(users, (player: Player, index: number) => {
+  const [ players, setPlayers ] = useState<Player[]>(() => Players.init(users, (player: Player, index: number) => {
     if (index !== 0) {
       player.cardOnHand = takeRandomCard()
     }
   }))
 
-
-  useEffect(() => {
-    players.forEach((player: Player) => queue.enqueue(player))
-  }, [])
+  useMemo(() => {
+    queue = new Queue()
+    players.forEach((player: Player) => queue?.enqueue(player))
+  }, [players])
 
   const [ gameProgress, setGameProgress ] = useState(GameProgress.choice)
 
   const getActivePlayer = () => {
-    const player = queue.dequeue()
-    queue.enqueue(player)
+    const player = queue?.dequeue()
+    queue?.enqueue(player)
     return player
   }
 
   const [ activePlayer, setActivePlayer ] = useState<Player>(getActivePlayer())
   const [ isSelectCard, setIsSelectCard ] = useState<boolean>(false)
   const prevPlayer: Player | undefined = usePreviousValueOfVariable(activePlayer)
+
+
   const [ cards, setCards ] = useState([ takeRandomCard(), takeRandomCard() ])
   const [ deck, setDeck ] = useState(CardDeck.shuffle(initDeck))
   const [ discardedCard, setDiscardedCard ] = useState<CardType | null>(null)
@@ -94,12 +95,15 @@ export default function Game () {
     }
     if (prevPlayer && activePlayer.user.id !== prevPlayer.user?.id || !prevPlayer) {
       let renderCards = []
+
       if (currentUser.id === activePlayer.user.id) {
         changeGameProgress(GameProgress.choice)
         renderCards = cards
       } else {
+
         changeGameProgress(GameProgress.waiting)
         const cardOnHand = Players.getPlayerByUserId(players, currentUser.id).cardOnHand
+
         if (cardOnHand) {
           renderCards.push(cardOnHand)
         }
