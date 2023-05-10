@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
+import {  Routes, Route } from 'react-router-dom'
 import MainHeader from './layout/header/MainHeader'
 import Login from './pages/login/Login'
 import Registration from './pages/registration/Registration'
@@ -12,12 +11,10 @@ import { Home } from './pages/home/Home'
 import { default as GameRoom } from './pages/room/GameRoom'
 import { NotFound } from './pages/notFound/NotFound'
 import { GameEnd } from './pages/gameEnd/GameEnd'
-
-import theme from './theme'
 import { useContext } from 'react'
-import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
-import Game from './pages/game/Game'
 import './App.less'
+import Game from './pages/game/Game'
+import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
 
 function App () {
   const { isDarkTheme } = useContext(ThemeContext)
