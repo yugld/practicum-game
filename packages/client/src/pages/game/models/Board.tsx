@@ -22,7 +22,7 @@ export default class Board {
     this.canvas = canvasRef as HTMLCanvasElement
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
     if (!this.context) return
-
+    this.setDimensionsCanvas()
   }
 
   getCoordinatesForOneCard () {

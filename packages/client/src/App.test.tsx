@@ -1,8 +1,8 @@
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { render, screen } from '@testing-library/react'
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
-import { BrowserRouter } from 'react-router-dom'
 
 const appContent = 'Об игре';
 
