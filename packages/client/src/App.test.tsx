@@ -1,5 +1,8 @@
 import App from './App'
 import { render, screen } from '@testing-library/react'
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
+import theme from './theme'
+import { BrowserRouter } from 'react-router-dom'
 
 const appContent = 'Об игре';
 
@@ -10,7 +13,13 @@ global.fetch = jest.fn(() =>
 
 test('Example test', async () => {
   render(
-    <App />
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
   expect(screen.getByText(appContent)).toBeDefined()
 })
