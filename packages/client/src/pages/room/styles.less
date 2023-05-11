@@ -25,10 +25,13 @@
 
     &__players {
         width: 30%;
-        padding: 20px 40px;
         border-radius: 4px;
         background-color: fade(@ui-color[@orange][@1], 70%);
-        list-style-type: decimal;
+    }
+
+    &__player {
+        display: flex;
+        gap: 20px;
     }
 
     &__dialog {
@@ -36,6 +39,11 @@
 
         &_input {
             width: 100%;
+        }
+
+        &_player {
+            display: flex;
+            gap: 20px;
         }
 
         &_footer {

@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 
+export const RESOURCE_URL = 'https://ya-praktikum.tech/api/v2/resources';
+
 export abstract class BaseAPI {
   protected readonly api: AxiosInstance
   
