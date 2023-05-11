@@ -15,8 +15,9 @@ import {
     ListItemAvatar,
     IconButton
 } from '@mui/material';
+import { io } from 'socket.io-client';
 import { useFlag } from '../../hooks/useFlag';
-import { addRoomUsers, deleteRoomUsers, getRoomUsers } from '../../services/room';
+import { addRoomUsers, deleteRoomUsers, getRoomToken, getRoomUsers } from '../../services/room';
 import { searchUsers } from "../../services/user";
 import { IUser } from '../../api/types';
 import { RESOURCE_URL } from "../../api/BaseApi";
@@ -35,6 +36,7 @@ const GameRoom = () => {
     const [roomUsers, setRoomUsers] = useState<IUser[]>([]);
     const [userList, setUserList] = useState<IUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<IUser | undefined>(undefined);
+    const [roomToken, setRoomToken] = useState<string>('');
 
     const handleSubmit = () => {
         if (selectedUser)
@@ -88,9 +90,44 @@ const GameRoom = () => {
                     console.error(reason)
                 }
             })
+
+        getRoomToken(roomId)
+            .then((token) => setRoomToken(token))
+            .catch(({ response }) => {
+                const reason = response?.data?.reason
+
+                if (reason) {
+                    console.error(reason)
+                }
+            })
     }, []);
 
-    const goToGameEndPage = () => {
+    // useEffect(() => {
+    //     if (roomToken) {
+    //         const url = `wss://ya-praktikum.tech/ws/chats/877084/${roomId}/${roomToken}`;
+
+    //         const socket = io(url);
+
+    //         socket.on('connected', () => console.log('connect'));
+    //         socket.on('disconnect', () => console.log('disconnect'));
+    //         socket.on('message', (message) => {
+    //             const data = JSON.parse(message.data);
+    
+    //             if (data.type && data.type === 'pong') {
+    //                 return;
+    //             }
+    
+    //             socket.emit('message', data);
+    //         })
+
+    //         return () => {
+    //             socket.off('connected', () => console.log('connect'));
+    //             socket.off('disconnect', () => console.log('disconnect'));
+    //         };
+    //     }
+    // }, [roomToken]);
+
+    const goToGamePage = () => {
         navigate(`/rooms/${roomId}/game`)
     }
 
@@ -122,7 +159,7 @@ const GameRoom = () => {
                     </Button>
                     <Button
                         className="button-filled"
-                        onClick={goToGameEndPage}
+                        onClick={goToGamePage}
                         disabled={roomUsers.length < 2}
                     >
                         Начать игру

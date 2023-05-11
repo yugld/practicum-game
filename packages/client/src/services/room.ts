@@ -70,3 +70,11 @@ export const addRoomUsers = async ({id, users}: RoomUsersPayload) => {
             return Promise.reject(response?.data?.reason);
         });
 }
+
+export const getRoomToken = async (id: number) => {
+    return roomApi.getToken(id)
+        .then((token: string) => token)
+        .catch(({ response }) => {
+            return Promise.reject(response?.data?.reason);
+        });
+}
