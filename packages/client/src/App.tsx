@@ -29,10 +29,10 @@ function App () {
       <Route path='/leaderboard' element={ <Leaderboard /> } />
       <Route path='/forum' element={ <Forum /> } />
       <Route path='/rules' element={ <GameRules /> } />
-      <Route path='/game' element={ <Game /> } />
-      <Route path='/game/start' element={ <GameStart /> } />
-      <Route path='/game/end' element={ <GameEnd /> } />
+      <Route path='/rooms' element={ <GameStart /> } />
       <Route path='/rooms/:roomId' element={ <GameRoom /> } />
+      <Route path='/rooms/:roomId/game' element={ <Game /> } />
+      <Route path='/rooms/:roomId/end' element={ <GameEnd /> } />
     </Routes>
   </div>
 }

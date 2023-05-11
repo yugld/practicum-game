@@ -23,7 +23,7 @@ import { RESOURCE_URL } from "../../api/BaseApi";
 import deleteIcon from "../../assets/icons/delete.svg"
 
 import "./styles.less"
-import { withAuthorizationCheck } from "../../utils/authorizedPage";
+// import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
 const GameRoom = () => {
     const params = useParams<Record<string, any>>();
@@ -91,7 +91,7 @@ const GameRoom = () => {
     }, []);
 
     const goToGameEndPage = () => {
-        navigate(`/game/end`)
+        navigate(`/rooms/${roomId}/game`)
     }
 
     const deleteUserFromRoom = (userId: number) => {
@@ -200,4 +200,5 @@ const GameRoom = () => {
     )
 }
 
-export default withAuthorizationCheck(GameRoom);
+// export default withAuthorizationCheck(GameRoom);
+export default GameRoom;

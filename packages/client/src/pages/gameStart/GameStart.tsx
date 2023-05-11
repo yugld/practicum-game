@@ -14,7 +14,7 @@ import { Room } from '../../api/types';
 
 import "./styles.less"
 import "../../assets/base/index.less"
-import { withAuthorizationCheck } from '../../utils/authorizedPage';
+// import { withAuthorizationCheck } from '../../utils/authorizedPage';
 
 const GameStart = () => {
     const [visible, openDialog, closeDialog] = useFlag(false);
@@ -130,4 +130,5 @@ const GameStart = () => {
     )
 }
 
-export default withAuthorizationCheck(GameStart);
+// export default withAuthorizationCheck(GameStart);
+export default GameStart;
