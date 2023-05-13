@@ -15,9 +15,8 @@ import {
     ListItemAvatar,
     IconButton
 } from '@mui/material';
-import { io } from 'socket.io-client';
 import { useFlag } from '../../hooks/useFlag';
-import { addRoomUsers, deleteRoomUsers, getRoomToken, getRoomUsers } from '../../services/room';
+import { addRoomUsers, deleteRoomUsers, getRoomUsers } from '../../services/room';
 import { searchUsers } from "../../services/user";
 import { IUser } from '../../api/types';
 import { RESOURCE_URL } from "../../api/BaseApi";
@@ -26,7 +25,11 @@ import deleteIcon from "../../assets/icons/delete.svg"
 import "./styles.less"
 // import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
-const GameRoom = () => {
+type Props = {
+    websocket?: WebSocket;
+}
+
+const GameRoom = ({websocket}: Props) => {
     const params = useParams<Record<string, any>>();
     const navigate = useNavigate();
     const roomId: number = params.roomId;
@@ -36,7 +39,7 @@ const GameRoom = () => {
     const [roomUsers, setRoomUsers] = useState<IUser[]>([]);
     const [userList, setUserList] = useState<IUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<IUser | undefined>(undefined);
-    const [roomToken, setRoomToken] = useState<string>('');
+    const [usersCounter, setUsersCounter] = useState<number>(0);
 
     const handleSubmit = () => {
         if (selectedUser)
@@ -90,45 +93,31 @@ const GameRoom = () => {
                     console.error(reason)
                 }
             })
-
-        getRoomToken(roomId)
-            .then((token) => setRoomToken(token))
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-
-                if (reason) {
-                    console.error(reason)
-                }
-            })
     }, []);
 
-    // useEffect(() => {
-    //     if (roomToken) {
-    //         const url = `wss://ya-praktikum.tech/ws/chats/877084/${roomId}/${roomToken}`;
+    useEffect(() => {
+        websocket?.addEventListener('message', (message: { data: any }) => {
+            const data = JSON.parse(message.data);
 
-    //         const socket = io(url);
+            if (data.type && data.type === 'pong') {
+                return;
+            }
 
-    //         socket.on('connected', () => console.log('connect'));
-    //         socket.on('disconnect', () => console.log('disconnect'));
-    //         socket.on('message', (message) => {
-    //             const data = JSON.parse(message.data);
-    
-    //             if (data.type && data.type === 'pong') {
-    //                 return;
-    //             }
-    
-    //             socket.emit('message', data);
-    //         })
+            if (data.content === 'game started') {
+                navigate(`/rooms/${roomId}/game`);
+            } else if (data.content === 'player connected') {
+                // todo: add user id
+                setUsersCounter(usersCounter + 1);
+            }
+        });
 
-    //         return () => {
-    //             socket.off('connected', () => console.log('connect'));
-    //             socket.off('disconnect', () => console.log('disconnect'));
-    //         };
-    //     }
-    // }, [roomToken]);
+        websocket?.addEventListener('open', () => {
+            websocket.send(JSON.stringify({ type: 'message', content: 'player connected' }));
+        });
+    }, [websocket]);
 
     const goToGamePage = () => {
-        navigate(`/rooms/${roomId}/game`)
+        websocket?.send(JSON.stringify({ type: 'message', content: 'game started' }));
     }
 
     const deleteUserFromRoom = (userId: number) => {
@@ -149,22 +138,25 @@ const GameRoom = () => {
         <div className="page room-page">
             <div className="room-page__header">
                 <h3 className="room-page__header-title">Комната {roomId} (будет название комнаты)</h3>
-                <div className="room-page__header-buttons">
-                    <Button
-                        className="button-filled"
-                        onClick={openDialog}
-                        disabled={roomUsers.length === 4}
-                    >
-                        Добавить игрока
-                    </Button>
-                    <Button
-                        className="button-filled"
-                        onClick={goToGamePage}
-                        disabled={roomUsers.length < 2}
-                    >
-                        Начать игру
-                    </Button>
-                </div>
+                {Boolean(usersCounter) && <div>Подключено игроков: {usersCounter}</div>}
+                {Boolean(websocket) && (
+                    <div className="room-page__header-buttons">
+                        <Button
+                            className="button-filled"
+                            onClick={openDialog}
+                            disabled={roomUsers.length === 4}
+                        >
+                            Добавить игрока
+                        </Button>
+                        <Button
+                            className="button-filled"
+                            onClick={goToGamePage}
+                            disabled={roomUsers.length < 2}
+                        >
+                            Начать игру
+                        </Button>
+                    </div>
+                )}
             </div>
             {!!roomUsers.length && (
                 <List className='room-page__players'>

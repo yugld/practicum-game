@@ -1,10 +1,15 @@
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 import "./styles.less"
 import "../../assets/base/index.less"
 
-export const GameEnd = () => {
+type Props = {
+    websocket?: WebSocket;
+}
+
+export const GameEnd = ({websocket}: Props) => {
     const params = useParams<Record<string, any>>();
     const roomId: number = params.roomId;
     const navigate = useNavigate();
@@ -17,7 +22,15 @@ export const GameEnd = () => {
         navigate(`/rooms/${roomId}/game`)
     }
 
-    navigate(`/rooms/${roomId}/game`)
+    useEffect(() => {
+        websocket?.addEventListener('message', (message: { data: any }) => {
+            const data = JSON.parse(message.data);
+    
+            if (data.type && data.type === 'pong') {
+                return;
+            }
+        });
+      }, [websocket]);
 
     return (
         <div className="page game-end-page">

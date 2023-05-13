@@ -15,7 +15,21 @@ import { CHARACTER_VALUES } from '../../constants/cardList'
 export const users = [ { id: 1, name: 'Maria' }, { id: 2, name: 'Daria' } ]
 export const currentUser = users[0]
 
-export default function Game () {
+type Props = {
+  websocket?: WebSocket;
+}
+
+export default function Game({ websocket }: Props) {
+  useEffect(() => {
+    websocket?.addEventListener('message', (message: { data: any }) => {
+        const data = JSON.parse(message.data);
+
+        if (data.type && data.type === 'pong') {
+            return;
+        }
+    });
+  }, [websocket]);
+  
   // Инициализация колоды из 16 карт
   let initDeck = CardDeck.init(cardList)
 
