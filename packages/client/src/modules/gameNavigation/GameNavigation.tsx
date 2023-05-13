@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Route, Routes, Outlet, useParams } from "react-router-dom"
-import { io } from 'socket.io-client'
 import GameRoom from "../../pages/room/GameRoom"
 import Game from "../../pages/game/Game"
 import { GameEnd } from "../../pages/gameEnd/GameEnd"
