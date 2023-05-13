@@ -1,5 +1,5 @@
 export interface IUser {
-  id?: number
+  id: number
   login: string
   first_name: string
   second_name: string
@@ -35,3 +35,13 @@ export type APIError = {
 export type ResponseData = object | APIError; 
 
 export type TUserOmit = Omit<IUser, 'id' | 'avatar'>
+
+export interface Room {
+  id: number;
+  title: string;
+  last_message: {
+    user: IUser;
+    time: string;
+    content: string;
+  }
+}

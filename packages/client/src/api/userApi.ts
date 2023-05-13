@@ -2,7 +2,6 @@ import { BaseAPI } from './BaseApi'
 import { ChangePasswordData, IUser, TUserOmit } from './types'
 
 class UserApi extends BaseAPI {
-
   public getUser = () => this.api.get<IUser>('/auth/user')
 
   public editUser = (data: TUserOmit) =>
@@ -20,6 +19,11 @@ class UserApi extends BaseAPI {
     const data = new FormData()
     data.append('avatar', avatar)
     return this.api.put('/user/profile/avatar', data)
+  }
+
+  public async searchUsersByLogin(login: string): Promise<Array<IUser>> {
+    const response = await this.api.post('/user/search', { login })
+    return response.data;
   }
 }
 

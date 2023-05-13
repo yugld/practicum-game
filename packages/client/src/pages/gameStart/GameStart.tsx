@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
@@ -9,19 +9,32 @@ import {
     DialogActions
 } from '@mui/material';
 import { useFlag } from '../../hooks/useFlag';
+import { createRoom, getRoomList } from '../../services/room';
+import { Room } from '../../api/types';
 
 import "./styles.less"
 import "../../assets/base/index.less"
-import { withAuthorizationCheck } from '../../utils/authorizedPage';
+// import { withAuthorizationCheck } from '../../utils/authorizedPage';
 
 const GameStart = () => {
     const [visible, openDialog, closeDialog] = useFlag(false);
     const [inputValue, setInputValue] = useState('');
+    const [roomList, setRoomList] = useState<Room[]>([]);
+
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        console.log(inputValue);
-        handleClose();
+        createRoom(inputValue)
+            .then((id) => {
+                navigate(`/rooms/${id}`)
+                handleClose()
+            })
+            .catch(({ response }) => {
+                const reason = response?.data?.reason
+                if (reason) {
+                    console.error(reason);
+                }
+            })
     }
 
     const handleClose = () => {
@@ -33,9 +46,23 @@ const GameStart = () => {
         setInputValue(event.target.value);
     }
 
-    const goToRoom = (id: string) => {
+    const goToRoom = (id: number) => {
         navigate(`/rooms/${id}`)
     }
+
+    useEffect(() => {
+        getRoomList()
+            .then((rooms) => {
+                setRoomList(rooms);
+            })
+            .catch(({ response }) => {
+                const reason = response?.data?.reason
+
+                if (reason) {
+                    console.error(reason)
+                }
+            })
+    }, []);
 
     return (
         <div className="page game-start-page">
@@ -62,29 +89,26 @@ const GameStart = () => {
                         </p>
                     </div>
 
-                    <Button className="game-start-page__button button-filled" onClick={openDialog}>Начать новую игру</Button>
+                    <Button className="game-start-page__button button-filled" onClick={openDialog}>Создать новую комнату</Button>
                 </div>
 
                 <div className="game-start-page__rooms">
-                    <h3>Доступные комнаты</h3>
-                    <div className="game-start-page__room">
-                        <p>First test room</p>
-                        <Button
-                            className="game-start-page__button-small button-filled"
-                            onClick={() => goToRoom('1')}
-                        >
-                            Войти
-                        </Button>
-                    </div>
-                    <div className="game-start-page__room" id='2'>
-                        <p>Second test room</p>
-                        <Button
-                            className="game-start-page__button-small button-filled"
-                            onClick={() => goToRoom('2')}
-                        >
-                            Войти
-                        </Button>
-                    </div>
+                    {!!roomList.length && (
+                        <>
+                            <h3>Доступные комнаты</h3>
+                            {roomList.map((room) =>
+                                <div className="game-start-page__room" key={room.id}>
+                                    <p>{room.title}</p>
+                                    <Button
+                                        className="game-start-page__button-small button-filled"
+                                        onClick={() => goToRoom(room.id)}
+                                    >
+                                        Войти
+                                    </Button>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -106,4 +130,5 @@ const GameStart = () => {
     )
 }
 
-export default withAuthorizationCheck(GameStart);
+// export default withAuthorizationCheck(GameStart);
+export default GameStart;
