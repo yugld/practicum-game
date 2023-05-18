@@ -40,11 +40,20 @@ const Login = () => {
     if (!loginError && !passwordError) {
       login(loginData)
         .then(() => {
-          localStorage.setItem('isAuthenticated', String(true));
-          navigate('/', { replace: true });
+          setIsAuthenticated();
         })
-        .catch((reason) => setFormError(reason));
+        .catch((reason) => {
+          if (reason === 'User already in system') {
+            setIsAuthenticated();
+          }
+          setFormError(reason);
+        });
     }
+  }
+
+  function setIsAuthenticated() {
+    localStorage.setItem('isAuthenticated', String(true));
+    navigate('/', { replace: true });
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
