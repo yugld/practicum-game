@@ -1,8 +1,12 @@
-import { AreaCardType, CardType, CoordinatesType, DimensionsType } from '../types'
+import {
+  AreaCardType,
+  CardType,
+  CoordinatesType,
+  DimensionsType,
+} from '../types'
 
 const MARGIN = 20
 export const THEME = 'light'
-
 
 let coordinatesDiscardedCards = { x: 0, y: 0 }
 export default class Board {
@@ -10,69 +14,85 @@ export default class Board {
   context: CanvasRenderingContext2D
   cardDimensions: DimensionsType = {
     width: 150,
-    height: 200
+    height: 200,
   }
 
   cards: CardType[] = []
   areaCards: AreaCardType[] = []
   coordinates: CoordinatesType[] = []
-  choiceCards: boolean[] = [ false, false ]
+  choiceCards: boolean[] = [false, false]
 
-  constructor (canvasRef: HTMLCanvasElement | null) {
+  constructor(canvasRef: HTMLCanvasElement | null) {
     this.canvas = canvasRef as HTMLCanvasElement
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
     if (!this.context) return
     this.setDimensionsCanvas()
   }
 
-  getCoordinatesForOneCard () {
+  getCoordinatesForOneCard() {
     return [
       {
         x: this.canvas.width / 2 - this.cardDimensions.width / 2,
-        y: this.canvas.height / 2 - 50
-      }
+        y: this.canvas.height / 2 - 50,
+      },
     ]
-
   }
 
-  getCoordinatesForTwoCard () {
+  getCoordinatesForTwoCard() {
     return [
       {
         x: this.canvas.width / 2 - this.cardDimensions.width - MARGIN,
-        y: this.canvas.height / 2 - 50
-      }, {
+        y: this.canvas.height / 2 - 50,
+      },
+      {
         x: this.canvas.width / 2 + MARGIN,
-        y: this.canvas.height / 2 - 50
-      }
+        y: this.canvas.height / 2 - 50,
+      },
     ]
   }
 
+  drawDiscardedCards(cards: CardType[]) {
+    cards.map((card: CardType) => {
+      this.drawDiscardedCard(card)
+    })
+  }
+
+  resetDiscardedCards() {
+    this.context.clearRect(
+      0,
+      0,
+      coordinatesDiscardedCards.x + 110,
+      coordinatesDiscardedCards.y + 80
+    )
+    coordinatesDiscardedCards = { x: 0, y: 0 }
+  }
 
   // Отрисовать сброшенную карту
-  drawDiscardedCard (card: CardType) {
+  drawDiscardedCard(card: CardType) {
     if (!this.canvas) return
     if (coordinatesDiscardedCards.x === 0) {
       coordinatesDiscardedCards.x = this.canvas.width / 2 - 200
     }
     this.createCardImage(
-      card.imgSrc(THEME),
+      card.imgSrc,
       { width: 60, height: 80 },
-      { x: coordinatesDiscardedCards.x, y: coordinatesDiscardedCards.y })
-    coordinatesDiscardedCards = { x: coordinatesDiscardedCards.x + 20, y: 0 }
+      { x: coordinatesDiscardedCards.x, y: coordinatesDiscardedCards.y }
+    )
+    coordinatesDiscardedCards = { x: coordinatesDiscardedCards.x + 50, y: 0 }
   }
 
-  setDimensionsCanvas () {
+  setDimensionsCanvas() {
     if (!this.canvas) return
     const parentElement = document.querySelector('.game-board')
     this.canvas.width = parentElement?.clientWidth as number
     this.canvas.height = parentElement?.clientHeight as number
-
   }
 
   // Обнуляем состояния и определить количество карт, которые необходимо отрисовать
-  renderCards (cards: CardType[]) {
-    this.cards.forEach((card, index: number) => this.clearCard(index))
-    this.choiceCards = [ false, false ]
+  renderCards(cards: CardType[]) {
+    // this.cards.forEach((card, index: number) => this.clearCard(index))
+    this.choiceCards = [false, false]
+    this.areaCards = []
     if (cards.length === 2) {
       // Если ход текущего игрока, отрисовать сцену выбора карты
       this.createSceneChoiceCard(cards)
@@ -82,39 +102,43 @@ export default class Board {
     }
   }
 
-  createPlayerCard (card: CardType) {
+  createPlayerCard(card: CardType) {
     this.coordinates = this.getCoordinatesForOneCard()
-    this.clearCard(0)
-    this.drawCard(this.cardDimensions, card.imgSrc(THEME), 0)
-
+    this.clearCard()
+    this.drawCard(this.cardDimensions, card.imgSrc, 0)
   }
 
-  createSceneChoiceCard (cards: CardType[]) {
+  createSceneChoiceCard(cards: CardType[]) {
     this.coordinates = this.getCoordinatesForTwoCard()
+
     this.cards = cards
     this.cards.forEach((card: CardType, index: number) => {
-      this.drawCard(this.cardDimensions, card.imgSrc(THEME), index)
-
+      this.drawCard(this.cardDimensions, card.imgSrc, index)
     })
-
-
   }
 
-  handleClickOnCard (event: MouseEvent): CardType | undefined {
+  handleClickOnCard(event: MouseEvent): CardType | undefined {
     const mouseX: number = event.offsetX
     const mouseY: number = event.offsetY
 
-    function isIntersect (area: AreaCardType) {
-      return mouseX > area.A.x && mouseX < area.B.x && mouseY > area.A.y && mouseY < area.D.y
+    function isIntersect(area: AreaCardType) {
+      return (
+        mouseX > area.A.x &&
+        mouseX < area.B.x &&
+        mouseY > area.A.y &&
+        mouseY < area.D.y
+      )
     }
 
     let returnedCard
-    const variance = [ [ true, false ], [ false, true ] ]
+    const variance = [
+      [true, false],
+      [false, true],
+    ]
+
     this.cards.forEach((card: CardType, index: number) => {
       if (isIntersect(this.areaCards[index]) && !this.choiceCards[index]) {
-
         this.choiceCards = variance[index]
-
         this.swapActiveCard()
 
         returnedCard = this.getDiscardedCards()
@@ -124,49 +148,50 @@ export default class Board {
   }
 
   // В зависимости от того на какую карту кликнули, сделать ее неактивной. Другую сделать активной
-  swapActiveCard () {
+  swapActiveCard() {
+    this.clearCard()
     this.cards.forEach((card: CardType, index: number) => {
-      this.clearCard(index)
       let dimensions = this.cardDimensions
 
       if (this.choiceCards[index]) {
         dimensions = {
           width: this.cardDimensions.width - 30,
-          height: this.cardDimensions.height - 50
+          height: this.cardDimensions.height - 50,
         }
       }
-      this.drawCard(dimensions, card.imgSrc(THEME), index)
+      this.drawCard(dimensions, card.imgSrc, index)
     })
   }
 
   // Стереть предыдущую карту
-  clearCard (index: number) {
-
+  clearCard() {
     this.context.clearRect(
-      this.coordinates[index].x,
-      this.coordinates[index].y,
-      this.cardDimensions.width + 10,
-      this.cardDimensions.height + 10
+      this.canvas.width / 2 - this.cardDimensions.width - MARGIN,
+      this.canvas.height / 2 - 60,
+      this.canvas.width / 2 + this.cardDimensions.width + MARGIN,
+      this.canvas.height / 2 - 40 + this.cardDimensions.height
     )
   }
 
-
   // В зависимости от переданных размеров определить область клика
-  drawCard (dimensions: DimensionsType, img: string, index: number) {
+  drawCard(dimensions: DimensionsType, img: string, index: number) {
     const { x, y } = this.coordinates[index]
     this.areaCards.push({
       A: { x, y },
       B: { x: x + dimensions.width, y },
       C: { x: x + dimensions.width, y: y + this.cardDimensions.height },
-      D: { x, y: y + dimensions.height }
+      D: { x, y: y + dimensions.height },
     })
-    this.createCardImage(img, dimensions, this.coordinates[index], this.choiceCards[index])
-
-
+    this.createCardImage(
+      img,
+      dimensions,
+      this.coordinates[index],
+      this.choiceCards[index]
+    )
   }
 
   // Отрисовать изображение карты
-  createCardImage (
+  createCardImage(
     src: string,
     dimensions: DimensionsType,
     coordinates: CoordinatesType,
@@ -189,15 +214,13 @@ export default class Board {
       )
       this.context.globalAlpha = 1.0
     })
-
   }
 
-  getSelectedCards (): CardType {
+  getSelectedCards(): CardType {
     return this.cards[this.choiceCards[0] ? 1 : 0]
   }
 
-  getDiscardedCards (): CardType {
+  getDiscardedCards(): CardType {
     return this.cards[this.choiceCards[0] ? 0 : 1]
   }
-
 }

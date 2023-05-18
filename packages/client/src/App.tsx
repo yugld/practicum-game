@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import MainHeader from './layout/header/MainHeader'
 import GameNavigation from './modules/gameNavigation/GameNavigation'
@@ -17,6 +17,8 @@ import GameStart from './pages/gameStart/GameStart'
 
 function App () {
   const { isDarkTheme } = useContext(ThemeContext)
+
+
   return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
     <MainHeader />
     <Routes>
