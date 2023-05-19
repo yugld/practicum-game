@@ -25,18 +25,6 @@ self.addEventListener("install", function (event) {
     );
 });
 
-self.addEventListener("activate", function (event) {
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(name => { return true })
-                    .map(name => caches.delete(name))
-            )
-        })
-    );
-});
-
 self.addEventListener("fetch", function (event) {
     const request = event.request;
     if (request.method !== "GET") {
@@ -66,3 +54,14 @@ self.addEventListener("fetch", function (event) {
     );
 });
 
+self.addEventListener("activate", function (event) {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames
+                    .filter(name => { return true })
+                    .map(name => caches.delete(name))
+            )
+        })
+    );
+});
