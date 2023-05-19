@@ -11,7 +11,13 @@ const version = "v-1";
 
 const CACHE_NAME = cacheName + version;
 export const URLS: string[] = [
-    "/"
+    "/",
+    '/profile',
+    '/forum',
+    '/game',
+    '/leaderboard',
+    '/rules',
+    '/rooms'
 ];
 
 self.addEventListener("install", function (event) {
