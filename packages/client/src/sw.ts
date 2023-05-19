@@ -1,3 +1,5 @@
+/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />
 /// <reference lib="WebWorker" />
 
 // export empty type because of tsc --isolatedModules flag
@@ -9,7 +11,7 @@ const version = "v-1";
 
 const CACHE_NAME = cacheName + version;
 export const URLS: string[] = [
-    "./index.html"
+    "/"
 ];
 
 self.addEventListener("install", function (event) {
