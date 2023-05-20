@@ -100,6 +100,11 @@ export default function Game({ websocket }: Props) {
           if (message.type === 'message') {
             console.log(data)
             console.log(message)
+            console.log(
+              !Array.isArray(data) &&
+                data?.content &&
+                data?.content?.status === 'confirmFinishRound'
+            )
             if (
               !Array.isArray(data) &&
               data?.content &&
@@ -111,6 +116,11 @@ export default function Game({ websocket }: Props) {
 
               return
             }
+            console.log(
+              !Array.isArray(data) &&
+                data?.content &&
+                data?.content?.status === 'confirmStartRound'
+            )
             if (
               !Array.isArray(data) &&
               data?.content &&
@@ -122,6 +132,7 @@ export default function Game({ websocket }: Props) {
 
               return
             }
+            console.log(Array.isArray(data))
 
             if (Array.isArray(data)) {
               const findIndexLatestDataAboutGame = data.findIndex(element => {
