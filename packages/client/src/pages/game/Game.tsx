@@ -13,7 +13,6 @@ import {
 } from './types'
 import Player from './models/Player'
 import { cardList, CHARACTER_VALUES } from '../../constants/cardList'
-import { Queue } from './models/Queue'
 import { ThemeContext } from '../../ThemeWrapper'
 
 import { useParams } from 'react-router-dom'
@@ -21,7 +20,7 @@ import { GameProgressModel } from './models/GameProgressModel'
 import { IUser } from '../../api/types'
 
 type Props = {
-  websocket: WebSocket
+  websocket: WebSocket | undefined
 }
 
 // Инициализация колоды из 16 карт
@@ -34,9 +33,6 @@ let isFinishPrevRound: FinishedRoundType = {
   value: false,
   winUser: null,
 }
-
-// Инициализация очереди игроков
-const queue = new Queue()
 
 interface GameProgressState {
   activePlayer: Player
@@ -100,10 +96,6 @@ export default function Game({ websocket }: Props) {
 
         if (message.type === 'message') {
           if (data.content && data.content.status === 'confirmFinishRound') {
-            console.log('confirmFinishRound')
-
-            console.log(user)
-            console.log(data.content)
             if (user?.id !== data.content.activePlayer?.user.id) {
               confirmFinishRound()
             }
@@ -111,10 +103,6 @@ export default function Game({ websocket }: Props) {
             return
           }
           if (data.content && data.content.status === 'confirmStartRound') {
-            console.log('confirmStartRound')
-            console.log(user)
-            console.log(data.content)
-            console.log(activePlayer)
             if (user?.id === data.content.activePlayer?.user.id) {
               startNewRound()
             }
@@ -476,9 +464,6 @@ export default function Game({ websocket }: Props) {
       })
       changeGameProgress(GameProgress.waitingConfirm)
     } else if (deck.length === 0 || deck.length === 1) {
-      // Если закончились карты в колоде, найти победившего
-      // Сравнить карты на руках игроков, побеждает тот у кого значение больше
-
       if (!activePlayer?.cardOnHand?.value || !noActivePlayer.cardOnHand) {
         return
       }
@@ -519,8 +504,7 @@ export default function Game({ websocket }: Props) {
 
   const getConfirmFromRivalPlayer = ({ winPlayer }: { winPlayer: Player }) => {
     changeGameProgress(GameProgress.waitingConfirm)
-    console.log('get confir,')
-    websocket.send(
+    websocket?.send(
       JSON.stringify({
         type: 'message',
         content: {
@@ -533,7 +517,7 @@ export default function Game({ websocket }: Props) {
   }
 
   const confirmStartNewRound = () => {
-    websocket.send(
+    websocket?.send(
       JSON.stringify({
         type: 'message',
         content: {
@@ -544,8 +528,6 @@ export default function Game({ websocket }: Props) {
     )
   }
   const startNewRound = () => {
-    console.log(discardedCard)
-    console.log(activePlayer)
     if (!discardedCard || !activePlayer?.user) return
 
     changeResultMessage({

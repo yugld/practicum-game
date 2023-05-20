@@ -1,6 +1,6 @@
 import { CardType, GameProgress, ResultMessageType } from '../types'
 import { cardList } from '../../../constants/cardList'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { CustomizedButton } from '../../../components/button/Button'
 
 import Player from '../models/Player'

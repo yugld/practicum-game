@@ -1,7 +1,6 @@
 import { getRoomUsers } from '../../../services/room'
 import Player from './Player'
 import Players from './Players'
-import { Queue } from './Queue'
 import { IUser } from '../../../api/types'
 import Board from './Board'
 
@@ -20,19 +19,6 @@ export class GameProgressModel {
         }
         return []
       })
-  }
-
-  static initPlayers(
-    queue: Queue,
-    activePlayer: Player,
-    roomUsers: IUser[],
-    callback: (player: Player, index: number) => void
-  ) {
-    const players = Players.init(roomUsers, callback)
-
-    players.forEach((player: Player) => queue?.enqueue(player))
-
-    return players
   }
 
   static renderBoard(
