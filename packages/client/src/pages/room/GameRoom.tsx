@@ -23,6 +23,7 @@ import { RESOURCE_URL } from "../../api/BaseApi";
 import deleteIcon from "../../assets/icons/delete.svg"
 
 import "./styles.less"
+import { notifyUser } from "../../utils/notifications";
 // import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
 type Props = {
@@ -45,6 +46,7 @@ const GameRoom = ({websocket}: Props) => {
         if (selectedUser)
             addRoomUsers({ id: roomId, users: [selectedUser.id] })
                 .then(() => {
+                    notifyUser('Пользователь добавлен');
                     setRoomUsers([...roomUsers, selectedUser]);
                     handleClose();
                 })
