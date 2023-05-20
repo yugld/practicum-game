@@ -1,12 +1,9 @@
 /// <reference lib="WebWorker" />
-
-// export empty type because of tsc --isolatedModules flag
 export type { };
 declare const self: ServiceWorkerGlobalScope;
 
 const cacheName = "game-cache";
 const version = "v-1";
-
 const CACHE_NAME = cacheName + version;
 export const URLS: string[] = [
     "./index.html"
@@ -15,11 +12,9 @@ export const URLS: string[] = [
 self.addEventListener("install", function (event) {
     event.waitUntil(
         caches.open(CACHE_NAME).then(function (cache) {
-            console.log("Opened cache");
             return cache.addAll(URLS);
         })
             .catch(err => {
-                console.log(err);
                 throw err;
             })
     );
