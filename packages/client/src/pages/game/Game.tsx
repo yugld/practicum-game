@@ -104,7 +104,7 @@ export default function Game({ websocket }: Props) {
             data?.content &&
             data?.content?.status === 'confirmFinishRound'
           ) {
-            if (user?.id !== data.content.activePlayer?.user.id) {
+            if (user?.id !== data?.content?.activePlayer?.user.id) {
               confirmFinishRound()
             }
 
@@ -115,7 +115,7 @@ export default function Game({ websocket }: Props) {
             data?.content &&
             data?.content?.status === 'confirmStartRound'
           ) {
-            if (user?.id === data.content.activePlayer?.user.id) {
+            if (user?.id === data?.content?.activePlayer?.user.id) {
               startNewRound()
             }
 
@@ -123,9 +123,10 @@ export default function Game({ websocket }: Props) {
           }
 
           if (Array.isArray(data)) {
-            const findIndexLatestDataAboutGame = data.findIndex(element =>
-              element.content.includes('discardedCards')
-            )
+            const findIndexLatestDataAboutGame = data.findIndex(element => {
+              console.log(element)
+              return element.content.includes('discardedCards')
+            })
             initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
           } else if (data.type && data.type === 'message') {
             rerenderBoard(data.content)
