@@ -136,9 +136,14 @@ export default function Game({ websocket }: Props) {
 
             if (Array.isArray(data)) {
               const findIndexLatestDataAboutGame = data.findIndex(element => {
-                return element.content.includes('discardedCards')
+                return element?.content.includes('discardedCards')
               })
-              initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
+              console.log(findIndexLatestDataAboutGame)
+              if (findIndexLatestDataAboutGame !== -1) {
+                initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
+              } else {
+                createInitGameState()
+              }
             } else if (data.type && data.type === 'message') {
               console.log(data)
               rerenderBoard(data.content)
@@ -152,23 +157,24 @@ export default function Game({ websocket }: Props) {
     )
   }, [websocket])
 
-  const createInitGameState = (room_users: IUser[]) => {
+  const createInitGameState = async () => {
     // Т.к. в игре 2 игрока, убираем из колоды 3 рандомные карты
     for (let i = 0; i < 3; i++) {
       takeRandomCard()
     }
+    const roomUsers = await GameProgressModel.initRoomUsers(roomId)
 
     const content: GameProgressState = {
       activePlayer: new Player({
-        user: room_users[0],
+        user: roomUsers[0],
       }),
       rivalPlayer: new Player({
-        user: room_users[1],
+        user: roomUsers[1],
         cardOnHand: takeRandomCard(),
       }),
       discardedCards: {
-        [room_users[0].id]: [],
-        [room_users[1].id]: [],
+        [roomUsers[0].id]: [],
+        [roomUsers[1].id]: [],
       },
       discardedCard: null,
       deck,
@@ -206,15 +212,15 @@ export default function Game({ websocket }: Props) {
       return
     }
 
-    // Получили игроков комнаты
-    const room_users = await GameProgressModel.initRoomUsers(roomId)
     if (!data.activePlayer) {
-      data.activePlayer = new Player({ user: room_users[0] })
+      await createInitGameState()
+      return
     }
 
+    // Получили игроков комнаты
+    const roomUsers = await GameProgressModel.initRoomUsers(roomId)
     if (!data.activePlayer) {
-      createInitGameState(room_users)
-      return
+      data.activePlayer = new Player({ user: roomUsers[0] })
     }
 
     deck = data.deck
