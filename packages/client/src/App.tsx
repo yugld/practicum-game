@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import MainHeader from './layout/header/MainHeader'
 import GameNavigation from './modules/gameNavigation/GameNavigation'
@@ -11,12 +11,28 @@ import GameRules from './pages/gameRules/GameRules'
 import { Home } from './pages/home/Home'
 import { NotFound } from './pages/notFound/NotFound'
 import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
+import GameStart from './pages/gameStart/GameStart'
+import { useAppDispatch } from './store/store'
+import { getUser } from './store/userSlice'
 
 import './App.less'
-import GameStart from './pages/gameStart/GameStart'
 
-function App () {
+function App() {
+  const dispatch = useAppDispatch()
+  const [isLoading, setLoading] = useState(true)
+
+  useEffect(() => {
+    dispatch(getUser())
+      .finally(() => setLoading(false))
+  }, [])
+
+
   const { isDarkTheme } = useContext(ThemeContext)
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
   return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
     <MainHeader />
     <Routes>
