@@ -78,6 +78,7 @@ export default function Game({ websocket }: Props) {
 
   useEffect(() => {
     websocket?.addEventListener('open', () => {
+      console.log('open websocket')
       websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
     })
     websocket?.addEventListener(
@@ -89,6 +90,7 @@ export default function Game({ websocket }: Props) {
         } catch {
           data = message.data
         }
+        console.log(data)
 
         if (data.type && data.type === 'pong') {
           return

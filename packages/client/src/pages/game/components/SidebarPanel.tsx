@@ -72,7 +72,6 @@ export default function SidebarPanel(props: Props) {
       <div className="sidebar-body">
         <div className="sidebar-body__content">
           <div className="sidebar-body__status-play">
-            {props.gameProgress}
             {props.gameProgress === GameProgress.finishRound &&
               props.activePlayer?.user?.id !== user?.id && (
                 <h2>Начало нового раунда</h2>
