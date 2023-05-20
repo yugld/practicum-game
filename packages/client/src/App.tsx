@@ -30,7 +30,7 @@ function App() {
   const { isDarkTheme } = useContext(ThemeContext)
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <div>Загрузка...</div>;
   }
 
   return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
