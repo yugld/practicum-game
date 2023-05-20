@@ -84,53 +84,58 @@ export default function Game({ websocket }: Props) {
     websocket?.addEventListener(
       'message',
       (message: { data: any; type: string }) => {
-        let data
         try {
-          data = JSON.parse(message.data)
-        } catch {
-          data = message.data
-        }
-        console.log(data)
-
-        if (data.type && data.type === 'pong') {
-          return
-        }
-
-        if (message.type === 'message') {
+          let data
+          try {
+            data = JSON.parse(message.data)
+          } catch {
+            data = message.data
+          }
           console.log(data)
+
+          if (data.type && data.type === 'pong') {
+            return
+          }
+
+          if (message.type === 'message') {
+            console.log(data)
+            console.log(message)
+            if (
+              !Array.isArray(data) &&
+              data?.content &&
+              data?.content?.status === 'confirmFinishRound'
+            ) {
+              if (user?.id !== data?.content?.activePlayer?.user.id) {
+                confirmFinishRound()
+              }
+
+              return
+            }
+            if (
+              !Array.isArray(data) &&
+              data?.content &&
+              data?.content?.status === 'confirmStartRound'
+            ) {
+              if (user?.id === data?.content?.activePlayer?.user.id) {
+                startNewRound()
+              }
+
+              return
+            }
+
+            if (Array.isArray(data)) {
+              const findIndexLatestDataAboutGame = data.findIndex(element => {
+                return element.content.includes('discardedCards')
+              })
+              initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
+            } else if (data.type && data.type === 'message') {
+              console.log(data)
+              rerenderBoard(data.content)
+            }
+          }
+        } catch (err) {
+          console.log(err)
           console.log(message)
-          if (
-            !Array.isArray(data) &&
-            data?.content &&
-            data?.content?.status === 'confirmFinishRound'
-          ) {
-            if (user?.id !== data?.content?.activePlayer?.user.id) {
-              confirmFinishRound()
-            }
-
-            return
-          }
-          if (
-            !Array.isArray(data) &&
-            data?.content &&
-            data?.content?.status === 'confirmStartRound'
-          ) {
-            if (user?.id === data?.content?.activePlayer?.user.id) {
-              startNewRound()
-            }
-
-            return
-          }
-
-          if (Array.isArray(data)) {
-            const findIndexLatestDataAboutGame = data.findIndex(element => {
-              console.log(element)
-              return element.content.includes('discardedCards')
-            })
-            initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
-          } else if (data.type && data.type === 'message') {
-            rerenderBoard(data.content)
-          }
         }
       }
     )
