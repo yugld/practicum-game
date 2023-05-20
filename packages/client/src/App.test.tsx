@@ -6,7 +6,7 @@ import theme from './theme'
 import { store } from './store/store'
 import { Provider } from 'react-redux'
 
-const appContent = 'Об игре';
+const appContent = 'Toggle';
 
 // @ts-ignore
 global.fetch = jest.fn(() =>
