@@ -97,6 +97,8 @@ export default function Game({ websocket }: Props) {
         }
 
         if (message.type === 'message') {
+          console.log(data)
+          console.log(message)
           if (data.content && data.content.status === 'confirmFinishRound') {
             if (user?.id !== data.content.activePlayer?.user.id) {
               confirmFinishRound()
