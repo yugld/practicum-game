@@ -105,6 +105,7 @@ export default class Board {
   createPlayerCard(card: CardType) {
     this.coordinates = this.getCoordinatesForOneCard()
     this.clearCard()
+    console.log(card)
     this.drawCard(this.cardDimensions, card.imgSrc, 0)
   }
 
@@ -199,8 +200,9 @@ export default class Board {
   ) {
     const image = new Image()
     image.src = src
-
+    console.log(src)
     image.addEventListener('load', () => {
+      console.log('load image')
       if (isDiscardedCard) {
         this.context.globalAlpha = 0.4
       }

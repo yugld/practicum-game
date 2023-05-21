@@ -44,7 +44,6 @@ export class GameProgressModel {
       }
       console.log(players)
       const cardOnHand = Players.getPlayerByUserId(players, user.id).cardOnHand
-      console.log(cardOnHand)
       if (cardOnHand) {
         renderCards.push(cardOnHand)
       }
