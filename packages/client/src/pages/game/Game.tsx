@@ -84,14 +84,12 @@ export default function Game({ websocket }: Props) {
   }
 
   useEffect(() => {
-    console.log(websocket?.readyState)
     if (websocket?.readyState === WebsocketStateEnum.OPEN) {
       websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
     }
-    // websocket?.addEventListener('open', () => {
-    //   console.log('open websocket')
-    //   websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
-    // })
+    websocket?.addEventListener('open', () => {
+      websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
+    })
     websocket?.addEventListener(
       'message',
       (message: { data: any; type: string }) => {
