@@ -113,18 +113,21 @@ export default function Game({ websocket }: Props) {
               data?.content &&
               data?.content?.status === 'confirmFinishRound'
             ) {
+              console.log(user?.id)
+              console.log(data)
               if (user?.id !== data?.content?.activePlayer?.user.id) {
                 confirmFinishRound()
               }
 
               return
             }
+            console.log(data)
             if (
               !Array.isArray(data) &&
               data?.content &&
               data?.content?.status === 'confirmStartRound'
             ) {
-              if (user?.id === data?.content?.activePlayer?.user.id) {
+              if (user?.id !== data?.content?.activePlayer?.user.id) {
                 startNewRound()
               }
 
