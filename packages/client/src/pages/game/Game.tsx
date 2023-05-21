@@ -44,10 +44,10 @@ interface GameProgressState {
 }
 
 enum WebsocketStateEnum {
-  CONNECTING = 'CONNECTING',
-  OPEN = 'OPEN',
-  CLOSING = 'CLOSING',
-  CLOSED = 'CLOSED',
+  CONNECTING,
+  OPEN,
+  CLOSING,
+  CLOSED,
 }
 
 export default function Game({ websocket }: Props) {
@@ -85,13 +85,13 @@ export default function Game({ websocket }: Props) {
 
   useEffect(() => {
     console.log(websocket?.readyState)
-    // if (websocket?.readyState === WebsocketStateEnum.OPEN) {
-    //   console.log('is open')
-    // }
-    websocket?.addEventListener('open', () => {
-      console.log('open websocket')
+    if (websocket?.readyState === WebsocketStateEnum.OPEN) {
       websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
-    })
+    }
+    // websocket?.addEventListener('open', () => {
+    //   console.log('open websocket')
+    //   websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
+    // })
     websocket?.addEventListener(
       'message',
       (message: { data: any; type: string }) => {
