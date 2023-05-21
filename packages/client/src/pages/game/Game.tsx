@@ -116,6 +116,7 @@ export default function Game({ websocket }: Props) {
             ) {
               console.log(user?.id)
               console.log(data)
+              console.log(user?.id !== data?.content?.activePlayer?.user.id)
               if (user?.id !== data?.content?.activePlayer?.user.id) {
                 confirmFinishRound()
               }
@@ -564,6 +565,8 @@ export default function Game({ websocket }: Props) {
     )
   }
   const startNewRound = () => {
+    console.log(discardedCard)
+    console.log(activePlayer?.user)
     if (!discardedCard || !activePlayer?.user) return
 
     changeResultMessage({
