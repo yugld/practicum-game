@@ -81,7 +81,6 @@ export default function Game({ websocket }: Props) {
   const confirmFinishRound = () => {
     changeGameProgress(GameProgress.finishRound)
   }
-
   useEffect(() => {
     if (websocket?.readyState === WebsocketStateEnum.OPEN) {
       websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
@@ -90,66 +89,72 @@ export default function Game({ websocket }: Props) {
         websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
       })
     }
+  }, [websocket])
 
+  useEffect(() => {
     websocket?.addEventListener(
       'message',
       (message: { data: any; type: string }) => {
+        let data
         try {
-          let data
-          try {
-            data = JSON.parse(message.data)
-          } catch {
-            data = message.data
-          }
+          data = JSON.parse(message.data)
+        } catch {
+          data = message.data
+        }
 
-          if (data.type && data.type === 'pong') {
+        if (data.type && data.type === 'pong') {
+          return
+        }
+
+        if (message.type === 'message') {
+          if (
+            !Array.isArray(data) &&
+            data?.content &&
+            data?.content?.status === 'confirmFinishRound'
+          ) {
+            if (user?.id !== data?.content?.activePlayer?.user.id) {
+              confirmFinishRound()
+            }
+
+            return
+          }
+          if (
+            !Array.isArray(data) &&
+            data?.content &&
+            data?.content?.status === 'confirmStartRound'
+          ) {
+            if (user?.id === data?.content?.activePlayer?.user.id) {
+              startNewRound()
+            }
+
             return
           }
 
-          if (message.type === 'message') {
-            if (
-              !Array.isArray(data) &&
-              data?.content &&
-              data?.content?.status === 'confirmFinishRound'
-            ) {
-              if (user?.id !== data?.content?.activePlayer?.user.id) {
-                confirmFinishRound()
-              }
-
-              return
+          if (Array.isArray(data)) {
+            const findIndexLatestDataAboutGame = data.findIndex(element => {
+              return element?.content.includes('discardedCards')
+            })
+            if (findIndexLatestDataAboutGame !== -1) {
+              initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
+            } else {
+              createInitGameState()
             }
-            if (
-              !Array.isArray(data) &&
-              data?.content &&
-              data?.content?.status === 'confirmStartRound'
-            ) {
-              if (user?.id === data?.content?.activePlayer?.user.id) {
-                startNewRound()
-              }
-
-              return
-            }
-
-            if (Array.isArray(data)) {
-              const findIndexLatestDataAboutGame = data.findIndex(element => {
-                return element?.content.includes('discardedCards')
-              })
-              if (findIndexLatestDataAboutGame !== -1) {
-                initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
-              } else {
-                createInitGameState()
-              }
-            } else if (data.type && data.type === 'message') {
-              rerenderBoard(data.content)
-            }
+          } else if (data.type && data.type === 'message') {
+            rerenderBoard(data.content)
           }
-        } catch (err) {
-          console.log(err)
-          console.log(message)
         }
       }
     )
-  }, [websocket])
+
+    return () => {
+      websocket?.removeEventListener('open', () => {
+        console.log('remove open')
+      })
+      websocket?.removeEventListener('message', () => {
+        console.log('remove open')
+      })
+    }
+  }, [websocket, activePlayer, discardedCard])
 
   const createInitGameState = async () => {
     // Т.к. в игре 2 игрока, убираем из колоды 3 рандомные карты
@@ -200,7 +205,6 @@ export default function Game({ websocket }: Props) {
   }
 
   const initRoom = async (data: GameProgressState) => {
-    console.log(data)
     if (!user) {
       console.log('User is undefined')
       return
@@ -248,7 +252,6 @@ export default function Game({ websocket }: Props) {
 
   const rerenderBoard = (data: GameProgressState) => {
     if (!canvasRef || !board || !user) return
-    console.log(data)
 
     deck = data.deck
     board.current?.clearCard()
@@ -483,7 +486,6 @@ export default function Game({ websocket }: Props) {
   }
   const computeNextStep = () => {
     const noActivePlayer = getNoActivePlayer()
-    console.log(isFinishPrevRound.winUser)
     if (isFinishPrevRound.winUser) {
       getConfirmFromRivalPlayer({
         winPlayer: Players.getPlayerByUserId(
@@ -546,8 +548,6 @@ export default function Game({ websocket }: Props) {
   }
 
   const confirmStartNewRound = () => {
-    console.log(discardedCard)
-    console.log(activePlayer?.user)
     websocket?.send(
       JSON.stringify({
         type: 'message',
@@ -559,8 +559,6 @@ export default function Game({ websocket }: Props) {
     )
   }
   const startNewRound = () => {
-    console.log(discardedCard)
-    console.log(activePlayer?.user)
     if (!discardedCard || !activePlayer?.user) return
 
     changeResultMessage({
@@ -587,8 +585,7 @@ export default function Game({ websocket }: Props) {
       newActivePlayer = noActivePlayer
       newRivalPlayer = activePlayer
     }
-    console.log(newActivePlayer)
-    console.log(newRivalPlayer)
+
     websocket?.send(
       JSON.stringify({
         type: 'message',
