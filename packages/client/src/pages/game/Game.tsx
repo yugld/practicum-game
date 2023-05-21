@@ -43,6 +43,13 @@ interface GameProgressState {
   isFinishPrevRound: FinishedRoundType
 }
 
+enum WebsocketStateEnum {
+  CONNECTING = 'CONNECTING',
+  OPEN = 'OPEN',
+  CLOSING = 'CLOSING',
+  CLOSED = 'CLOSED',
+}
+
 export default function Game({ websocket }: Props) {
   const takeRandomCard = () => {
     const { newDeck, selectedCard } = CardDeck.takeRandomCardFromDeck(deck)
@@ -77,6 +84,10 @@ export default function Game({ websocket }: Props) {
   }
 
   useEffect(() => {
+    console.log(websocket?.readyState)
+    // if (websocket?.readyState === WebsocketStateEnum.OPEN) {
+    //   console.log('is open')
+    // }
     websocket?.addEventListener('open', () => {
       console.log('open websocket')
       websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
@@ -91,20 +102,12 @@ export default function Game({ websocket }: Props) {
           } catch {
             data = message.data
           }
-          console.log(data)
 
           if (data.type && data.type === 'pong') {
             return
           }
 
           if (message.type === 'message') {
-            console.log(data)
-            console.log(message)
-            console.log(
-              !Array.isArray(data) &&
-                data?.content &&
-                data?.content?.status === 'confirmFinishRound'
-            )
             if (
               !Array.isArray(data) &&
               data?.content &&
@@ -116,11 +119,6 @@ export default function Game({ websocket }: Props) {
 
               return
             }
-            console.log(
-              !Array.isArray(data) &&
-                data?.content &&
-                data?.content?.status === 'confirmStartRound'
-            )
             if (
               !Array.isArray(data) &&
               data?.content &&
@@ -132,20 +130,17 @@ export default function Game({ websocket }: Props) {
 
               return
             }
-            console.log(Array.isArray(data))
 
             if (Array.isArray(data)) {
               const findIndexLatestDataAboutGame = data.findIndex(element => {
                 return element?.content.includes('discardedCards')
               })
-              console.log(findIndexLatestDataAboutGame)
               if (findIndexLatestDataAboutGame !== -1) {
                 initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
               } else {
                 createInitGameState()
               }
             } else if (data.type && data.type === 'message') {
-              console.log(data)
               rerenderBoard(data.content)
             }
           }

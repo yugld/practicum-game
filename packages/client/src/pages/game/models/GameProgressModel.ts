@@ -31,8 +31,7 @@ export class GameProgressModel {
     changeGameProgress: (progress: GameProgress) => void
   ) {
     let renderCards: CardType[] = []
-    console.log(user?.id)
-    console.log(activePlayer?.user.id)
+
     if (user?.id === activePlayer?.user.id) {
       changeGameProgress(GameProgress.choice)
       renderCards = [takeRandomCard(), takeRandomCard()]
@@ -42,7 +41,6 @@ export class GameProgressModel {
         console.log('User is undefined')
         return
       }
-      console.log(players)
       const cardOnHand = Players.getPlayerByUserId(players, user.id).cardOnHand
       if (cardOnHand) {
         renderCards.push(cardOnHand)
