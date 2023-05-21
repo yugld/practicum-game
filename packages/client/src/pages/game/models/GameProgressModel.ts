@@ -31,10 +31,9 @@ export class GameProgressModel {
     changeGameProgress: (progress: GameProgress) => void
   ) {
     let renderCards: CardType[] = []
-
     if (user?.id === activePlayer?.user.id) {
       changeGameProgress(GameProgress.choice)
-      renderCards = [takeRandomCard(), takeRandomCard()]
+      renderCards = [activePlayer?.cardOnHand, takeRandomCard()]
     } else {
       changeGameProgress(GameProgress.waiting)
       if (!user) {

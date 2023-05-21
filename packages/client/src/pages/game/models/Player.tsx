@@ -9,11 +9,11 @@ export default class Player {
   user: IUser
   isProtect = false
   numberOfTokens: number
-  cardOnHand: CardType | null
+  cardOnHand: CardType
 
-  constructor(props: { user: IUser; cardOnHand?: CardType }) {
+  constructor(props: { user: IUser; cardOnHand: CardType }) {
     this.user = props.user
     this.numberOfTokens = 0
-    this.cardOnHand = props.cardOnHand || null
+    this.cardOnHand = props.cardOnHand
   }
 }
