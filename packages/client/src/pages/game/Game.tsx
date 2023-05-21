@@ -102,6 +102,7 @@ export default function Game({ websocket }: Props) {
           } catch {
             data = message.data
           }
+          console.log(data)
 
           if (data.type && data.type === 'pong') {
             return
@@ -121,7 +122,6 @@ export default function Game({ websocket }: Props) {
 
               return
             }
-            console.log(data)
             if (
               !Array.isArray(data) &&
               data?.content &&
