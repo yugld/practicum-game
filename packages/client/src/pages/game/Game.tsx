@@ -89,6 +89,11 @@ export default function Game({ websocket }: Props) {
         websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
       })
     }
+    return () => {
+      websocket?.removeEventListener('open', () => {
+        console.log('remove open')
+      })
+    }
   }, [websocket])
 
   useEffect(() => {
@@ -147,9 +152,6 @@ export default function Game({ websocket }: Props) {
     )
 
     return () => {
-      websocket?.removeEventListener('open', () => {
-        console.log('remove open')
-      })
       websocket?.removeEventListener('message', () => {
         console.log('remove open')
       })
