@@ -17,7 +17,6 @@ import { ThemeContext } from '../../ThemeWrapper'
 
 import { useParams } from 'react-router-dom'
 import { GameProgressModel } from './models/GameProgressModel'
-import { IUser } from '../../api/types'
 
 type Props = {
   websocket: WebSocket | undefined
@@ -102,7 +101,6 @@ export default function Game({ websocket }: Props) {
           } catch {
             data = message.data
           }
-          console.log(data)
 
           if (data.type && data.type === 'pong') {
             return
@@ -114,9 +112,6 @@ export default function Game({ websocket }: Props) {
               data?.content &&
               data?.content?.status === 'confirmFinishRound'
             ) {
-              console.log(user?.id)
-              console.log(data)
-              console.log(user?.id !== data?.content?.activePlayer?.user.id)
               if (user?.id !== data?.content?.activePlayer?.user.id) {
                 confirmFinishRound()
               }
@@ -128,9 +123,6 @@ export default function Game({ websocket }: Props) {
               data?.content &&
               data?.content?.status === 'confirmStartRound'
             ) {
-              console.log('confirmStartRound')
-              console.log(user?.id)
-              console.log(data)
               if (user?.id === data?.content?.activePlayer?.user.id) {
                 startNewRound()
               }
@@ -554,6 +546,8 @@ export default function Game({ websocket }: Props) {
   }
 
   const confirmStartNewRound = () => {
+    console.log(discardedCard)
+    console.log(activePlayer?.user)
     websocket?.send(
       JSON.stringify({
         type: 'message',
