@@ -207,6 +207,7 @@ export default function Game({ websocket }: Props) {
   }
 
   const initRoom = async (data: GameProgressState) => {
+    console.log(data)
     if (!user) {
       console.log('User is undefined')
       return
