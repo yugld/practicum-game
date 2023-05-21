@@ -590,7 +590,8 @@ export default function Game({ websocket }: Props) {
       newActivePlayer = noActivePlayer
       newRivalPlayer = activePlayer
     }
-
+    console.log(newActivePlayer)
+    console.log(newRivalPlayer)
     websocket?.send(
       JSON.stringify({
         type: 'message',
