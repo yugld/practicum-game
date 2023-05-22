@@ -20,7 +20,8 @@ export const initialStateUser: UserSlice = {
         email: '',
         avatar: '',
         phone: ''
-    }
+    },
+    isUserLoading: true
 };
   
 export const signinUser = createAsyncThunk(
@@ -136,9 +137,11 @@ const user = createSlice({
         });
         builder.addCase(getUser.fulfilled, (state: UserSlice, action) => {
             state.user = action.payload;
+            state.isUserLoading = false;
         });
         builder.addCase(getUser.rejected, (state: UserSlice) => {
             state.user = initialStateUser.user;
+            state.isUserLoading = false;
         });
         builder.addCase(editUserInfo.pending, (state: UserSlice) => {
             state.user = { ...state.user };

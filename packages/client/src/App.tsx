@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import MainHeader from './layout/header/MainHeader'
 import GameNavigation from './modules/gameNavigation/GameNavigation'
 import Login from './pages/login/Login'
@@ -13,23 +14,23 @@ import { NotFound } from './pages/notFound/NotFound'
 import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
 import GameStart from './pages/gameStart/GameStart'
 import { useAppDispatch } from './store/store'
+import { Store } from './store/store.types'
 import { getUser } from './store/userSlice'
 
 import './App.less'
 
 function App() {
   const dispatch = useAppDispatch()
-  const [isLoading, setLoading] = useState(true)
+  const isUserLoading = useSelector((state: Store) => state.user.isUserLoading)
 
   useEffect(() => {
     dispatch(getUser())
-      .finally(() => setLoading(false))
   }, [])
 
 
   const { isDarkTheme } = useContext(ThemeContext)
 
-  if (isLoading) {
+  if (isUserLoading) {
     return <div>Загрузка...</div>;
   }
 
@@ -51,4 +52,3 @@ function App() {
 }
 
 export default App
-

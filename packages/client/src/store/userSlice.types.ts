@@ -32,4 +32,5 @@ export interface ChangePasswordData {
 
 export interface UserSlice {
     user: IUser;
+    isUserLoading: boolean;
 }

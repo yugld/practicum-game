@@ -1,10 +1,10 @@
 import { useState, MouseEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppBar, Container, Toolbar, Menu, MenuItem, Tooltip, IconButton, Avatar } from '@mui/material'
 import { Store } from '../../store/store.types'
 import { useAppDispatch } from '../../store/store'
-import { logoutUser } from '../../store/userSlice'
+import { clearUser, logoutUser } from '../../store/userSlice'
 import { RESOURCE_URL } from '../../utils/axios'
 import { ToggleTheme } from './ToggleTheme'
 
@@ -12,7 +12,6 @@ import './styles.less'
 
 export default function MainHeader() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const user = useSelector((state: Store) => state.user.user);
   const [ anchorElUser, setAnchorElUser ] = useState<null | HTMLElement>(null)
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -26,8 +25,8 @@ export default function MainHeader() {
   const onLogout = () => {
     dispatch(logoutUser())
       .then(() => {
-        setAnchorElUser(null);
-        navigate('/login', { replace: true })
+        setAnchorElUser(null)
+        dispatch(clearUser())
       })
   }
 
