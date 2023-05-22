@@ -8,6 +8,8 @@ import ErrorBoundary from './components/errorBoundary/errorBoundary'
 import theme from './theme'
 import './assets/styles.less'
 import { ThemeWrapper } from './ThemeWrapper'
+import { startServiceWorker } from './startServiceWorker'
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
@@ -24,3 +26,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </ErrorBoundary>
   </StrictMode>
 )
+
+startServiceWorker();
