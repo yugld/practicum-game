@@ -1,6 +1,4 @@
 import Player from './Player'
-import { IUser } from '../../../api/types'
-
 class Players {
   getNoActivePlayerIndex(players: Player[], activePlayerId: number): number {
     return players.findIndex(

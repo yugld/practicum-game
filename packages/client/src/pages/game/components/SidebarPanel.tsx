@@ -1,6 +1,6 @@
 import { CardType, GameProgress, ResultMessageType } from '../types'
 import { cardList } from '../../../constants/cardList'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { CustomizedButton } from '../../../components/button/Button'
 
 import Player from '../models/Player'
@@ -9,7 +9,8 @@ import HeartFill from '../../../assets/icons/heart-fill.svg'
 import ScieldCheck from '../../../assets/icons/shield-check-bold.svg'
 
 import { Card, MenuList, MenuItem } from '@mui/material'
-import { ThemeContext } from '../../../ThemeWrapper'
+import { useSelector } from 'react-redux'
+import { Store } from '../../../store/store.types'
 
 interface Props {
   activePlayer: Player
@@ -25,7 +26,7 @@ interface Props {
 }
 
 export default function SidebarPanel(props: Props) {
-  const { user } = useContext(ThemeContext)
+  const user = useSelector((state: Store) => state.user.user)
   const [selectedCard, setSelectedCard] = useState<CardType>()
 
   const selectCard = (card: CardType) => {
@@ -55,6 +56,7 @@ export default function SidebarPanel(props: Props) {
         </span>
 
         {user &&
+          user.id !== undefined &&
           Players.getPlayerByUserId(props.players, user.id).isProtect && (
             <span className="sidebar-game-statuses__protect">
               Вы защищены!

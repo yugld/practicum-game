@@ -14,7 +14,6 @@ import {
 import Player from './models/Player'
 import { cardList, CHARACTER_VALUES } from '../../constants/cardList'
 
-import { useParams } from 'react-router-dom'
 import { GameProgressModel } from './models/GameProgressModel'
 import { useSelector } from 'react-redux'
 import { Store } from '../../store/store.types'
@@ -27,11 +26,11 @@ type Props = {
 let deck = CardDeck.init(cardList)
 interface FinishedRoundType {
   value: boolean
-  winUser: number | null
+  winUser: number | undefined
 }
 let isFinishPrevRound: FinishedRoundType = {
   value: false,
-  winUser: null,
+  winUser: undefined,
 }
 
 interface GameProgressState {
@@ -51,8 +50,6 @@ export default function Game({ websocket }: Props) {
   }
 
   const user = useSelector((state: Store) => state.user.user)
-  const params = useParams<Record<string, any>>()
-  const roomId: number = params.roomId
 
   const [players, setPlayers] = useState<Player[]>(() => [])
 
@@ -73,7 +70,7 @@ export default function Game({ websocket }: Props) {
     text: '',
   })
 
-  const roomsList = useSelector((state: Store) => state.rooms.roomsList)
+  const roomUsersList = useSelector((state: Store) => state.room.roomUsersList)
 
   const confirmFinishRound = () => {
     changeGameProgress(GameProgress.finishRound)
@@ -152,6 +149,8 @@ export default function Game({ websocket }: Props) {
   }, [websocket, initMessageListener])
 
   const createInitGameState = async () => {
+    if (roomUsersList === null) return
+
     // Т.к. в игре 2 игрока, убираем из колоды 3 рандомные карты
     for (let i = 0; i < 3; i++) {
       takeRandomCard()
@@ -160,11 +159,11 @@ export default function Game({ websocket }: Props) {
 
     const content: GameProgressState = {
       activePlayer: new Player({
-        user: roomsList?.[0],
+        user: roomUsersList[0],
         cardOnHand: takeRandomCard(),
       }),
       rivalPlayer: new Player({
-        user: roomsList?.[1],
+        user: roomUsersList[1],
         cardOnHand: takeRandomCard(),
       }),
       discardedCards: [],
@@ -172,7 +171,7 @@ export default function Game({ websocket }: Props) {
       deck,
       isFinishPrevRound: {
         value: false,
-        winUser: null,
+        winUser: undefined,
       },
     }
     console.log('new game')
@@ -247,7 +246,7 @@ export default function Game({ websocket }: Props) {
     }
     isFinishPrevRound = {
       value: false,
-      winUser: null,
+      winUser: undefined,
     }
     console.log('render board 2')
     GameProgressModel.renderBoard(
@@ -307,7 +306,7 @@ export default function Game({ websocket }: Props) {
     }
   }
   const discardCard = (card?: CardType) => {
-    if (discardedCard?.value && activePlayer) {
+    if (discardedCard?.value && activePlayer && activePlayer.user.id) {
       const noActivePlayerIndex = Players.getNoActivePlayerIndex(
         players,
         activePlayer.user.id
@@ -463,12 +462,20 @@ export default function Game({ websocket }: Props) {
   const getNoActivePlayer = () => {
     const noActivePlayerIndex = Players.getNoActivePlayerIndex(
       players,
-      activePlayer.user.id
+      activePlayer.user.id || 0
     )
     return players[noActivePlayerIndex]
   }
   const computeNextStep = () => {
+    if (activePlayer.user.id === undefined) {
+      console.log('User is undefined')
+      return
+    }
     const noActivePlayer = getNoActivePlayer()
+    if (noActivePlayer.user.id === undefined) {
+      console.log('No active player is undefined')
+      return
+    }
     if (isFinishPrevRound.winUser) {
       getConfirmFromRivalPlayer({
         winPlayer: Players.getPlayerByUserId(

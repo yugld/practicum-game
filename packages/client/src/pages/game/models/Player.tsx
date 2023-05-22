@@ -1,5 +1,5 @@
 import { CardType } from '../types'
-import { IUser } from '../../../api/types'
+import { IUser } from '../../../store/userSlice.types'
 
 export interface UserType {
   id: number
