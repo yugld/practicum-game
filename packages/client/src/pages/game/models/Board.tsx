@@ -203,8 +203,11 @@ export default class Board {
     isDiscardedCard = false
   ) {
     const image = new Image()
+    if (import.meta.env.MODE === 'production') {
+      src.replace('/src', '')
+    }
     image.src = src
-    console.log(src)
+    console.log(import.meta.env.MODE)
     image.addEventListener('load', () => {
       console.log('load images')
       if (isDiscardedCard) {
