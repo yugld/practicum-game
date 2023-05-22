@@ -1,31 +1,33 @@
 import { useEffect, useState } from "react"
 import { Route, Routes, Outlet, useParams } from "react-router-dom"
+import { useSelector } from 'react-redux'
+import { unwrapResult } from '@reduxjs/toolkit'
+
 import GameRoom from "../../pages/room/GameRoom"
 import Game from "../../pages/game/Game"
 import { GameEnd } from "../../pages/gameEnd/GameEnd"
-import { getRoomToken } from "../../services/room"
+
+import { useAppDispatch } from "../../store/store"
+import { getRoomToken } from "../../store/roomsSlice"
+import { Store } from "../../store/store.types"
 
 const GameNavigation = () => {
+    const dispatch = useAppDispatch();
     const params = useParams<Record<string, any>>();
     const roomId: number = params.roomId;
     const [roomToken, setRoomToken] = useState<string>('');
     const [websocket, setWebsocket] = useState<WebSocket | undefined>(undefined);
+    const currentUserId = useSelector((state: Store) => state.user.user.id);
 
     useEffect(() => {
-        getRoomToken(roomId)
-            .then((token) => setRoomToken(token))
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-
-                if (reason) {
-                    console.error(reason)
-                }
-            })
+        dispatch(getRoomToken(roomId))
+            .then(unwrapResult)
+            .then((res) => setRoomToken(res.token))
     }, []);
 
     useEffect(() => {
         if (roomToken) {
-            const url = `wss://ya-praktikum.tech/ws/chats/877084/${roomId}/${roomToken}`;
+            const url = `wss://ya-praktikum.tech/ws/chats/${currentUserId}/${roomId}/${roomToken}`;
 
             const socket = new WebSocket(url);
             let pingInterval = 0;

@@ -1,5 +1,7 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 import {
     Button,
     Input,
@@ -9,31 +11,32 @@ import {
     DialogActions
 } from '@mui/material';
 import { useFlag } from '../../hooks/useFlag';
-import { createRoom, getRoomList } from '../../services/room';
-import { Room } from '../../api/types';
+import { useAppDispatch } from '../../store/store';
+import { createRoom, getRoomsList } from '../../store/roomsSlice';
+import { Store } from '../../store/store.types';
+import { withAuthorizationCheck } from '../../utils/authorizedPage';
+import { Room } from '../../store/roomSlice.types';
+import { updateRoomInfo } from '../../store/roomSlice';
 
 import "./styles.less"
 import "../../assets/base/index.less"
-// import { withAuthorizationCheck } from '../../utils/authorizedPage';
 
 const GameStart = () => {
+    const dispatch = useAppDispatch();
     const [visible, openDialog, closeDialog] = useFlag(false);
-    const [inputValue, setInputValue] = useState('');
-    const [roomList, setRoomList] = useState<Room[]>([]);
+    const [inputValue, setInputValue] = useState<string>('');
+    
+    const roomsList = useSelector((state: Store) => state.rooms.roomsList);
 
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        createRoom(inputValue)
-            .then((id) => {
-                navigate(`/rooms/${id}`)
+        dispatch(createRoom(inputValue))
+            .then(unwrapResult)
+            .then(() => {
+                dispatch(getRoomsList({}))
+                // navigate(`/rooms/${res.id}`)
                 handleClose()
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-                if (reason) {
-                    console.error(reason);
-                }
             })
     }
 
@@ -46,22 +49,13 @@ const GameStart = () => {
         setInputValue(event.target.value);
     }
 
-    const goToRoom = (id: number) => {
-        navigate(`/rooms/${id}`)
+    const goToRoom = (room: Room) => {
+        dispatch(updateRoomInfo(room))
+        navigate(`/rooms/${room.id}`)
     }
 
     useEffect(() => {
-        getRoomList()
-            .then((rooms) => {
-                setRoomList(rooms);
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-
-                if (reason) {
-                    console.error(reason)
-                }
-            })
+        dispatch(getRoomsList({}))
     }, []);
 
     return (
@@ -93,15 +87,15 @@ const GameStart = () => {
                 </div>
 
                 <div className="game-start-page__rooms">
-                    {!!roomList.length && (
+                    {!!roomsList?.length && (
                         <>
                             <h3>Доступные комнаты</h3>
-                            {roomList.map((room) =>
+                            {roomsList.map((room) =>
                                 <div className="game-start-page__room" key={room.id}>
                                     <p>{room.title}</p>
                                     <Button
                                         className="game-start-page__button-small button-filled"
-                                        onClick={() => goToRoom(room.id)}
+                                        onClick={() => goToRoom(room)}
                                     >
                                         Войти
                                     </Button>
@@ -130,5 +124,4 @@ const GameStart = () => {
     )
 }
 
-// export default withAuthorizationCheck(GameStart);
-export default GameStart;
+export default withAuthorizationCheck(GameStart);
