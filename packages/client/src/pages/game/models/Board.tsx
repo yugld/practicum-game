@@ -204,7 +204,9 @@ export default class Board {
   ) {
     const image = new Image()
     image.src = src
+    console.log(src)
     image.addEventListener('load', () => {
+      console.log('load images')
       if (isDiscardedCard) {
         this.context.globalAlpha = 0.4
       }
