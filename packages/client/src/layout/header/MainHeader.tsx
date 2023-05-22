@@ -23,9 +23,10 @@ export default function MainHeader() {
   }
 
   const onLogout = () => {
+    setAnchorElUser(null)
+    
     dispatch(logoutUser())
       .then(() => {
-        setAnchorElUser(null)
         dispatch(clearUser())
       })
   }
