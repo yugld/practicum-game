@@ -9,6 +9,7 @@ import { ThemeWrapper } from './ThemeWrapper'
 import { store } from './store/store'
 import App from './App'
 import './assets/styles.less'
+import { startServiceWorker } from './startServiceWorker'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
@@ -27,3 +28,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </ErrorBoundary>
   </StrictMode>
 )
+
+startServiceWorker();
