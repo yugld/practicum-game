@@ -1,26 +1,11 @@
-import { getRoomUsers } from '../../../services/room'
 import Player from './Player'
 import Players from './Players'
-import { IUser } from '../../../api/types'
+import { IUser } from '../../../store/userSlice.types'
 import Board from './Board'
 
 import { CardType, GameProgress } from '../types'
 
 export class GameProgressModel {
-  static async initRoomUsers(roomId: number): Promise<IUser[]> {
-    return await getRoomUsers(roomId)
-      .then(users => {
-        return users
-      })
-      .catch(({ response }) => {
-        const reason = response?.data?.reason
-        if (reason) {
-          console.error(reason)
-        }
-        return []
-      })
-  }
-
   static renderBoard(
     board: Board | null,
     players: Player[],
@@ -36,7 +21,7 @@ export class GameProgressModel {
       renderCards = [activePlayer?.cardOnHand, takeRandomCard()]
     } else {
       changeGameProgress(GameProgress.waiting)
-      if (!user) {
+      if (!user || user.id == undefined) {
         console.log('User is undefined')
         return
       }
@@ -45,7 +30,7 @@ export class GameProgressModel {
         renderCards.push(cardOnHand)
       }
     }
-
+    console.log(renderCards)
     board?.renderCards(renderCards)
   }
 }

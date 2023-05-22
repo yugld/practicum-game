@@ -1,13 +1,18 @@
-import { Link } from 'react-router-dom'
-import './styles.less'
-import { AppBar, Container, Toolbar, Menu, MenuItem, Tooltip, IconButton, Avatar } from '@mui/material'
 import { useState, MouseEvent } from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { AppBar, Container, Toolbar, Menu, MenuItem, Tooltip, IconButton, Avatar } from '@mui/material'
+import { Store } from '../../store/store.types'
+import { useAppDispatch } from '../../store/store'
+import { clearUser, logoutUser } from '../../store/userSlice'
+import { RESOURCE_URL } from '../../utils/axios'
 import { ToggleTheme } from './ToggleTheme'
 
-const settings = [ 'Profile', 'Logout' ]
+import './styles.less'
 
-
-export default function MainHeader () {
+export default function MainHeader() {
+  const dispatch = useAppDispatch();
+  const user = useSelector((state: Store) => state.user.user);
   const [ anchorElUser, setAnchorElUser ] = useState<null | HTMLElement>(null)
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
@@ -17,42 +22,62 @@ export default function MainHeader () {
     setAnchorElUser(null)
   }
 
+  const onLogout = () => {
+    setAnchorElUser(null)
+    
+    dispatch(logoutUser())
+      .then(() => {
+        dispatch(clearUser())
+      })
+  }
+
   return <AppBar position='static' className='main-header'>
     <Container maxWidth='xl'>
       <Toolbar disableGutters>
 
         <div className='page-links'>
-          <Link className='page-links__item' to='/'>Об игре</Link>
-          <Link className='page-links__item' to='/login'>Авторизация</Link>
-          <Link className='page-links__item' to='/registration'>Регистрация</Link>
-          <Link className='page-links__item' to='/profile'>Профиль</Link>
-          <Link className='page-links__item' to='/leaderboard'>Лидерборд</Link>
-          <Link className='page-links__item' to='/forum'>Форум</Link>
-          <Link className='page-links__item' to='/rules'>Правила</Link>
-          <Link className='page-links__item' to='/rooms'>Начать игру</Link>
+          {user.id ? (
+            <>
+              <Link className='page-links__item' to='/rooms'>Начать игру</Link>
+              <Link className='page-links__item' to='/rules'>Правила</Link>
+              <Link className='page-links__item' to='/leaderboard'>Лидерборд</Link>
+              <Link className='page-links__item' to='/forum'>Форум</Link>
+            </>
+          ) : (
+            <>
+              <Link className='page-links__item' to='/'>Об игре</Link>
+              <Link className='page-links__item' to='/login'>Авторизация</Link>
+              <Link className='page-links__item' to='/registration'>Регистрация</Link>
+            </>
+          )}
         </div>
         <div className='main-header__dropdown-menu'>
           <ToggleTheme />
-          <Tooltip title='Open settings'>
-            <IconButton onClick={ handleOpenUserMenu } id='basic-button' aria-haspopup='true'>
-              <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            id='menu-appbar'
-            anchorEl={ anchorElUser }
-            open={ Boolean(anchorElUser) }
-            onClose={ handleCloseUserMenu }
-            MenuListProps={ {
-              'aria-labelledby': 'basic-button'
-            } }
-          >
-            { settings.map((setting) => (
-              <MenuItem key={ setting } onClick={ handleCloseUserMenu }>
-                <span>{ setting }</span>
-              </MenuItem>
-            )) }
-          </Menu>
+          {user.id && (
+            <>
+              <Tooltip title=''>
+                <IconButton onClick={handleOpenUserMenu} id='basic-button' aria-haspopup='true'>
+                  <Avatar alt={user.display_name || user.first_name} src={user.avatar ? `${RESOURCE_URL}${user.avatar}` : ''} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                id='menu-appbar'
+                anchorEl={anchorElUser}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button'
+                }}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link to='/profile'>Профиль</Link>
+                </MenuItem>
+                <MenuItem onClick={onLogout}>
+                  <span>Выйти</span>
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </div>
       </Toolbar>
     </Container>

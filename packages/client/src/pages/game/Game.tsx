@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Board from './models/Board'
 import CardDeck from './models/CardDeck'
 import Players from './models/Players'
@@ -13,10 +13,11 @@ import {
 } from './types'
 import Player from './models/Player'
 import { cardList, CHARACTER_VALUES } from '../../constants/cardList'
-import { ThemeContext } from '../../ThemeWrapper'
 
 import { useParams } from 'react-router-dom'
 import { GameProgressModel } from './models/GameProgressModel'
+import { useSelector } from 'react-redux'
+import { Store } from '../../store/store.types'
 
 type Props = {
   websocket: WebSocket | undefined
@@ -36,17 +37,10 @@ let isFinishPrevRound: FinishedRoundType = {
 interface GameProgressState {
   activePlayer: Player
   rivalPlayer: Player
-  discardedCards: Record<number, CardType[]>
+  discardedCards: CardType[]
   discardedCard: CardType | null
   deck: CardType[]
   isFinishPrevRound: FinishedRoundType
-}
-
-enum WebsocketStateEnum {
-  CONNECTING,
-  OPEN,
-  CLOSING,
-  CLOSED,
 }
 
 export default function Game({ websocket }: Props) {
@@ -56,12 +50,14 @@ export default function Game({ websocket }: Props) {
     return selectedCard
   }
 
-  const { user } = useContext(ThemeContext)
+  const user = useSelector((state: Store) => state.user.user)
   const params = useParams<Record<string, any>>()
   const roomId: number = params.roomId
 
   const [players, setPlayers] = useState<Player[]>(() => [])
+
   const [activePlayer, setActivePlayer] = useState<Player>({} as Player)
+  const [discardedCard, setDiscardedCard] = useState<CardType | null>(null)
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const board = useRef<Board | null>(null)
@@ -69,14 +65,15 @@ export default function Game({ websocket }: Props) {
   const [gameProgress, setGameProgress] = useState(GameProgress.choice)
   const [isSelectCard, setIsSelectCard] = useState<boolean>(false)
 
-  const [discardedCard, setDiscardedCard] = useState<CardType | null>(null)
-  const discardedCards = useRef<Record<number, CardType[]>>({})
+  const discardedCards = useRef<CardType[]>([])
   const [numberToken, setNumberToken] = useState<number>(0)
 
   const [resultMessage, setResultMessage] = useState<ResultMessageType>({
     type: ResultMessageTypeEnum.error,
     text: '',
   })
+
+  const roomsList = useSelector((state: Store) => state.rooms.roomsList)
 
   const confirmFinishRound = () => {
     changeGameProgress(GameProgress.finishRound)
@@ -92,86 +89,85 @@ export default function Game({ websocket }: Props) {
     }
   }, [websocket])
 
-  useEffect(() => {
-    websocket?.addEventListener(
-      'message',
-      (message: { data: any; type: string }) => {
-        let data
-        try {
-          data = JSON.parse(message.data)
-        } catch {
-          data = message.data
+  const initMessageListener = (message: { data: any; type: string }) => {
+    // console.log(m)
+    let data
+    try {
+      data = JSON.parse(message.data)
+    } catch {
+      data = message.data
+    }
+
+    if (data.type && data.type === 'pong') {
+      return
+    }
+
+    if (message.type === 'message') {
+      console.log(data?.content)
+
+      if (
+        !Array.isArray(data) &&
+        data?.content?.status === 'confirmFinishRound'
+      ) {
+        if (user?.id !== data?.content?.activePlayer?.user.id) {
+          confirmFinishRound()
         }
 
-        if (data.type && data.type === 'pong') {
-          return
-        }
-
-        if (message.type === 'message') {
-          if (
-            !Array.isArray(data) &&
-            data?.content?.status === 'confirmFinishRound'
-          ) {
-            if (user?.id !== data?.content?.activePlayer?.user.id) {
-              confirmFinishRound()
-            }
-
-            return
-          }
-          if (
-            !Array.isArray(data) &&
-            data?.content?.status === 'confirmStartRound'
-          ) {
-            if (user?.id === data?.content?.activePlayer?.user.id) {
-              startNewRound()
-            }
-
-            return
-          }
-
-          if (Array.isArray(data)) {
-            const findIndexLatestDataAboutGame = data.findIndex(element => {
-              return element?.content.includes('discardedCards')
-            })
-            if (findIndexLatestDataAboutGame !== -1) {
-              initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
-            } else {
-              createInitGameState()
-            }
-          } else if (data.type && data.type === 'message') {
-            rerenderBoard(data.content)
-          }
-        }
+        return
       }
-    )
+      if (
+        !Array.isArray(data) &&
+        data?.content?.status === 'confirmStartRound'
+      ) {
+        if (user?.id === data?.content?.activePlayer?.user.id) {
+          startNewRound()
+        }
+
+        return
+      }
+
+      if (Array.isArray(data)) {
+        const findIndexLatestDataAboutGame = data.findIndex(element => {
+          return element?.content.includes('discardedCards')
+        })
+        if (findIndexLatestDataAboutGame !== -1) {
+          initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
+        } else {
+          createInitGameState()
+        }
+      } else if (data.type && data.type === 'message') {
+        rerenderBoard(data.content)
+      }
+    }
+  }
+
+  useEffect(() => {
+    websocket?.addEventListener('message', initMessageListener)
 
     return () => {
       websocket?.removeEventListener('message', () => {
         console.log('remove open')
       })
     }
-  }, [websocket, activePlayer, discardedCard])
+  }, [websocket, initMessageListener])
 
   const createInitGameState = async () => {
     // Т.к. в игре 2 игрока, убираем из колоды 3 рандомные карты
     for (let i = 0; i < 3; i++) {
       takeRandomCard()
     }
-    const roomUsers = await GameProgressModel.initRoomUsers(roomId)
     console.log(deck)
+
     const content: GameProgressState = {
       activePlayer: new Player({
-        user: roomUsers[0],
+        user: roomsList?.[0],
         cardOnHand: takeRandomCard(),
       }),
       rivalPlayer: new Player({
-        user: roomUsers[1],
+        user: roomsList?.[1],
         cardOnHand: takeRandomCard(),
       }),
-      discardedCards: {
-        [roomUsers[0].id]: [],
-        [roomUsers[1].id]: [],
-      },
+      discardedCards: [],
       discardedCard: null,
       deck,
       isFinishPrevRound: {
@@ -179,7 +175,7 @@ export default function Game({ websocket }: Props) {
         winUser: null,
       },
     }
-
+    console.log('new game')
     websocket?.send(
       JSON.stringify({
         type: 'message',
@@ -193,10 +189,7 @@ export default function Game({ websocket }: Props) {
     for (let i = 0; i < 3; i++) {
       takeRandomCard()
     }
-    discardedCards.current = {
-      [_players[0].user.id]: [],
-      [_players[1].user.id]: [],
-    }
+    discardedCards.current = []
 
     board?.current?.resetDiscardedCards()
   }
@@ -219,7 +212,7 @@ export default function Game({ websocket }: Props) {
     board.current = new Board(canvasRef.current)
     board.current?.setDimensionsCanvas()
     canvasRef.current?.addEventListener('click', canvasClickHandler)
-
+    console.log('render board 1')
     GameProgressModel.renderBoard(
       board.current,
       _players,
@@ -229,7 +222,7 @@ export default function Game({ websocket }: Props) {
       user,
       changeGameProgress
     )
-    board?.current?.drawDiscardedCards(data.discardedCards[user.id])
+    board?.current?.drawDiscardedCards(data.discardedCards)
 
     setPlayers(_players)
     setActivePlayer(data.activePlayer)
@@ -242,6 +235,7 @@ export default function Game({ websocket }: Props) {
   }
 
   const rerenderBoard = (data: GameProgressState) => {
+    // debugger
     if (!canvasRef || !board || !user) return
 
     deck = data.deck
@@ -255,6 +249,7 @@ export default function Game({ websocket }: Props) {
       value: false,
       winUser: null,
     }
+    console.log('render board 2')
     GameProgressModel.renderBoard(
       board.current,
       _players,
@@ -264,6 +259,8 @@ export default function Game({ websocket }: Props) {
       user,
       changeGameProgress
     )
+
+    board?.current?.drawDiscardedCards(data.discardedCards)
 
     setActivePlayer(data.activePlayer)
     setPlayers(_players)
@@ -403,9 +400,7 @@ export default function Game({ websocket }: Props) {
         // Если был сброшен Принц поменять карту противника на новую
         checkIsProtectRival(noActivePlayer, () => {
           if (noActivePlayer.cardOnHand) {
-            discardedCards.current[noActivePlayer.user.id].push(
-              noActivePlayer.cardOnHand
-            )
+            discardedCards.current.push(noActivePlayer.cardOnHand)
           }
           players[noActivePlayerIndex].cardOnHand = takeRandomCard()
 
@@ -459,13 +454,10 @@ export default function Game({ websocket }: Props) {
   }
 
   const computeSum = (playerId: number) => {
-    return discardedCards.current[playerId].reduce(
-      (acc: number, card: CardType) => {
-        acc += card.value
-        return acc
-      },
-      0
-    )
+    return discardedCards.current.reduce((acc: number, card: CardType) => {
+      acc += card.value
+      return acc
+    }, 0)
   }
 
   const getNoActivePlayer = () => {
@@ -526,6 +518,7 @@ export default function Game({ websocket }: Props) {
 
   const getConfirmFromRivalPlayer = ({ winPlayer }: { winPlayer: Player }) => {
     changeGameProgress(GameProgress.waitingConfirm)
+
     websocket?.send(
       JSON.stringify({
         type: 'message',
@@ -539,6 +532,7 @@ export default function Game({ websocket }: Props) {
   }
 
   const confirmStartNewRound = () => {
+    console.log('confirmStartNewRound')
     websocket?.send(
       JSON.stringify({
         type: 'message',
@@ -557,7 +551,7 @@ export default function Game({ websocket }: Props) {
       text: '',
     })
 
-    discardedCards.current[activePlayer.user.id].push(discardedCard)
+    discardedCards.current.push(discardedCard)
 
     const noActivePlayer = getNoActivePlayer()
 
@@ -576,7 +570,7 @@ export default function Game({ websocket }: Props) {
       newActivePlayer = noActivePlayer
       newRivalPlayer = activePlayer
     }
-
+    console.log('start new round')
     websocket?.send(
       JSON.stringify({
         type: 'message',

@@ -52,9 +52,13 @@ export default class Board {
   }
 
   drawDiscardedCards(cards: CardType[]) {
-    cards.map((card: CardType) => {
-      this.drawDiscardedCard(card)
-    })
+    this.resetDiscardedCards()
+
+    if (cards?.length) {
+      cards.map((card: CardType) => {
+        this.drawDiscardedCard(card)
+      })
+    }
   }
 
   resetDiscardedCards() {

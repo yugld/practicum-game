@@ -1,41 +1,41 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes, Outlet, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { unwrapResult } from '@reduxjs/toolkit'
+
 import GameRoom from '../../pages/room/GameRoom'
 import Game from '../../pages/game/Game'
 import { GameEnd } from '../../pages/gameEnd/GameEnd'
-import { getRoomToken } from '../../services/room'
-import { ThemeContext } from '../../ThemeWrapper'
+
+import { useAppDispatch } from '../../store/store'
+import { getRoomToken } from '../../store/roomsSlice'
+import { Store } from '../../store/store.types'
 
 const GameNavigation = () => {
-  const { user } = useContext(ThemeContext)
+  const dispatch = useAppDispatch()
   const params = useParams<Record<string, any>>()
   const roomId: number = params.roomId
   const [roomToken, setRoomToken] = useState<string>('')
   const [websocket, setWebsocket] = useState<WebSocket | undefined>(undefined)
+  const currentUserId = useSelector((state: Store) => state.user.user.id)
 
   useEffect(() => {
-    getRoomToken(roomId)
-      .then(token => setRoomToken(token))
-      .catch(({ response }) => {
-        const reason = response?.data?.reason
-
-        if (reason) {
-          console.error(reason)
-        }
-      })
+    dispatch(getRoomToken(roomId))
+      .then(unwrapResult)
+      .then(res => setRoomToken(res.token))
   }, [])
 
   useEffect(() => {
-    if (roomToken && user) {
-      const url = `wss://ya-praktikum.tech/ws/chats/${user.id}/${roomId}/${roomToken}`
+    if (roomToken) {
+      const url = `wss://ya-praktikum.tech/ws/chats/${currentUserId}/${roomId}/${roomToken}`
 
       const socket = new WebSocket(url)
       let pingInterval = 0
 
-      socket.addEventListener('open', evn => {
+      socket.addEventListener('open', () => {
         pingInterval = setInterval(() => {
-          socket.send(JSON.stringify({ type: 'ping' }))
-        }, 10000) as unknown as number
+          // socket.send(JSON.stringify({ type: 'ping' }))
+        }, 5000) as unknown as number
       })
 
       socket.addEventListener('close', () => {
@@ -44,10 +44,7 @@ const GameNavigation = () => {
       })
 
       socket.addEventListener('message', (message: { data: any }) => {
-        const data =
-          typeof message.data !== 'string'
-            ? JSON.parse(message.data)
-            : message.data
+        const data = JSON.parse(message.data)
 
         if (data.type && data.type === 'pong') {
           return
