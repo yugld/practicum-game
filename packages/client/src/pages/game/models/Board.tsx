@@ -203,10 +203,11 @@ export default class Board {
     isDiscardedCard = false
   ) {
     const image = new Image()
-
-    image.src = src.replace('/src', '')
-
+    src.replace('/src', '')
+    image.src = src
     console.log(src)
+    console.log(image.src)
+    console.log(src.replace('/src', ''))
     image.addEventListener('load', () => {
       console.log('load images')
       if (isDiscardedCard) {
