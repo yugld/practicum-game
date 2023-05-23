@@ -68,7 +68,6 @@ const GameRoom = ({ websocket }: Props) => {
                 .then(unwrapResult)
                 .then(() => {
                     notifyUser('Пользователь добавлен');
-                    setRoomUsers([...roomUsers, selectedUser]);
                     dispatch(updateUsers([...roomUsersList, selectedUser]));
                     handleClose();
                 })
