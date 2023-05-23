@@ -36,6 +36,8 @@ import { RESOURCE_URL } from "../../utils/axios";
 import deleteIcon from "../../assets/icons/delete.svg"
 
 import "./styles.less"
+import { notifyUser } from "../../utils/notifications";
+// import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
 type Props = {
     websocket?: WebSocket;
@@ -65,6 +67,7 @@ const GameRoom = ({ websocket }: Props) => {
             dispatch(addRoomUser({ chatId: roomId, users: [selectedUser.id] }))
                 .then(unwrapResult)
                 .then(() => {
+                    notifyUser('Пользователь добавлен');
                     dispatch(updateUsers([...roomUsersList, selectedUser]));
                     handleClose();
                 })
