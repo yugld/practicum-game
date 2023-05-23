@@ -1,16 +1,19 @@
-import { CustomizedButton } from '../../components/button/Button'
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { CustomizedButton } from '../../components/button/Button';
 import Form from '../../modules/form/Form';
 import Input from '../../components/input/Input';
-import { useNavigate, Navigate } from 'react-router-dom';
-
-import './styles.less';
 import Link from '../../components/link';
 import { validateForm } from '../../utils/formValidation';
-import { isAuth } from '../../utils/isAuthenticated';
-import { registration } from '../../services/auth';
+import { useAuthentification } from '../../utils/useAuthentification';
+import { useAppDispatch } from '../../store/store';
+import { getUser, signupUser } from '../../store/userSlice';
+
+import './styles.less';
 
 const Registration = () => {
+  const dispatch = useAppDispatch();
+
   const [firstName, setFirstName] = useState('')
   const [secondName, setSecondName] = useState('')
   const [login, setLogin] = useState('')
@@ -27,7 +30,7 @@ const Registration = () => {
   const [passwordError, setPasswordError] = useState("");
 
   const [formError, setFormError] = useState("");
-  const navigate = useNavigate();
+
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -68,12 +71,9 @@ const Registration = () => {
     const passwordError = validateForm({ type: 'password', value: password });
     setPasswordError(passwordError);
 
-    if ([loginError, emailError, nameError, secondNameError, phoneError, passwordError].some(Boolean)) {
-      registration(registrationData)
-        .then(() => {
-          localStorage.setItem('isAuthenticated', String(true));
-          navigate('/', { replace: true });
-        })
+    if (!loginError && !emailError && !nameError && !secondNameError && !phoneError && !passwordError) {
+      dispatch(signupUser(registrationData))
+        .then(() => dispatch(getUser()))
         .catch((reason) => setFormError(reason));
     }
   }
@@ -111,8 +111,8 @@ const Registration = () => {
     }
   }
 
-  if (isAuth()) {
-    return <Navigate replace to="/game/start" />;
+  if (useAuthentification()) {
+    return <Navigate replace to="/rooms" />;
   } else {
     return (
       <main className="page registration-page">
