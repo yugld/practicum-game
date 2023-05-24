@@ -17,6 +17,9 @@ import { cardList, CHARACTER_VALUES } from '../../constants/cardList'
 import { GameProgressModel } from './models/GameProgressModel'
 import { useSelector } from 'react-redux'
 import { Store } from '../../store/store.types'
+import { getRoomsUsers } from '../../store/roomSlice'
+import { useAppDispatch } from '../../store/store'
+import { useNavigate, useParams } from 'react-router-dom'
 
 type Props = {
   websocket: WebSocket | undefined
@@ -43,6 +46,8 @@ interface GameProgressState {
 }
 
 export default function Game({ websocket }: Props) {
+  const dispatch = useAppDispatch()
+
   const takeRandomCard = () => {
     const { newDeck, selectedCard } = CardDeck.takeRandomCardFromDeck(deck)
     deck = newDeck
@@ -100,8 +105,6 @@ export default function Game({ websocket }: Props) {
     }
 
     if (message.type === 'message') {
-      console.log(data?.content)
-
       if (
         !Array.isArray(data) &&
         data?.content?.status === 'confirmFinishRound'
@@ -130,6 +133,8 @@ export default function Game({ websocket }: Props) {
         if (findIndexLatestDataAboutGame !== -1) {
           initRoom(JSON.parse(data[findIndexLatestDataAboutGame].content))
         } else {
+          console.log(findIndexLatestDataAboutGame)
+
           createInitGameState()
         }
       } else if (data.type && data.type === 'message') {
@@ -137,6 +142,11 @@ export default function Game({ websocket }: Props) {
       }
     }
   }
+  const params = useParams<Record<string, any>>()
+  const roomId: number = params.roomId
+  useEffect(() => {
+    dispatch(getRoomsUsers(roomId))
+  }, [])
 
   useEffect(() => {
     websocket?.addEventListener('message', initMessageListener)
@@ -149,6 +159,7 @@ export default function Game({ websocket }: Props) {
   }, [websocket, initMessageListener])
 
   const createInitGameState = async () => {
+    console.log(roomUsersList)
     if (roomUsersList === null) return
 
     // Т.к. в игре 2 игрока, убираем из колоды 3 рандомные карты
