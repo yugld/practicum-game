@@ -3,6 +3,7 @@ import { IUser } from "./userSlice.types";
 export interface RoomSlice {
   roomUsersList: IUser[] | null;
   currentStatus: string | null;
+  playersConnected: number;
   roomInfo: Room | null;
 }
 

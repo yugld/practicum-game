@@ -9,6 +9,7 @@ const ADD_ROOM_USER = 'ADD_ROOM_USER';
 export const initialStateRoom: RoomSlice = {
     roomUsersList: null,
     currentStatus: null,
+    playersConnected: 0,
     roomInfo: null
 };
 
@@ -66,6 +67,9 @@ const room = createSlice({
         updateRoomInfo: (state: RoomSlice, action) => {
             state.roomInfo = action.payload;
         },
+        connectPlayer: (state: RoomSlice) => {
+            state.playersConnected += 1;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getRoomsUsers.pending, (state: RoomSlice) => {
@@ -85,7 +89,8 @@ export const {
         clearRoomUsersList,
         updateUsers,
         updateGameStatus,
-        updateRoomInfo
+        updateRoomInfo,
+        connectPlayer
     },
     reducer: roomReducer
 } = room;

@@ -22,6 +22,7 @@ import { useAppDispatch } from "../../store/store";
 import { Store } from "../../store/store.types";
 import {
     addRoomUser,
+    connectPlayer,
     deleteRoomUser,
     getRoomsUsers,
     updateGameStatus,
@@ -34,10 +35,9 @@ import { withAuthorizationCheck } from "../../utils/authorizedPage";
 import { useFlag } from '../../hooks/useFlag';
 import { RESOURCE_URL } from "../../utils/axios";
 import deleteIcon from "../../assets/icons/delete.svg"
+import { notifyUser } from "../../utils/notifications";
 
 import "./styles.less"
-import { notifyUser } from "../../utils/notifications";
-// import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
 type Props = {
     websocket?: WebSocket;
@@ -50,6 +50,7 @@ const GameRoom = ({ websocket }: Props) => {
     const currentUserId = useSelector((state: Store) => state.user.user.id);
     const roomCreatorId = useSelector((state: Store) => state.room.roomInfo?.created_by);
     const roomTitle = useSelector((state: Store) => state.room.roomInfo?.title);
+    const usersCounter = useSelector((state: Store) => state.room.playersConnected);
 
     const params = useParams<Record<string, any>>();
     const navigate = useNavigate();
@@ -59,7 +60,6 @@ const GameRoom = ({ websocket }: Props) => {
     const [deleteRoomtVisible, deleteRoomOpenDialog, deleteRoomCloseDialog] = useFlag(false);
     const [inputValue, setInputValue] = useState<string>('');
     const [selectedUser, setSelectedUser] = useState<IUser | undefined>(undefined);
-    const [usersCounter, setUsersCounter] = useState<number>(0);
     const [debouncedText] = useDebounce(inputValue, 500);
 
     const handleSubmit = () => {
@@ -110,7 +110,7 @@ const GameRoom = ({ websocket }: Props) => {
                 dispatch(updateGameStatus(data.content))
                 navigate(`/rooms/${roomId}/game`);
             } else if (data.content === 'player connected') {
-                setUsersCounter(usersCounter + 1);
+                dispatch(connectPlayer())
             }
         });
 
