@@ -7,7 +7,7 @@ import {
   ResultMessageType,
   ResultMessageTypeEnum,
 } from '../types'
-import { PlayerType } from '../../../store/activePlayer.types'
+import { PlayerType } from '../../../store/gameState.types'
 import Player from './Player'
 import { GameProgressState } from '../../../store/gameState.types'
 import {

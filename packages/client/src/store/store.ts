@@ -4,8 +4,6 @@ import { roomsReducer } from './roomsSlice'
 import { roomReducer } from './roomSlice'
 import { userReducer } from './userSlice'
 import { addUserDialogReducer } from './addUserDialogSlice'
-import { activePlayerReducer } from './activePlayer'
-import { discardedCardReducer } from './discardedCard'
 import { gameStateReducer } from './gameState'
 
 export const store = configureStore({
@@ -14,8 +12,6 @@ export const store = configureStore({
     room: roomReducer,
     user: userReducer,
     addUserDialog: addUserDialogReducer,
-    activePlayer: activePlayerReducer,
-    discardedCard: discardedCardReducer,
     gameState: gameStateReducer,
   },
 })

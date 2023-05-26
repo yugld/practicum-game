@@ -1,12 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Board from './models/Board'
-import CardDeck from './models/CardDeck'
 import { CustomizedButton } from '../../components/button/Button'
 import './styles.less'
 import SidebarPanel from './components/SidebarPanel'
-import { GameProgress, ResultMessageType, ResultMessageTypeEnum } from './types'
-import { PlayerType } from '../../store/activePlayer.types'
-import { cardList } from '../../constants/cardList'
+import { GameProgress } from './types'
 
 import GameProgressModel from './models/GameProgressModel'
 import { useSelector } from 'react-redux'
@@ -14,28 +11,9 @@ import { Store } from '../../store/store.types'
 import { getRoomsUsers } from '../../store/roomSlice'
 import { useAppDispatch } from '../../store/store'
 import { useParams } from 'react-router-dom'
-import {
-  updateActivePlayer,
-  updateDiscardedCards,
-  updateRivalPlayer,
-} from '../../store/gameState'
-import { updateDiscardedCard } from '../../store/gameState'
-import {
-  FinishedRoundType,
-  GameProgressState,
-} from '../../store/gameState.types'
-import { updateGameState } from '../../store/gameState'
 
 type Props = {
   websocket: WebSocket | undefined
-}
-
-// Инициализация колоды из 16 карт
-const deck = CardDeck.init(cardList)
-
-const isFinishPrevRound: FinishedRoundType = {
-  value: false,
-  winUser: undefined,
 }
 
 export default function Game({ websocket }: Props) {
@@ -44,8 +22,6 @@ export default function Game({ websocket }: Props) {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const board = useRef<Board | null>(null)
-
-  const [gameProgress, setGameProgress] = useState(GameProgress.choice)
 
   useEffect(() => {
     GameProgressModel.setBoard(canvasRef.current)
@@ -95,7 +71,7 @@ export default function Game({ websocket }: Props) {
             <span className="description-card"></span>
           </div>
           <div className="buttons">
-            {gameProgress === GameProgress.choice &&
+            {gameState.gameProgress === GameProgress.choice &&
               !gameState.isSelectCard && (
                 <CustomizedButton
                   text="Сбросить карту"

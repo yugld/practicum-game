@@ -1,5 +1,6 @@
 import Player from './Player'
-import { PlayerType } from '../../../store/activePlayer.types'
+import { PlayerType } from '../../../store/gameState.types'
+
 class Players {
   getNoActivePlayerIndex(
     players: PlayerType[],

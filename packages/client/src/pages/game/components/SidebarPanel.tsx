@@ -2,9 +2,6 @@ import { CardType, GameProgress } from '../types'
 import { cardList } from '../../../constants/cardList'
 import { useState } from 'react'
 import { CustomizedButton } from '../../../components/button/Button'
-
-import Player from '../models/Player'
-import Players from '../models/Players'
 import HeartFill from '../../../assets/icons/heart-fill.svg'
 import ScieldCheck from '../../../assets/icons/shield-check-bold.svg'
 

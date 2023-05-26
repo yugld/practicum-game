@@ -1,11 +1,17 @@
-import { PlayerType } from './activePlayer.types'
 import { CardType, GameProgress, ResultMessageType } from '../pages/game/types'
+import { IUser } from './userSlice.types'
 
 export interface FinishedRoundType {
   value: boolean
   winUser: number | undefined
 }
 
+export interface PlayerType {
+  user: IUser | null
+  isProtect: boolean
+  numberOfTokens: number
+  cardOnHand: CardType
+}
 export interface DiscardedCardType {
   user: number
   card: CardType
