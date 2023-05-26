@@ -93,14 +93,14 @@
 
 ### ***8: Принцесса***
 
-![Princess](/packages/client/src/assets/images/8-dark.png)
+![Princess](/packages/client/src/assets/images/8-light.png)
 
 Если вы сбрасываете принцессу - не важно, как и почему, ваше послание сгорает в ближайшем камине, а вы оказываетесь вне
 игры.
 
 ### ***7: Графиня***
 
-![Countess](/packages/client/src/assets/images/7-dark.png)
+![Countess](/packages/client/src/assets/images/7-light.png)
 
 Свойства большинства карт вступает в силу при сбросе. Однако свойство графини вступает в силу, когда она у вас на руках.
 Более того, при сбросе ее свойства в силу не вступает.
@@ -109,14 +109,14 @@
 
 ### ***6: Король***
 
-![King](/packages/client/src/assets/images/6-dark.png)
+![King](/packages/client/src/assets/images/6-light.png)
 
 Сбросив короля, если противник не находится под защитой служанки, обменяйте свою карту с руки на карту соперника. Если
 соперник защищен, ничего не происходит.
 
 ### ***5: Принц***
 
-![Prince](/packages/client/src/assets/images/5-dark.png)
+![Prince](/packages/client/src/assets/images/5-light.png)
 
 Если вы сбросите принца, то соперник сбрасывает с руки карту, не применяя ее свойство, и берет новую. Если карт в колоде
 не осталось, игрок берет карту, которая была отложена в начале раунда. Если соперник защищен служанкой, вам придется
@@ -124,27 +124,27 @@
 
 ### ***4: Служанка***
 
-![Handmaid](/packages/client/src/assets/images/4-dark.png)
+![Handmaid](/packages/client/src/assets/images/4-light.png)
 
 Сбросив служанку, вы до начала своего следующего хода защищены от вредных свойств карта соперника. Если соперник защищен
 служанкой, то игрок должен применить свойство на себя.
 
 ### ***3: Барон***
 
-![Baron](/packages/client/src/assets/images/3-dark.png)
+![Baron](/packages/client/src/assets/images/3-light.png)
 
 Сбросив барона, сравните карты на руках. Обладатель карты с меньшим значением оказывается вне игры. При равных значениях
 или если соперник защищен служанкой ничего не происходит.
 
 ### ***2: Священник***
 
-![Priest](/packages/client/src/assets/images/2-dark.png)
+![Priest](/packages/client/src/assets/images/2-light.png)
 
 Сбросив священника, можете посмотреть карту соперника.
 
 ### ***1: Стражница***
 
-![Guardian](/packages/client/src/assets/images/1-dark.png)
+![Guardian](/packages/client/src/assets/images/1-light.png)
 
 Сбросив стражницу, выберите карту. Если у соперника на руке выбранная карта, он оказывается вне игры. Если соперник
 защищен служанкой, ничего не происходит.
