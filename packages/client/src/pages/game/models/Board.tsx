@@ -204,6 +204,7 @@ export default class Board {
   ) {
     const image = new Image()
     src = src.replace('/src', '')
+    src = src.replace('/images', '')
     console.log(src)
     image.src = src
 
