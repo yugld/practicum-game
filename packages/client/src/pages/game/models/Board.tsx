@@ -203,8 +203,8 @@ export default class Board {
     isDiscardedCard = false
   ) {
     const image = new Image()
-    src = src.replace('/src', '')
-    src = src.replace('/images', '')
+    // src = src.replace('/src', '')
+    // src = src.replace('/images', '')
     console.log(src)
     image.src = src
 
