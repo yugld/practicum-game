@@ -1,4 +1,4 @@
-import { CardType, GameProgress, ResultMessageType } from '../types'
+import { CardType, GameProgress } from '../types'
 import { cardList } from '../../../constants/cardList'
 import { useState } from 'react'
 import { CustomizedButton } from '../../../components/button/Button'
@@ -11,22 +11,12 @@ import ScieldCheck from '../../../assets/icons/shield-check-bold.svg'
 import { Card, MenuList, MenuItem } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { Store } from '../../../store/store.types'
+import GameProgressModel from '../models/GameProgressModel'
 
-interface Props {
-  activePlayer: Player
-  players: Player[]
-  discardedCard: CardType | null
-  isSelectCard: boolean
-  resultMessage: ResultMessageType
-  gameProgress: GameProgress
-  discardCard: (card: CardType) => void
-  computeNextStep: () => void
-  confirmStartNewRound: () => void
-  numberToken: number
-}
-
-export default function SidebarPanel(props: Props) {
+export default function SidebarPanel() {
   const user = useSelector((state: Store) => state.user.user)
+  const gameState = useSelector((state: Store) => state.gameState.gameState)
+
   const [selectedCard, setSelectedCard] = useState<CardType>()
 
   const selectCard = (card: CardType) => {
@@ -35,82 +25,83 @@ export default function SidebarPanel(props: Props) {
 
   const confirmSelectedCard = () => {
     if (!selectedCard) return
-    props.discardCard(selectedCard)
+    GameProgressModel.discardCard(selectedCard)
   }
 
   const startNewRound = () => {
-    props.computeNextStep()
+    GameProgressModel.computeNextStep()
   }
-  const getNotActivePlayer = (): Player => {
-    return props.players.find(
-      (player: Player) => player.user.id !== props.activePlayer.user.id
-    ) as Player
+
+  const getCurrentPlayer = () => {
+    return user.id === gameState.activePlayer?.user?.id
+      ? gameState.activePlayer
+      : gameState.rivalPlayer
   }
 
   return (
     <div className="game-page__sidebar">
       <div className="sidebar-game-statuses">
         <span className="sidebar-game-statuses__tokens">
-          Мои жетоны: <strong>{props.numberToken}</strong>
+          Мои жетоны: <strong>{getCurrentPlayer()?.numberOfTokens}</strong>
           <img src={HeartFill} />
         </span>
 
-        {user &&
-          user.id !== undefined &&
-          Players.getPlayerByUserId(props.players, user.id).isProtect && (
-            <span className="sidebar-game-statuses__protect">
-              Вы защищены!
-              <img src={ScieldCheck} />
-            </span>
-          )}
+        {user?.id !== undefined && getCurrentPlayer()?.isProtect && (
+          <span className="sidebar-game-statuses__protect">
+            Вы защищены!
+            <img src={ScieldCheck} />
+          </span>
+        )}
       </div>
       <Card className="sidebar-header">
-        {props.activePlayer?.user?.id === user?.id ? (
+        {gameState.activePlayer?.user?.id === user?.id ? (
           <h5>Ваш ход.</h5>
         ) : (
-          <h5>Ход игрока: {props.activePlayer?.user?.first_name}</h5>
+          <h5>Ход игрока: {gameState.activePlayer?.user?.first_name}</h5>
         )}
       </Card>
       <div className="sidebar-body">
         <div className="sidebar-body__content">
           <div className="sidebar-body__status-play">
-            {props.gameProgress === GameProgress.finishRound &&
-              props.activePlayer?.user?.id !== user?.id && (
+            {gameState.gameProgress === GameProgress.finishRound &&
+              gameState.activePlayer?.user?.id !== user?.id && (
                 <h2>Начало нового раунда</h2>
               )}
-            {props.gameProgress === GameProgress.waitingConfirm &&
-              props.activePlayer?.user?.id === user?.id && (
+            {gameState.gameProgress === GameProgress.waitingConfirm &&
+              gameState.activePlayer?.user?.id === user?.id && (
                 <h2>Ожидается подтверждение от игрока</h2>
               )}
-            {props.activePlayer?.user?.id === user?.id &&
-              props.gameProgress === GameProgress.choice && (
+            {gameState.activePlayer?.user?.id === user?.id &&
+              gameState.gameProgress === GameProgress.choice && (
                 <div className="sidebar-body__choice-card">
                   Выберите сбрасываемую карту.
                 </div>
               )}
 
-            {props.discardedCard?.value && !props.isSelectCard && (
+            {gameState.discardedCard?.value && !gameState.isSelectCard && (
               <div>
-                <h4>{props.discardedCard?.title}</h4>
-                <div>{props.discardedCard?.text}</div>
+                <h4>{gameState.discardedCard?.title}</h4>
+                <div>{gameState.discardedCard?.text}</div>
               </div>
             )}
-            {props.discardedCard?.value === 2 &&
-              props.gameProgress === GameProgress.viewCard && (
+            {gameState.discardedCard?.value === 2 &&
+              gameState.gameProgress === GameProgress.viewCard && (
                 <div className="player-card">
-                  <h5>Карта игрока {getNotActivePlayer().user.first_name}</h5>
+                  <h5>
+                    Карта игрока {gameState.rivalPlayer?.user?.first_name}
+                  </h5>
                   <img
-                    src={getNotActivePlayer().cardOnHand?.imgSrc}
+                    src={gameState.rivalPlayer?.cardOnHand?.imgSrc}
                     style={{ height: '100px', width: 'auto' }}
                   />
                 </div>
               )}
           </div>
 
-          {props.isSelectCard && (
+          {gameState.isSelectCard && (
             <div className="select-card-panel">
               <div className="select-card-panel__header">
-                <h4>{props.discardedCard?.title}</h4>
+                <h4>{gameState.discardedCard?.title}</h4>
                 <div>Угадайте карту соперника:</div>
               </div>
 
@@ -137,20 +128,20 @@ export default function SidebarPanel(props: Props) {
         </div>
 
         <div className="sidebar-body__actions">
-          {props.resultMessage.text && (
+          {gameState.resultMessage?.text && (
             <div className="result-message">
-              <span>{props.resultMessage.text}</span>
+              <span>{gameState.resultMessage?.text}</span>
             </div>
           )}
-          {(props.gameProgress === GameProgress.confirm ||
-            props.gameProgress === GameProgress.viewCard) && (
+          {(gameState.gameProgress === GameProgress.confirm ||
+            gameState.gameProgress === GameProgress.viewCard) && (
             <CustomizedButton text="Ок" onClick={() => startNewRound()} />
           )}
-          {props.gameProgress === GameProgress.finishRound &&
-            props.activePlayer?.user?.id !== user?.id && (
+          {gameState.gameProgress === GameProgress.finishRound &&
+            gameState.activePlayer?.user?.id !== user?.id && (
               <CustomizedButton
                 text="Подтвердить"
-                onClick={props.confirmStartNewRound}
+                onClick={GameProgressModel.confirmStartNewRound}
               />
             )}
         </div>

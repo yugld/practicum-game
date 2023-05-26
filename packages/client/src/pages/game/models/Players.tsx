@@ -1,19 +1,24 @@
 import Player from './Player'
+import { PlayerType } from '../../../store/activePlayer.types'
 class Players {
-  getNoActivePlayerIndex(players: Player[], activePlayerId: number): number {
+  getNoActivePlayerIndex(
+    players: PlayerType[],
+    activePlayerId: number
+  ): number {
     return players.findIndex(
-      (player: Player) => player.user.id !== activePlayerId
+      (player: PlayerType) => player.user?.id !== activePlayerId
     )
   }
 
-  getPlayerByUserId(players: Player[], id: number): Player {
+  getPlayerByUserId(players: PlayerType[], id: number): PlayerType {
     return (
-      players.find((player: Player) => player.user.id === id) || ({} as Player)
+      players.find((player: PlayerType) => player.user?.id === id) ||
+      ({} as Player)
     )
   }
 
-  getPlayerIndexByUserId(players: Player[], id: number): number {
-    return players.findIndex((player: Player) => player.user.id === id)
+  getPlayerIndexByUserId(players: PlayerType[], id: number): number {
+    return players.findIndex((player: PlayerType) => player.user?.id === id)
   }
 }
 export default new Players()

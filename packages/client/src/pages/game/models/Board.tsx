@@ -4,6 +4,7 @@ import {
   CoordinatesType,
   DimensionsType,
 } from '../types'
+import { DiscardedCardType } from '../../../store/gameState.types'
 
 const MARGIN = 20
 export const THEME = 'light'
@@ -51,12 +52,12 @@ export default class Board {
     ]
   }
 
-  drawDiscardedCards(cards: CardType[]) {
+  drawDiscardedCards(cards: DiscardedCardType[]) {
     this.resetDiscardedCards()
 
     if (cards?.length) {
-      cards.map((card: CardType) => {
-        this.drawDiscardedCard(card)
+      cards.map((discardedCard: DiscardedCardType) => {
+        this.drawDiscardedCard(discardedCard.card)
       })
     }
   }
@@ -109,7 +110,6 @@ export default class Board {
   createPlayerCard(card: CardType) {
     this.coordinates = this.getCoordinatesForOneCard()
     this.clearCard()
-    console.log(card)
     this.drawCard(this.cardDimensions, card.imgSrc, 0)
   }
 
@@ -205,11 +205,8 @@ export default class Board {
     const image = new Image()
     src.replace('/src', '')
     image.src = src
-    console.log(src)
-    console.log(image.src)
-    console.log(src.replace('/src', ''))
+
     image.addEventListener('load', () => {
-      console.log('load images')
       if (isDiscardedCard) {
         this.context.globalAlpha = 0.4
       }
