@@ -8,7 +8,6 @@ import king from '../assets/images/6-light.png'
 import countess from '../assets/images/7-light.png'
 import princess from '../assets/images/8-light.png'
 
-
 export const CHARACTER_VALUES = {
   princess: 8,
   countess: 7,
@@ -24,56 +23,56 @@ export const cardList: CardType[] = [
     value: CHARACTER_VALUES.guardian,
     count: 5,
     title: '1: Стражница',
-    imgSrc: () => guardian,
-    text: 'Выберите соперника и назовите значение карты, отличное от 1. Если у этого игрока на руке есть карта с названным значением, он выбывает из раунда.'
+    imgSrc: guardian,
+    text: 'Выберите соперника и назовите значение карты, отличное от 1. Если у этого игрока на руке есть карта с названным значением, он выбывает из раунда.',
   },
   {
     value: CHARACTER_VALUES.priest,
     count: 2,
     title: '2: Священник',
-    imgSrc: (theme = 'light') => priest,
-    text: 'Можете посмотреть карту соперника.'
+    imgSrc: priest,
+    text: 'Можете посмотреть карту соперника.',
   },
   {
     value: CHARACTER_VALUES.baron,
     count: 2,
     title: '3: Барон',
-    imgSrc: (theme = 'light') => baron,
-    text: 'Сравните с соперником карты на руках. Обладатель карты с меньшим значением оказывается выбывает из раунда.'
+    imgSrc: baron,
+    text: 'Сравните с соперником карты на руках. Обладатель карты с меньшим значением оказывается выбывает из раунда.',
   },
   {
     value: CHARACTER_VALUES.handmaid,
     count: 2,
     title: '4: Служанка',
-    imgSrc: (theme = 'light') => handmaid,
-    text: 'Вы до начала своего следующего хода защищены от всех свойств карт соперников.'
+    imgSrc: handmaid,
+    text: 'Вы до начала своего следующего хода защищены от всех свойств карт соперников.',
   },
   {
     value: CHARACTER_VALUES.prince,
     count: 2,
     title: '5: Принц',
-    imgSrc: (theme = 'light') => prince,
-    text: 'Противник сбрасывает с руки карту, не применяя её свойство, и берёт новую.'
+    imgSrc: prince,
+    text: 'Противник сбрасывает с руки карту, не применяя её свойство, и берёт новую.',
   },
   {
     value: CHARACTER_VALUES.king,
     count: 1,
     title: '6: Король',
-    imgSrc: (theme = 'light') => king,
-    text: 'Обменяйтесь с ним картами с соперником.'
+    imgSrc: king,
+    text: 'Обменяйтесь с ним картами с соперником.',
   },
   {
     value: CHARACTER_VALUES.countess,
     count: 1,
     title: '7: Графиня',
-    imgSrc: (theme = 'light') => countess,
-    text: 'Вы должны сбросить эту карту, если она оказалась у вас на руках вместе с королем или принцем.'
+    imgSrc: countess,
+    text: 'Вы должны сбросить эту карту, если она оказалась у вас на руках вместе с королем или принцем.',
   },
   {
     value: CHARACTER_VALUES.princess,
     count: 1,
     title: '8: Принцесса',
-    imgSrc: (theme = 'light') => princess,
-    text: 'Если вы сбрасываете эту карту, то выбываете из раунда.'
-  }
+    imgSrc: princess,
+    text: 'Если вы сбрасываете эту карту, то выбываете из раунда.',
+  },
 ]
