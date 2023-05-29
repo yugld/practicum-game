@@ -1,22 +1,24 @@
-import { CustomizedButton } from '../../components/button/Button'
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
-import Form from '../../modules/form/Form';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { Navigate } from 'react-router-dom';
+import { CustomizedButton } from '../../components/button/Button';
 import Input from '../../components/input/Input';
+import Link from '../../components/link';
+import Form from '../../modules/form/Form';
+import { validateForm } from '../../utils/formValidation';
+import { useAuthentification } from '../../utils/useAuthentification';
+import { useAppDispatch } from '../../store/store';
+import { getUser, signinUser } from '../../store/userSlice';
 
 import './styles.less';
-import Link from '../../components/link';
-import { validateForm } from '../../utils/formValidation';
-import { login } from '../../services/auth';
-import { isAuth } from '../../utils/isAuthenticated';
 
 const Login = () => {
+  const dispatch = useAppDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setuUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [formError, setFormError] = useState("");
-  const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -38,11 +40,9 @@ const Login = () => {
     setPasswordError(passwordError);
 
     if (!loginError && !passwordError) {
-      login(loginData)
-        .then(() => {
-          localStorage.setItem('isAuthenticated', String(true));
-          navigate('/', { replace: true });
-        })
+      dispatch(signinUser(loginData))
+        .then(unwrapResult)
+        .then(() => dispatch(getUser()))
         .catch((reason) => setFormError(reason));
     }
   }
@@ -62,8 +62,8 @@ const Login = () => {
     }
   }
 
-  if (isAuth()) {
-    return <Navigate replace to="/game/start" />;
+  if (useAuthentification()) {
+    return <Navigate replace to="/rooms" />;
   } else {
     return (
       <main className="page login-page">

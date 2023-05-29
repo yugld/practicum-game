@@ -1,5 +1,7 @@
-import { useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 import {
     Button,
     Input,
@@ -9,19 +11,33 @@ import {
     DialogActions
 } from '@mui/material';
 import { useFlag } from '../../hooks/useFlag';
+import { useAppDispatch } from '../../store/store';
+import { createRoom, getRoomsList } from '../../store/roomsSlice';
+import { Store } from '../../store/store.types';
+import { withAuthorizationCheck } from '../../utils/authorizedPage';
+import { Room } from '../../store/roomSlice.types';
+import { updateRoomInfo } from '../../store/roomSlice';
 
 import "./styles.less"
 import "../../assets/base/index.less"
-import { withAuthorizationCheck } from '../../utils/authorizedPage';
 
 const GameStart = () => {
+    const dispatch = useAppDispatch();
     const [visible, openDialog, closeDialog] = useFlag(false);
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState<string>('');
+    
+    const roomsList = useSelector((state: Store) => state.rooms.roomsList);
+
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        console.log(inputValue);
-        handleClose();
+        dispatch(createRoom(inputValue))
+            .then(unwrapResult)
+            .then(() => {
+                dispatch(getRoomsList({}))
+                // navigate(`/rooms/${res.id}`)
+                handleClose()
+            })
     }
 
     const handleClose = () => {
@@ -33,9 +49,14 @@ const GameStart = () => {
         setInputValue(event.target.value);
     }
 
-    const goToRoom = (id: string) => {
-        navigate(`/rooms/${id}`)
+    const goToRoom = (room: Room) => {
+        dispatch(updateRoomInfo(room))
+        navigate(`/rooms/${room.id}`)
     }
+
+    useEffect(() => {
+        dispatch(getRoomsList({}))
+    }, []);
 
     return (
         <div className="page game-start-page">
@@ -62,29 +83,26 @@ const GameStart = () => {
                         </p>
                     </div>
 
-                    <Button className="game-start-page__button button-filled" onClick={openDialog}>Начать новую игру</Button>
+                    <Button className="game-start-page__button button-filled" onClick={openDialog}>Создать новую комнату</Button>
                 </div>
 
                 <div className="game-start-page__rooms">
-                    <h3>Доступные комнаты</h3>
-                    <div className="game-start-page__room">
-                        <p>First test room</p>
-                        <Button
-                            className="game-start-page__button-small button-filled"
-                            onClick={() => goToRoom('1')}
-                        >
-                            Войти
-                        </Button>
-                    </div>
-                    <div className="game-start-page__room" id='2'>
-                        <p>Second test room</p>
-                        <Button
-                            className="game-start-page__button-small button-filled"
-                            onClick={() => goToRoom('2')}
-                        >
-                            Войти
-                        </Button>
-                    </div>
+                    {!!roomsList?.length && (
+                        <>
+                            <h3>Доступные комнаты</h3>
+                            {roomsList.map((room) =>
+                                <div className="game-start-page__room" key={room.id}>
+                                    <p>{room.title}</p>
+                                    <Button
+                                        className="game-start-page__button-small button-filled"
+                                        onClick={() => goToRoom(room)}
+                                    >
+                                        Войти
+                                    </Button>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
 

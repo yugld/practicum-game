@@ -1,44 +1,37 @@
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { userApi } from '../../api/userApi'
+import { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { unwrapResult } from '@reduxjs/toolkit'
 import { Button, TextField, Avatar, FormControl, FormLabel, IconButton } from '@mui/material'
 import EditPassword from '../../components/EditPassword/EditPassword'
+import { withAuthorizationCheck } from '../../utils/authorizedPage'
+import { Store } from '../../store/store.types'
+import { useAppDispatch } from '../../store/store'
+import { editUserInfo, updateAvatar } from '../../store/userSlice'
+import { RESOURCE_URL } from '../../utils/axios'
 
 import './Profile.less'
-import { withAuthorizationCheck } from '../../utils/authorizedPage'
 
 const Profile = () => {
-    const navigate = useNavigate()
-
-    const [avatar, setAvatar] = useState<Blob>()
-    const [first_name, setFirstName] = useState('')
-    const [second_name, setSecondName] = useState('')
-    const [display_name, setDisplayName] = useState('')
-    const [login, setLogin] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
+    const dispatch = useAppDispatch()
+    const user = useSelector((store: Store) => store.user.user)
+    
+    const [first_name, setFirstName] = useState(user.first_name)
+    const [second_name, setSecondName] = useState(user.second_name)
+    const [display_name, setDisplayName] = useState(user.display_name || '')
+    const [login, setLogin] = useState(user.login)
+    const [email, setEmail] = useState(user.email)
+    const [phone, setPhone] = useState(user.phone)
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        userApi
-            .editUser({
-                first_name,
-                second_name,
-                display_name,
-                login,
-                email,
-                phone,
-            })
-            .then(() => {
-                console.log('Change userData')
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-
-                if (reason) {
-                    console.log(reason)
-                }
-            })
+        dispatch(editUserInfo({
+            first_name,
+            second_name,
+            display_name,
+            login,
+            email,
+            phone,
+        }))
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,75 +59,12 @@ const Profile = () => {
         }
     }
 
-    const onLogout = () => {
-        userApi
-            .logOut()
-            .then(() => {
-                localStorage.setItem('isAuthenticated', String(false));
-                navigate('/login', { replace: true });
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-                if (reason) {
-                    console.log(reason)
-                }
-            })
-    }
-
-    useEffect(() => {
-        userApi.getUser().then(({ data }) => {
-            setFirstName(data.first_name)
-            setSecondName(data.second_name)
-            setDisplayName(data.display_name || '')
-            setLogin(data.login)
-            setEmail(data.email)
-            setPhone(data.phone)
-        })
-    }, [])
-
-    useEffect(() => {
-        userApi
-            .getUser()
-            .then(({ data }) => {
-                if (data.avatar) {
-                    userApi
-                        .getAvatar(data.avatar)
-                        .then(res => {
-                            setAvatar(res.data)
-                        })
-                        .catch(({ response }) => {
-                            const reason = response?.data?.reason
-                            if (reason) {
-                                console.log(reason)
-                            }
-                        })
-                }
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-
-                if (reason) {
-                    console.log(reason)
-                }
-            })
-    }, [])
-
     const handleOnChange: ChangeEventHandler<HTMLInputElement> = event => {
         const { files } = event.target
         if (files && files.length === 1) {
             const img = files[0]
-            setAvatar(img)
-            userApi
-                .editAvatar(img)
-                .then(() => {
-                    console.log('Change avatar')
-                })
-                .catch(({ response }) => {
-                    const reason = response?.data?.reason
-                    if (reason) {
-                        console.log(reason)
-                    }
-                })
+            dispatch(updateAvatar(img))
+                .then(unwrapResult)
             event.target.value = ''
         }
     }
@@ -156,7 +86,7 @@ const Profile = () => {
                         <Avatar
                             className=""
                             sx={{ width: 130, height: 130 }}
-                            src={avatar && URL.createObjectURL(avatar)}>
+                            src={user.avatar ? `${RESOURCE_URL}${user.avatar}` : ''}>
                             {first_name || 'Anon'}
                         </Avatar>
                     </IconButton>
@@ -225,9 +155,6 @@ const Profile = () => {
                     <div className="profile__buttons">
                         <Button type="submit">Сохранить данные</Button>
                         <EditPassword />
-                        <Button color="error" onClick={onLogout}>
-                            Выйти
-                        </Button>
                     </div>
                 </FormControl>
             </form>
