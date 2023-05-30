@@ -1,0 +1,111 @@
+.thread {
+    display: flex;
+    background: #D0D1CF;
+    flex-direction: column;
+    margin: 20px auto;
+    border-radius: 4px;
+    padding: 20px;
+    width: 60vw;
+
+    &__info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        &__icon-back {
+            margin-top: 6px;
+        }
+    }
+
+    &__title {
+        font-size: 24px;
+        line-height: 28px;
+        color: rgba(0, 0, 0, 0.87);
+
+    }
+
+    &__date {
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    &__text {
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        color: rgba(0, 0, 0, 0.6);
+        margin: 20px 0;
+    }
+
+    &__info-comment {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 20px;
+    }
+
+    &__avatar {
+        margin: 0 10px;
+    }
+
+    &__comments {
+        display: flex;
+        flex-direction: column;
+        background-color: #D0D1CF;
+
+        &__title {
+            font-size: 18px;
+            line-height: 28px;
+            color: rgba(0, 0, 0, 0.87);
+            margin-bottom: 10px;
+        }
+
+        &__form {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 20px;
+        }
+
+        &__input {
+            display: flex;
+            background-color: #D0D1CF;
+            border-radius: 4px;
+            height: 48px;
+            margin: auto 0;
+        }
+    }
+
+    &__comments__history {
+        .comment {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 16px;
+
+            &__info{
+                display: flex;
+                flex-direction: column;
+                margin-left: 15px;
+                width: 45vw;
+            }
+
+            &__author {
+                color: rgba(0, 0, 0, 0.87);
+                margin-bottom: 5px;
+            }
+
+            &__text {
+                display: flex;
+                align-items: start;
+                color: rgba(0, 0, 0, 0.6);
+            }
+
+            &__date {
+                align-items: end;
+                color: #535453;
+            }
+        }
+    }
+}

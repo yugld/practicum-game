@@ -14,6 +14,7 @@ import { DARK_THEME, LIGHT_THEME, ThemeContext } from './ThemeWrapper'
 
 import './App.less'
 import GameStart from './pages/gameStart/GameStart'
+import Thread from './pages/thread/Thread'
 
 function App () {
   const { isDarkTheme } = useContext(ThemeContext)
@@ -27,6 +28,7 @@ function App () {
       <Route path='/profile' element={ <Profile /> } />
       <Route path='/leaderboard' element={ <Leaderboard /> } />
       <Route path='/forum' element={ <Forum /> } />
+      <Route path='/thread' element={ <Thread /> } />
       <Route path='/rules' element={ <GameRules /> } />
       <Route path='/rooms' element={ <GameStart /> } />
       <Route path='/rooms/:roomId/*' element={ <GameNavigation /> } />
