@@ -16,10 +16,9 @@ import GameStart from './pages/gameStart/GameStart'
 import { useAppDispatch } from './store/store'
 import { Store } from './store/store.types'
 import { getUser } from './store/userSlice'
+import Thread from './pages/thread/Thread'
 
 import './App.less'
-import GameStart from './pages/gameStart/GameStart'
-import Thread from './pages/thread/Thread'
 
 function App() {
   const dispatch = useAppDispatch()
