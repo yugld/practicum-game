@@ -11,7 +11,8 @@ import App from './App'
 import './assets/styles.less'
 import { startServiceWorker } from './startServiceWorker'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <StrictMode>
     <ErrorBoundary>
       <StyledEngineProvider injectFirst>
