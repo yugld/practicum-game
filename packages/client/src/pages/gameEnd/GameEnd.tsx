@@ -15,7 +15,7 @@ export const GameEnd = ({websocket}: Props) => {
     const navigate = useNavigate();
 
     const goToRoomListPage = () => {
-        navigate(`/game/start`)
+        navigate(`/rooms`)
     }
 
     const goToGamePage = () => {

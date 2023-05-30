@@ -22,6 +22,9 @@
   "devDependencies": {
     "@evilmartians/lefthook": "1.1.1",
     "@mui/icons-material": "^5.11.16",
+    "@types/jest": "^29.5.1",
+    "@types/mocha": "^10.0.1",
+    "@types/serviceworker": "^0.0.67",
     "identity-obj-proxy": "3.0.0",
     "lerna": "5.4.3",
     "less": "4.1.3",

@@ -15,66 +15,79 @@ import {
     ListItemAvatar,
     IconButton
 } from '@mui/material';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import { useDebounce } from "use-debounce";
+import { useAppDispatch } from "../../store/store";
+import { Store } from "../../store/store.types";
+import {
+    addRoomUser,
+    deleteRoomUser,
+    getRoomsUsers,
+    updateGameStatus,
+    updateUsers
+} from "../../store/roomSlice";
+import { clearAddUserDialog, searchUsersByLogin } from "../../store/addUserDialogSlice";
+import { IUser } from "../../store/userSlice.types";
+import { deleteRoom } from "../../store/roomsSlice";
+import { withAuthorizationCheck } from "../../utils/authorizedPage";
 import { useFlag } from '../../hooks/useFlag';
-import { addRoomUsers, deleteRoomUsers, getRoomUsers } from '../../services/room';
-import { searchUsers } from "../../services/user";
-import { IUser } from '../../api/types';
-import { RESOURCE_URL } from "../../api/BaseApi";
+import { RESOURCE_URL } from "../../utils/axios";
 import deleteIcon from "../../assets/icons/delete.svg"
 
 import "./styles.less"
+import { notifyUser } from "../../utils/notifications";
 // import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
 type Props = {
     websocket?: WebSocket;
 }
 
-const GameRoom = ({websocket}: Props) => {
+const GameRoom = ({ websocket }: Props) => {
+    const dispatch = useAppDispatch();
+    const roomUsersList = useSelector((state: Store) => state.room.roomUsersList);
+    const suggestUsersList = useSelector((state: Store) => state.addUserDialog.usersList);
+    const currentUserId = useSelector((state: Store) => state.user.user.id);
+    const roomCreatorId = useSelector((state: Store) => state.room.roomInfo?.created_by);
+    const roomTitle = useSelector((state: Store) => state.room.roomInfo?.title);
+
     const params = useParams<Record<string, any>>();
     const navigate = useNavigate();
     const roomId: number = params.roomId;
 
-    const [visible, openDialog, closeDialog] = useFlag(false);
+    const [addUserVisible, addUserOpenDialog, addUserCloseDialog] = useFlag(false);
+    const [deleteRoomtVisible, deleteRoomOpenDialog, deleteRoomCloseDialog] = useFlag(false);
     const [inputValue, setInputValue] = useState<string>('');
-    const [roomUsers, setRoomUsers] = useState<IUser[]>([]);
-    const [userList, setUserList] = useState<IUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<IUser | undefined>(undefined);
     const [usersCounter, setUsersCounter] = useState<number>(0);
+    const [debouncedText] = useDebounce(inputValue, 500);
 
     const handleSubmit = () => {
-        if (selectedUser)
-            addRoomUsers({ id: roomId, users: [selectedUser.id] })
+        if (selectedUser && roomUsersList)
+            dispatch(addRoomUser({ chatId: roomId, users: [selectedUser.id] }))
+                .then(unwrapResult)
                 .then(() => {
-                    setRoomUsers([...roomUsers, selectedUser]);
+                    notifyUser('Пользователь добавлен');
+                    dispatch(updateUsers([...roomUsersList, selectedUser]));
                     handleClose();
-                })
-                .catch(({ response }) => {
-                    const reason = response?.data?.reason
-                    if (reason) {
-                        console.error(reason);
-                    }
                 })
     }
 
     const handleClose = () => {
-        closeDialog();
+        addUserCloseDialog();
         setInputValue('');
-        setUserList([]);
+        dispatch(clearAddUserDialog());
     }
 
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value)
-        setTimeout(() => searchUsers(event.target.value)
-            .then((users) => {
-                setUserList(users.filter(user => !roomUsers.includes(user)));
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-                if (reason) {
-                    console.error(reason);
-                }
-            }), 1000)
     }
+
+    useEffect(() => {
+        if (debouncedText) {
+            dispatch(searchUsersByLogin(debouncedText))
+        }
+      }, [debouncedText]);
 
     const handleListItemClick = (user: IUser) => {
         setSelectedUser(user);
@@ -82,17 +95,7 @@ const GameRoom = ({websocket}: Props) => {
     };
 
     useEffect(() => {
-        getRoomUsers(roomId)
-            .then((users) => {
-                setRoomUsers(users);
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
-
-                if (reason) {
-                    console.error(reason)
-                }
-            })
+        dispatch(getRoomsUsers(roomId))
     }, []);
 
     useEffect(() => {
@@ -104,9 +107,9 @@ const GameRoom = ({websocket}: Props) => {
             }
 
             if (data.content === 'game started') {
+                dispatch(updateGameStatus(data.content))
                 navigate(`/rooms/${roomId}/game`);
             } else if (data.content === 'player connected') {
-                // todo: add user id
                 setUsersCounter(usersCounter + 1);
             }
         });
@@ -120,51 +123,55 @@ const GameRoom = ({websocket}: Props) => {
         websocket?.send(JSON.stringify({ type: 'message', content: 'game started' }));
     }
 
-    const deleteUserFromRoom = (userId: number) => {
-        deleteRoomUsers({ id: roomId, users: [userId] })
-            .then(() => {
-                setRoomUsers(roomUsers.filter(user => user.id !== userId));
-            })
-            .catch(({ response }) => {
-                const reason = response?.data?.reason
+    const deleteUserFromRoom = (userId: number | undefined) => {
+        if (roomCreatorId === userId) {
+            deleteRoomOpenDialog();
+        } else {
+            dispatch(deleteRoomUser({ chatId: roomId, users: [userId] }))
+                .then(unwrapResult)
+                .then(() => dispatch(updateUsers(roomUsersList?.filter(user => user.id !== userId))))
+        }
+    }
 
-                if (reason) {
-                    console.error(reason)
-                }
+    const deleteGameRoom = () => {
+        dispatch(deleteRoom(roomId))
+            .then(() => {
+                deleteRoomCloseDialog()
+                navigate('/rooms', { replace: true })
             })
     }
 
     return (
         <div className="page room-page">
             <div className="room-page__header">
-                <h3 className="room-page__header-title">Комната {roomId} (будет название комнаты)</h3>
+                <h3 className="room-page__header-title">Комната {roomTitle || roomId}</h3>
                 {Boolean(usersCounter) && <div>Подключено игроков: {usersCounter}</div>}
                 {Boolean(websocket) && (
                     <div className="room-page__header-buttons">
                         <Button
                             className="button-filled"
-                            onClick={openDialog}
-                            disabled={roomUsers.length === 4}
+                            onClick={addUserOpenDialog}
+                            disabled={roomUsersList ? roomUsersList.length === 4 : false}
                         >
                             Добавить игрока
                         </Button>
                         <Button
                             className="button-filled"
                             onClick={goToGamePage}
-                            disabled={roomUsers.length < 2}
+                            disabled={roomUsersList ? roomUsersList.length < 2 : true}
                         >
                             Начать игру
                         </Button>
                     </div>
                 )}
             </div>
-            {!!roomUsers.length && (
+            {roomUsersList && roomUsersList.length && (
                 <List className='room-page__players'>
-                    {roomUsers.map((roomUser) => 
+                    {roomUsersList.map((roomUser) => 
                         <ListItem
                             className='room-page__player'
                             key={roomUser.id}
-                            secondaryAction={
+                            secondaryAction={roomCreatorId === currentUserId ? (
                                 <IconButton
                                     onClick={() => deleteUserFromRoom(roomUser.id)}
                                     edge="end"
@@ -172,6 +179,7 @@ const GameRoom = ({websocket}: Props) => {
                                 >
                                     <img src={deleteIcon} alt="Удалить пользователя из комнаты" />
                                 </IconButton>
+                            ) : <></>
                             }
                         >
                             <ListItemAvatar>
@@ -187,7 +195,7 @@ const GameRoom = ({websocket}: Props) => {
                 </List>
             )}
 
-            <Dialog open={visible} onClose={handleClose} maxWidth='md'>
+            <Dialog open={addUserVisible} onClose={handleClose} maxWidth='md'>
                 <DialogTitle>Введите логин пользователя</DialogTitle>
                 <DialogContent className='room-page__dialog'>
                     <Input
@@ -196,9 +204,9 @@ const GameRoom = ({websocket}: Props) => {
                         value={inputValue}
                         autoFocus
                     />
-                    {!!userList.length && (
+                    {!!suggestUsersList?.length && (
                         <List>
-                            {userList.map((user) => 
+                            {suggestUsersList.map((user) => 
                                 <ListItem
                                     key={user.id}
                                     disablePadding
@@ -225,9 +233,20 @@ const GameRoom = ({websocket}: Props) => {
                     <Button className='button-text' onClick={handleClose}>Отмена</Button>
                 </DialogActions>
             </Dialog>
+
+            <Dialog open={deleteRoomtVisible} onClose={handleClose} maxWidth='md'>
+                <DialogContent className='room-page__dialog'>
+                    <span>
+                        Удаление создателя комнаты приведет к удалению самой комнаты.
+                    </span>
+                </DialogContent>
+                <DialogActions className='room-page__dialog_footer'>
+                    <Button className='button-filled' onClick={deleteGameRoom}>Удалить</Button>
+                    <Button className='button-text' onClick={deleteRoomCloseDialog}>Отмена</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
 
-// export default withAuthorizationCheck(GameRoom);
-export default GameRoom;
+export default withAuthorizationCheck(GameRoom);

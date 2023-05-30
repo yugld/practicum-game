@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 
 export const LIGHT_THEME = 'light-theme'
 export const DARK_THEME = 'dark-theme'
@@ -8,18 +8,20 @@ interface ThemeContentType {
   applyTheme: () => void
 }
 
-export const ThemeContext = createContext<ThemeContentType>({} as ThemeContentType)
+export const ThemeContext = createContext<ThemeContentType>(
+  {} as ThemeContentType
+)
 
-export function ThemeWrapper ({ children }: { children: any }) {
-  const [ isDarkTheme, setTheme ] = useState(false)
+export function ThemeWrapper({ children }: { children: any }) {
+  const [isDarkTheme, setTheme] = useState(false)
+
   const applyTheme = () => {
     setTheme(!isDarkTheme)
   }
 
   return (
-
-    <ThemeContext.Provider value={ { isDarkTheme, applyTheme } }>
-      { children }
+    <ThemeContext.Provider value={{ isDarkTheme, applyTheme }}>
+      {children}
     </ThemeContext.Provider>
   )
 }

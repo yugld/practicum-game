@@ -1,3 +1,5 @@
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { unwrapResult } from '@reduxjs/toolkit'
 import {
   Button,
   TextField,
@@ -6,10 +8,11 @@ import {
   DialogActions,
   Dialog
 } from '@mui/material'
-import { userApi } from '../../api/userApi'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { useAppDispatch } from '../../store/store'
+import { editUserPassword } from '../../store/userSlice'
 
-export default function EditPassword () {
+export default function EditPassword() {
+  const dispatch = useAppDispatch()
   const [ open, setOpen ] = useState(false)
   const [ oldPassword, setOldPassword ] = useState('')
   const [ newPassword, setNewPassword ] = useState('')
@@ -38,19 +41,11 @@ export default function EditPassword () {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log({ newPassword })
-    userApi
-      .editPassword({ newPassword, oldPassword })
+    dispatch(editUserPassword({ newPassword, oldPassword }))
+      .then(unwrapResult)
       .then(() => {
         alert(`change password ${ newPassword }`)
         handleClose()
-      })
-      .catch(({ response }) => {
-        const reason = response?.data?.reason
-        if (reason) {
-          alert(reason)
-          handleClose()
-        }
       })
   }
 
