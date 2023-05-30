@@ -63,7 +63,7 @@ const Thread = () => {
                         <Avatar className='comment__avatar' sx={{ width: 40, height: 40 }} />
                         <div className='comment__info'>
                             <div className='comment__author'>Haaaaaaaa Haaaaaaaaa</div>
-                            <div className='comment__text'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis?</div>
+                            <div className='comment__text'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit esse commodi recusandae modi dolore atque vitae ea fugiat corrupti, doloremque laudantium eligendi qui quod rerum exercitationem consectetur incidunt doloribus distinctio?</div>
                         </div>
                         <div className='comment__date'>12:35 12.04.23</div>
                     </div>
