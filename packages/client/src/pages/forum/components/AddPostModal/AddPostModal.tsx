@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import IconAdd from '../icons/IconAdd'
+import './addpostModal.less';
 
 export default function AddPostModal() {
     const [open, setOpen] = useState(false)
@@ -40,11 +41,11 @@ export default function AddPostModal() {
             <IconButton onClick={handleClickOpen} size="large">
                 <IconAdd />
             </IconButton>
-            <Dialog open={open} onClose={handleClose} className='post__modal'>
-                <form onSubmit={handleSubmit}>
-                    <DialogTitle>Cоздать новую тему</DialogTitle>
-                    <DialogContent>
-                        <FormLabel>Название</FormLabel>
+            <Dialog open={open} onClose={handleClose} maxWidth='sm'>
+                <form onSubmit={handleSubmit} className='post__modal__form'>
+                    <DialogTitle className='post__modal__title'>Cоздать новую тему</DialogTitle>
+                    <DialogContent className='dialog'>
+                        <FormLabel className='post__modal__subtitle'>Название</FormLabel>
                         <TextField
                             margin='dense'
                             onChange={handleChange}
@@ -53,7 +54,7 @@ export default function AddPostModal() {
                             fullWidth
                             required
                         />
-                        <FormLabel>Описание</FormLabel>
+                        <FormLabel className='post__modal__subtitle'>Описание</FormLabel>
                         <TextField
                             margin='dense'
                             onChange={handleChange}
@@ -63,9 +64,9 @@ export default function AddPostModal() {
                             required
                         />
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Отмена</Button>
-                        <Button type='submit'>ОК</Button>
+                    <DialogActions >
+                        <Button onClick={handleClose} className='post__modal__subtitle'>Отмена</Button>
+                        <Button type='submit' className='post__modal__subtitle'>ОК</Button>
                     </DialogActions>
                 </form>
             </Dialog>
