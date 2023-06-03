@@ -47,20 +47,14 @@ async function startServer() {
     try {
       let template: string;
 
-      if (!isDev()) {
-        template = fs.readFileSync(
-          path.resolve(distPath, 'index.html'),
-          'utf-8',
-        )
-      } else {
-        template = fs.readFileSync(
-          path.resolve(srcPath, 'index.html'),
-          'utf-8',
-        )
+      const templatePath = isDev() ? srcPath : distPath;
 
-        template = await vite!.transformIndexHtml(url, template)
+      template = fs.readFileSync(
+        path.resolve(templatePath, 'index.html'),
+        'utf-8',
+      )
 
-      }
+      if (isDev()) template = await vite!.transformIndexHtml(url, template)
 
       let render: () => Promise<string>;
 
