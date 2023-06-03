@@ -3,12 +3,12 @@ import cors from 'cors'
 import { createServer as createViteServer } from 'vite'
 import type { ViteDevServer } from 'vite'
 
-dotenv.config()
-
 import express from 'express'
 
 import * as fs from 'fs'
 import * as path from 'path'
+
+dotenv.config()
 
 const isDev = () => process.env.NODE_ENV === 'development'
 
@@ -17,7 +17,7 @@ async function startServer() {
   app.use(cors())
   const port = Number(process.env.SERVER_PORT) || 3001
 
-  let vite: ViteDevServer | undefined;
+  let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
   const srcPath = path.dirname(require.resolve('client'))
   const ssrClientPath = require.resolve('client/ssr-dist/client.cjs')
