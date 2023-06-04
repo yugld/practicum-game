@@ -5,8 +5,7 @@ import AddPostModal from '../AddPostModal/AddPostModal';
 
 const CreatePostForm = () => {
     return (
-        <div>
-            <form className='post_form'>
+            <div className='post_header'>
                 <Paper
                     className='post_input'
                     component="form"
@@ -21,8 +20,7 @@ const CreatePostForm = () => {
                     />
                 </Paper>
                 <AddPostModal/>
-            </form>
-        </div>
+            </div>
     );
 };
 
