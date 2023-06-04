@@ -8,8 +8,7 @@ const CreatePostForm = () => {
             <div className='post_header'>
                 <Paper
                     className='post_input'
-                    component="form"
-                    sx={{ p: '2px 4px', display: 'flex', alignItems: 'center'}}>
+                    component="form">
                     <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
                         <IconSearch />
                     </IconButton>
