@@ -2,6 +2,7 @@ import { Avatar, IconButton, InputBase, Link, Paper } from "@mui/material";
 import './thread.less';
 import IconBack from "./components/icons/IconBack";
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import IconSend from "./components/icons/IconSend";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +11,22 @@ const Thread = () => {
 
     const goToForum = () => {
         navigate(`/forum`)
+    }
+
+    const geolocationAPI = navigator.geolocation;
+
+    const getUserCoordinates = () => {
+        if (!geolocationAPI) {
+            console.log('Geolocation API is not available in your browser!')
+        } else {
+            geolocationAPI.getCurrentPosition((position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                window.location.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+            }, (error) => {
+                console.log('Something went wrong getting your position!', error)
+            })
+        }
     }
 
     return (
@@ -42,8 +59,11 @@ const Thread = () => {
                             fullWidth={true}
                             className='thread__comments__input'
                         />
-                        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                        <IconButton type="button" sx={{ p: '10px' }}>
                             <SentimentSatisfiedAltIcon />
+                        </IconButton>
+                        <IconButton onClick={getUserCoordinates} type="button" sx={{ p: '10px' }}>
+                            <LocationOnIcon />
                         </IconButton>
                     </Paper>
                     <IconButton size="large">
