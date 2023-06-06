@@ -9,7 +9,10 @@ declare global {
         mozCancelFullScreen?: () => Promise<void>;
         msExitFullscreen?: () => Promise<void>;
         webkitExitFullscreen?: () => Promise<void>;
-      }
+    }
+
+    // eslint-disable-next-line
+    var __REDUX_STATE__: unknown;
 }
 
-export {};
+export { };

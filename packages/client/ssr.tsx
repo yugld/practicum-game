@@ -1,9 +1,14 @@
 import React from 'react';
 import App from './src/App';
 import { renderToString } from 'react-dom/server';
+import { Provider } from 'react-redux';
 
-export function render() {
+export {store} from './src/store/store';
+
+export function render(store: any) {
   return renderToString(
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   )
 };

@@ -56,7 +56,7 @@ async function startServer() {
 
       if (isDev()) template = await vite!.transformIndexHtml(url, template)
 
-      let render: () => Promise<string>;
+      let render: (store: any) => Promise<string>;
 
       if (!isDev()) {
         render = (await import(ssrClientPath)).render;
@@ -64,8 +64,11 @@ async function startServer() {
         render = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render;
       }
 
-      const appHtml = await render()
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml)
+      const store = (await import(ssrClientPath)).store;
+      const appHtml = await render(store);
+      const state = store.getState();
+      const stateMarkup = `<script>globalThis.__REDUX_STATE__=${JSON.stringify(state)}</script>`; 
+      const html = template.replace(`<!--ssr-outlet-->`, stateMarkup + appHtml);
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
