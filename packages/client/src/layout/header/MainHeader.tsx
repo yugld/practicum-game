@@ -15,8 +15,12 @@ const settings = ['Profile', 'Logout']
 import './styles.less'
 
 export default function MainHeader() {
+  console.debug('MainHeader first row');
+
   const dispatch = useAppDispatch();
   const user = useSelector((state: Store) => state.user.user);
+  console.debug('MainHeader user:' + JSON.stringify(user));
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
 

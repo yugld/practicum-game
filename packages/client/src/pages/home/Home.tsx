@@ -8,6 +8,9 @@ import clockIcon from "../../assets/icons/clock.svg"
 import "./styles.less"
 
 export const Home = () => {
+    console.debug('Home first row');
+
+
     return (
         <div className="page home-page">
             <h1>Тайное послание</h1>

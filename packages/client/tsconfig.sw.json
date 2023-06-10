@@ -9,6 +9,7 @@
         "strict": false,
         "outDir": "./dist",
         "target": "ESNext",
+        "sourceMap": true,
         "isolatedModules": false
     },
     "include": [

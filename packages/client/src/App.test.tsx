@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { render, screen } from '@testing-library/react'
-import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
 import { store } from './store/store'
 import { Provider } from 'react-redux'
@@ -15,7 +15,6 @@ global.fetch = jest.fn(() =>
 
 test('Example test', async () => {
   render(
-    <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <BrowserRouter>
@@ -23,7 +22,6 @@ test('Example test', async () => {
           </BrowserRouter>
         </Provider>
       </ThemeProvider>
-    </StyledEngineProvider>
   )
   expect(screen.getByText(appContent)).toBeDefined()
 })

@@ -15,6 +15,7 @@ export default defineConfig({
       output: {
         dir: 'ssr-dist',
       },
-    }
+    },
+    minify: false
   }
 });

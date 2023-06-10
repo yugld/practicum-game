@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import { BrowserRouter } from 'react-router-dom'
 import ErrorBoundary from './components/errorBoundary/errorBoundary'
 import theme from './theme'
@@ -15,7 +15,6 @@ ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <StrictMode>
     <ErrorBoundary>
-      <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <BrowserRouter>
@@ -25,7 +24,6 @@ ReactDOM.hydrateRoot(
             </BrowserRouter>
           </Provider>
         </ThemeProvider>
-      </StyledEngineProvider>
     </ErrorBoundary>
   </StrictMode>
 )

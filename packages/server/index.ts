@@ -56,7 +56,7 @@ async function startServer() {
 
       if (isDev()) template = await vite!.transformIndexHtml(url, template)
 
-      let render: (store: any) => Promise<string>;
+      let render: (url: string) => Promise<string>;
 
       if (!isDev()) {
         render = (await import(ssrClientPath)).render;
@@ -64,13 +64,13 @@ async function startServer() {
         render = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render;
       }
 
-      const store = (await import(ssrClientPath)).store;
-      const appHtml = await render(store);
-      const state = store.getState();
-      const stateMarkup = `<script>globalThis.__REDUX_STATE__=${JSON.stringify(state)}</script>`; 
-      const html = template.replace(`<!--ssr-outlet-->`, stateMarkup + appHtml);
+      const [initialState, appHtml, chunks, styles] = await render(url);
+      const stateMarkup = `<script>globalThis.__REDUX_STATE__=${JSON.stringify(initialState)}</script>`; 
+      const reduxState = template.replace(`<!--redux-state-->`, stateMarkup);
+      const html = reduxState.replace(`<!--ssr-outlet-->`, appHtml);
+      const htmlWithStyles = html.replace(`<!--styles-->`, styles);
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(htmlWithStyles)
     } catch (e) {
       if (isDev()) {
         vite!.ssrFixStacktrace(e as Error)

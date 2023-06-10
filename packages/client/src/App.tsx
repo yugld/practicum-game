@@ -19,10 +19,14 @@ import { getUser } from './store/userSlice'
 import Thread from './pages/thread/Thread'
 
 import './App.less'
+import { routes } from './routes/routes'
 
 function App() {
+  console.debug('first row app.tsx');
+
   const dispatch = useAppDispatch()
-  const isUserLoading = useSelector((state: Store) => state.user.isUserLoading)
+  const isUserLoading = useSelector((state: Store) => state.user.isUserLoading);
+  const state = useSelector((state: Store) => state);
 
   useEffect(() => {
     dispatch(getUser())
@@ -31,24 +35,19 @@ function App() {
 
   const { isDarkTheme } = useContext(ThemeContext)
 
-  if (isUserLoading) {
-    return <div>Загрузка...</div>;
-  }
+  // if (isUserLoading) {
+  //   return <div>Загрузка...<br/> {JSON.stringify(state)} </div>;
+  // }
 
   return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
     <MainHeader />
+
     <Routes>
-      <Route path='*' element={ <NotFound /> } />
-      <Route path='/' element={ <Home /> } />
-      <Route path='/login' element={ <Login /> } />
-      <Route path='/registration' element={ <Registration /> } />
-      <Route path='/profile' element={ <Profile /> } />
-      <Route path='/leaderboard' element={ <Leaderboard /> } />
-      <Route path='/forum' element={ <Forum /> } />
-      <Route path='/thread' element={ <Thread /> } />
-      <Route path='/rules' element={ <GameRules /> } />
-      <Route path='/rooms' element={ <GameStart /> } />
-      <Route path='/rooms/:roomId/*' element={ <GameNavigation /> } />
+      {routes.map((route) => {
+        const {loader: _, ...rest} = route;
+        console.debug('route:' + JSON.stringify(route));
+        return <Route key={rest.path} {...rest}/>
+      })}
     </Routes>
   </div>
 }
