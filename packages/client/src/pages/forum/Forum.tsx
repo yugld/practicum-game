@@ -1,7 +1,24 @@
-import { withAuthorizationCheck } from '../../utils/authorizedPage';
+import {Link} from "@mui/material";
+import './forum.less'
+import AddPost from "./components/AddPost/AddPost";
+import Post from "./components/Post/Post";
+import { useNavigate } from "react-router-dom";
 
-function Forum() {
-  return <h1>Страница форума</h1>
+const Forum = () => {
+
+  const navigate = useNavigate();
+  
+  const goToThread = () => {
+    navigate(`/thread`)
+}
+  return (
+    <main className="forum">
+      <AddPost />
+      <Link onClick={goToThread}><Post /></Link>
+      <Link onClick={goToThread}><Post /></Link>
+      <Link onClick={goToThread}><Post /></Link>
+    </main>
+  )
 }
 
-export default withAuthorizationCheck(Forum);
+export default Forum;

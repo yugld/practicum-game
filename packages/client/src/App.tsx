@@ -16,6 +16,7 @@ import GameStart from './pages/gameStart/GameStart'
 import { useAppDispatch } from './store/store'
 import { Store } from './store/store.types'
 import { getUser } from './store/userSlice'
+import Thread from './pages/thread/Thread'
 
 import './App.less'
 import { GameEnd } from './pages/gameEnd/GameEnd'
@@ -45,6 +46,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/forum" element={<Forum />} />
+        <Route path="/thread" element={<Thread />} />
         <Route path="/rules" element={<GameRules />} />
         <Route path="/rooms" element={<GameStart />} />
         <Route path="/finish" element={<GameEnd />} />
