@@ -18,7 +18,7 @@ type Props = {
 }
 declare global {
   interface Window {
-    pushpath: (path: string) => void
+    pushpath: ((path: string) => void) | undefined
   }
 }
 
@@ -29,6 +29,9 @@ export default function Game({ websocket }: Props) {
   useEffect(() => {
     window.pushpath = function (path: string) {
       navigate(path)
+    }
+    return () => {
+      window.pushpath = undefined
     }
   }, [])
 
@@ -44,17 +47,17 @@ export default function Game({ websocket }: Props) {
     }
   }, [board])
 
+  const handlerOpenSocket = () => {
+    websocket?.send(JSON.stringify({ content: '0', type: 'get old' }))
+    if (websocket) {
+      GameProgressModel.setWebsocket(websocket)
+    }
+  }
+
   useEffect(() => {
-    websocket?.addEventListener('open', () => {
-      websocket.send(JSON.stringify({ content: '0', type: 'get old' }))
-      if (websocket) {
-        GameProgressModel.setWebsocket(websocket)
-      }
-    })
+    websocket?.addEventListener('open', handlerOpenSocket)
     return () => {
-      websocket?.removeEventListener('open', () => {
-        console.log('remove open')
-      })
+      websocket?.removeEventListener('open', handlerOpenSocket)
     }
   }, [websocket])
 
@@ -71,9 +74,10 @@ export default function Game({ websocket }: Props) {
     )
 
     return () => {
-      websocket?.removeEventListener('message', () => {
-        console.log('remove open')
-      })
+      websocket?.removeEventListener(
+        'message',
+        GameProgressModel.initMessageListener
+      )
     }
   }, [websocket, GameProgressModel.initMessageListener])
 

@@ -472,7 +472,9 @@ class GameProgressModel {
 
   redirectToEndGamePage(winUser: number) {
     store.dispatch(updateFinishPrevRound({ winUser: winUser }))
-    window.pushpath('/finish')
+    if (window.pushpath) {
+      window.pushpath('/finish')
+    }
   }
   discardCard(card?: CardType) {
     let { gameState } = store.getState().gameState
