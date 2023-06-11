@@ -11,13 +11,27 @@ import { Store } from '../../store/store.types'
 import { getRoomsUsers } from '../../store/roomSlice'
 import { useAppDispatch } from '../../store/store'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   websocket: WebSocket | undefined
 }
+declare global {
+  interface Window {
+    pushpath: (path: string) => void
+  }
+}
 
 export default function Game({ websocket }: Props) {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    window.pushpath = function (path: string) {
+      navigate(path)
+    }
+  }, [])
+
   const gameState = useSelector((state: Store) => state.gameState.gameState)
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)

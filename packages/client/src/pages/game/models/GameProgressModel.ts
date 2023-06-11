@@ -26,6 +26,7 @@ import {
 import CardDeck from './CardDeck'
 import { cardList, CHARACTER_VALUES } from '../../../constants/cardList'
 import { store } from '../../../store/store'
+
 class GameProgressModel {
   websocket: WebSocket | null = null
   board: Board | null = null
@@ -83,6 +84,10 @@ class GameProgressModel {
           this.startNewRound()
         }
 
+        return
+      }
+      if (!Array.isArray(data) && data?.content?.status === 'finish_game') {
+        this.redirectToEndGamePage(data.content.winUser)
         return
       }
 
@@ -435,9 +440,22 @@ class GameProgressModel {
       (gameState.activePlayer && gameState.activePlayer.numberOfTokens > 7) ||
       (gameState.rivalPlayer && gameState.rivalPlayer.numberOfTokens > 7)
     ) {
-      console.log('end game')
+      this.websocket?.send(
+        JSON.stringify({
+          type: 'message',
+          content: {
+            status: 'finish_game',
+            winUser: gameState.isFinishPrevRound.winUser,
+          },
+        })
+      )
       return true
     }
+  }
+
+  redirectToEndGamePage(winUser: number) {
+    store.dispatch(updateFinishPrevRound({ winUser: winUser }))
+    window.pushpath('/finish')
   }
   discardCard(card?: CardType) {
     let { gameState } = store.getState().gameState
@@ -457,8 +475,6 @@ class GameProgressModel {
           ) {
             if (!gameState.activePlayer) return
             // Выигрывает активный игрок
-            // activePlayer.numberOfTokens += 1
-
             store.dispatch(
               updateActivePlayer({
                 numberOfTokens: gameState.activePlayer.numberOfTokens + 1,
