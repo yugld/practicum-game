@@ -4,6 +4,7 @@ import Board from './Board'
 import {
   CardType,
   GameProgress,
+  IEventListener,
   ResultMessageType,
   ResultMessageTypeEnum,
 } from '../types'
@@ -30,6 +31,7 @@ import { store } from '../../../store/store'
 class GameProgressModel {
   websocket: WebSocket | null = null
   board: Board | null = null
+  listeners: IEventListener[] = []
   constructor() {
     this.canvasClickHandler = this.canvasClickHandler.bind(this)
     this.startNewRound = this.startNewRound.bind(this)
@@ -44,10 +46,25 @@ class GameProgressModel {
     if (!board) {
       console.log('Board is undefined')
     }
-    board?.addEventListener('click', this.canvasClickHandler)
+    if (board) {
+      board?.addEventListener('click', this.canvasClickHandler)
+
+      this.listeners.push({
+        element: board,
+        eventName: 'click',
+        foo: this.canvasClickHandler,
+      })
+    }
 
     this.board = new Board(board)
     this.board?.setDimensionsCanvas()
+  }
+
+  unmountBoard() {
+    for (let i = 0; i < this.listeners.length; i++) {
+      const { element, eventName, foo } = this.listeners[i]
+      element.removeEventListener(eventName, foo)
+    }
   }
 
   initMessageListener(message: { data: any; type: string }) {
@@ -660,7 +677,7 @@ class GameProgressModel {
       }
     }
   }
-  canvasClickHandler(event: MouseEvent) {
+  canvasClickHandler(event: Event) {
     const returnedCard = this.board?.handleClickOnCard(event)
     if (returnedCard) {
       store.dispatch(updateDiscardedCard(returnedCard))

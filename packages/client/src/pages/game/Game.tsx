@@ -39,6 +39,9 @@ export default function Game({ websocket }: Props) {
 
   useEffect(() => {
     GameProgressModel.setBoard(canvasRef.current)
+    return () => {
+      GameProgressModel.unmountBoard()
+    }
   }, [board])
 
   useEffect(() => {

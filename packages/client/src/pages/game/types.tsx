@@ -36,3 +36,9 @@ export interface CoordinatesType {
 }
 
 export type AreaCardType = Record<'A' | 'B' | 'C' | 'D', CoordinatesType>
+
+export interface IEventListener {
+  element: HTMLElement
+  eventName: string
+  foo: (evn: Event) => void
+}
