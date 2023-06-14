@@ -5,28 +5,13 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import IconSend from "./components/icons/IconSend";
 import { useNavigate } from "react-router-dom";
+import { getUserCoordinates } from "../../utils/geolocationAPI";
 
 const Thread = () => {
     const navigate = useNavigate();
 
     const goToForum = () => {
         navigate(`/forum`)
-    }
-
-    const geolocationAPI = navigator.geolocation;
-
-    const getUserCoordinates = () => {
-        if (!geolocationAPI) {
-            console.log('Geolocation API is not available in your browser!')
-        } else {
-            geolocationAPI.getCurrentPosition((position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                window.location.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
-            }, (error) => {
-                console.log('Something went wrong getting your position!', error)
-            })
-        }
     }
 
     return (
