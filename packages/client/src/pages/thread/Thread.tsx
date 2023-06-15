@@ -2,8 +2,10 @@ import { Avatar, IconButton, InputBase, Link, Paper } from "@mui/material";
 import './thread.less';
 import IconBack from "./components/icons/IconBack";
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import IconSend from "./components/icons/IconSend";
 import { useNavigate } from "react-router-dom";
+import { getUserCoordinates } from "../../utils/geolocationAPI";
 
 const Thread = () => {
     const navigate = useNavigate();
@@ -42,8 +44,11 @@ const Thread = () => {
                             fullWidth={true}
                             className='thread__comments__input'
                         />
-                        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                        <IconButton type="button" sx={{ p: '10px' }}>
                             <SentimentSatisfiedAltIcon />
+                        </IconButton>
+                        <IconButton onClick={getUserCoordinates} type="button" sx={{ p: '10px' }}>
+                            <LocationOnIcon />
                         </IconButton>
                     </Paper>
                     <IconButton size="large">
