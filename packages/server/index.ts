@@ -6,7 +6,9 @@ import morgan from 'morgan'
 import { dbConnect } from './db/init'
 import router from './routes/index'
 
-dotenv.config({path:__dirname + '/./../../.env'})
+if (process.env.NODE_ENV === 'development') {
+  dotenv.config({path:__dirname + '/./../../.env'});
+}
 
 async function startServer() {
   const app = express()
