@@ -13,6 +13,10 @@ global.fetch = jest.fn(() =>
   Promise.resolve({ json: () => Promise.resolve('hey') })
 )
 
+jest.mock('./constants/env', () => ({
+  VITE_LOCAL_SERVER_HOST: 'test',
+}));
+
 test('Example test', async () => {
   render(
     <StyledEngineProvider injectFirst>

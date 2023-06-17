@@ -1,5 +1,6 @@
 import axios, {AxiosError, CancelTokenSource} from 'axios';
 import qs from 'qs';
+import { VITE_LOCAL_SERVER_HOST } from '../constants/env';
 
 export const RESOURCE_URL = 'https://ya-praktikum.tech/api/v2/resources';
 const BASE_URL = 'https://ya-praktikum.tech/api/v2';
@@ -66,7 +67,7 @@ axiosInstance.defaults.paramsSerializer = {
 };
 
 export const axiosLocalApiInstance = axios.create({
-    baseURL: import.meta.env.VITE_LOCAL_SERVER_HOST,
+    baseURL: VITE_LOCAL_SERVER_HOST,
     timeout: 3000,
 });
 
