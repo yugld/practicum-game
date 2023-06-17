@@ -1,20 +1,21 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@mui/material'
+import { useSelector } from 'react-redux'
+import { Store } from '../../store/store.types'
+import { IUser } from '../../store/userSlice.types'
+import { useAppDispatch } from '../../store/store'
+import { updateUserRating } from '../../store/leaderboardSlice'
 
 import './styles.less'
 import '../../assets/base/index.less'
-import { useSelector } from 'react-redux'
-import { Store } from '../../store/store.types'
-import Players from '../game/models/Players'
-import { PlayerType } from '../../store/gameState.types'
-import { IUser } from '../../store/userSlice.types'
 
 type Props = {
   websocket?: WebSocket
 }
 
 export const GameEnd = ({ websocket }: Props) => {
+  const dispatch = useAppDispatch();
   const params = useParams<Record<string, any>>()
   const roomId: number = params.roomId
   const navigate = useNavigate()
@@ -37,7 +38,7 @@ export const GameEnd = ({ websocket }: Props) => {
   useEffect(() => {
     if (!gameState.isFinishPrevRound.winUser) {
       navigate('/rooms')
-    }
+    } else dispatch(updateUserRating(gameState.isFinishPrevRound.winUser))
   }, [])
 
   useEffect(() => {

@@ -64,3 +64,13 @@ axiosInstance.interceptors.response.use(undefined, responseInterceptorError);
 axiosInstance.defaults.paramsSerializer = {
     serialize: (params) => qs.stringify(params, {arrayFormat: 'repeat'})
 };
+
+export const axiosLocalApiInstance = axios.create({
+    baseURL: import.meta.env.VITE_LOCAL_SERVER_HOST,
+    timeout: 3000,
+});
+
+axiosLocalApiInstance.interceptors.response.use(undefined, responseInterceptorError);
+axiosLocalApiInstance.defaults.paramsSerializer = {
+    serialize: (params) => qs.stringify(params, {arrayFormat: 'repeat'})
+};

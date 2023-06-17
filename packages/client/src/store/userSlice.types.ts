@@ -7,6 +7,7 @@ export interface IUser {
     email: string
     avatar?: string
     phone: string
+    winCount?: number
 }
 
 export interface RegisterRequestData {
