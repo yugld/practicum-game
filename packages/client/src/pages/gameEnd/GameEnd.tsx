@@ -22,6 +22,7 @@ export const GameEnd = ({ websocket }: Props) => {
 
   const gameState = useSelector((state: Store) => state.gameState.gameState)
   const roomUsersList = useSelector((state: Store) => state.room.roomUsersList)
+  const currentUser = useSelector((store: Store) => store.user.user)
 
   const goToRoomListPage = () => {
     navigate(`/rooms`)
@@ -38,7 +39,9 @@ export const GameEnd = ({ websocket }: Props) => {
   useEffect(() => {
     if (!gameState.isFinishPrevRound.winUser) {
       navigate('/rooms')
-    } else dispatch(updateUserRating(gameState.isFinishPrevRound.winUser))
+    } else if (currentUser.id === gameState.isFinishPrevRound.winUser) {
+      dispatch(updateUserRating(gameState.isFinishPrevRound.winUser))
+    }
   }, [])
 
   useEffect(() => {
