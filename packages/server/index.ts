@@ -7,19 +7,28 @@ import { dbConnect } from './db/init'
 import router from './routes/index'
 
 if (process.env.NODE_ENV === 'development') {
-  dotenv.config({path:__dirname + '/./../../.env'});
+  dotenv.config({ path: __dirname + '/./../../.env' })
 }
 
 async function startServer() {
   const app = express()
-  app.use(cors());
-  app.use((req, res, next)=>{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  app.use(cors())
+  app.use(express.json())
 
-    next();
-  });
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+    )
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-Requested-With,content-type'
+    )
+    res.contentType('application/json')
+
+    next()
+  })
   app.use(morgan('tiny')).use(router)
   const port = Number(process.env.SERVER_PORT) || 3001
 
@@ -32,4 +41,4 @@ async function startServer() {
   })
 }
 
-dbConnect().then(async () => startServer());
+dbConnect().then(async () => startServer())
