@@ -3,6 +3,7 @@ import { axiosInstance } from '../utils/axios';
 import { ChangePasswordData, LoginRequestData, RegisterRequestData, TUserOmit, UserSlice } from './userSlice.types';
 
 const GET_USER = 'GET_USER';
+const GET_USER_BY_ID = 'GET_USER_BY_ID';
 const SIGN_IN = 'SIGN_IN';
 const SIGN_UP = 'SIGN_UP';
 const LOGOUT = 'LOGOUT';
@@ -68,6 +69,19 @@ export const getUser = createAsyncThunk(
         const response = await axiosInstance({
             method: 'GET',
             url: `/auth/user`
+        });
+
+        return response.data;
+        
+    }
+);
+
+export const getUserById = createAsyncThunk(
+    `user/${GET_USER_BY_ID}`,
+    async (id: number) => {
+        const response = await axiosInstance({
+            method: 'GET',
+            url: `/user/${id}`
         });
 
         return response.data;

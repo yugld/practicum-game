@@ -1,0 +1,6 @@
+dist/
+node_modules/
+public/
+.idea/
+ssr-dist/
+.env.local
