@@ -15,7 +15,6 @@ export default function ThemeWrapper() {
   const mode: 'light' | 'dark' = useSelector(
     (state: Store) => state.theme.theme
   )
-  console.log(mode)
 
   const MUITheme = useMemo(
     () =>
