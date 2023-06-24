@@ -10,6 +10,7 @@ if (process.env.NODE_ENV === 'development') {
   dotenv.config({path:__dirname + '/./../../.env'});
 }
 
+
 async function startServer() {
   const app = express()
   app.use(cors());
