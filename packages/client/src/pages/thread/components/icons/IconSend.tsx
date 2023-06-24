@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { Store } from '../../../../store/store.types'
 
 const IconSend = () => {
-  const theme = useSelector((state: Store) => state.themeReducer.theme)
+  const theme = useSelector((state: Store) => state.theme.theme)
 
   return (
     <>
