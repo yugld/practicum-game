@@ -67,7 +67,7 @@ axiosInstance.defaults.paramsSerializer = {
 }
 
 export const axiosLocalApiInstance = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: VITE_LOCAL_SERVER_HOST,
   timeout: 3000,
 })
 
