@@ -68,7 +68,10 @@ export default function ThemeWrapper() {
             styleOverrides: {
               colorPrimary: ({ ownerState, theme }) => ({
                 backgroundColor: theme.palette.primary[theme.palette.mode],
-                color: theme.palette.primary.contrastText,
+                color:
+                  theme.palette[
+                    theme.palette.mode === 'light' ? 'primary' : 'secondary'
+                  ].contrastText,
               }),
             },
           },

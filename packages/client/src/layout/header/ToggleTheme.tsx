@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { Store } from '../../store/store.types'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 export function ToggleTheme() {
   const dispatch = useAppDispatch()
@@ -16,6 +17,7 @@ export function ToggleTheme() {
   const theme = useSelector((state: Store) => state.theme.theme)
 
   const [checked, setChecked] = useState(theme === 'light')
+  const [storageTheme, setStorageTheme] = useLocalStorage('theme', 'light')
 
   useEffect(() => {
     getTheme()
@@ -30,6 +32,8 @@ export function ToggleTheme() {
         .then(unwrapResult)
         .then(data => dispatch(updateTheme(data.value)))
         .catch(() => dispatch(updateTheme('light')))
+    } else {
+      dispatch(updateTheme(storageTheme))
     }
   }
   const switchTheme = (evn: React.MouseEvent<Element, MouseEvent>) => {
@@ -46,12 +50,11 @@ export function ToggleTheme() {
         .then(unwrapResult)
         .then(() => dispatch(updateTheme(newTheme)))
         .catch(error => console.log(error))
+    } else {
+      setStorageTheme(newTheme)
+      dispatch(updateTheme(newTheme))
     }
   }
 
-  return user.id ? (
-    <Switch checked={checked} onClick={switchTheme} />
-  ) : (
-    <div></div>
-  )
+  return <Switch checked={checked} onClick={switchTheme} />
 }
