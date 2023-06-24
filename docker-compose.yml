@@ -1,59 +1,63 @@
-version: "3.9"
+version: '3.9'
 
 services:
   client:
     container_name: prakticum-client
     image: client
     build:
-        context: .
-        dockerfile: Dockerfile.client
+      context: .
+      dockerfile: Dockerfile.client
     restart: always
     ports:
-        - "${CLIENT_PORT}:80"
+      - '${CLIENT_PORT}:80'
     environment:
-      env_file:
-        .env
+      env_file: .env
     depends_on:
       - server
+    networks:
+      - app
 
   server:
     container_name: prakticum-server
     image: server
     build:
-        context: .
-        dockerfile: Dockerfile.server
+      context: .
+      dockerfile: Dockerfile.server
     restart: always
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+    expose:
+      - '${SERVER_PORT}'
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PORT: ${POSTGRES_PORT}
-      env_file:
-        .env
+      env_file: .env
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - app
 
   postgres:
     image: postgres:14
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
-      env_file:
-        .env
+      env_file: .env
     volumes:
       - ./tmp/pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 5
-    restart:
-      always
+    restart: always
+    networks:
+      - app
 
+networks:
+  app:
