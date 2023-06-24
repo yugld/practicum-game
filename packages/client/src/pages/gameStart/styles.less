@@ -5,31 +5,33 @@
     height: 45px;
     border-radius: 30px;
     padding: 0 30px;
-    background-color: @button-color;
+    background: var(@ui-secondary-background__base);
+    color: var(@ui-main-color__base);
     width: 100%;
     font-size: 18px;
-    color: white;
     text-transform: none;
     cursor: pointer;
-  
+
     &:hover {
-        background-color: lighten(@button-color, 10%);
+        background-color: var(@ui-secondary-background__base);
+        opacity: 0.87;
     }
 }
 
 .button-text {
     height: 45px;
     padding: 0 10px;
-    background-color: transparent;
-    color: @ui-color[@orange][@9];
+    background-color: var(@ui-main-color__base);
     width: 100%;
     font-size: 18px;
     text-transform: none;
     cursor: pointer;
 
     &:hover {
-        color: lighten(@ui-color[@orange][@9], 10%);
+        color: var(@ui-secondary-background__base);
+        opacity: 0.87;
         background-color: transparent;
+
     }
 }
 
@@ -37,7 +39,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: @ui-color[@orange][@9];
+    color: var(@ui-main-color__base);
     height: 100%;
 
     &__wrapper {
@@ -63,7 +65,10 @@
         gap: 20px;
         padding: 20px;
         border-radius: 4px;
-        background-color: fade(@ui-color[@orange][@1], 70%);
+        background-color: var(@ui-main-background__base);
+        p {
+            opacity: 0.87;
+        }
     }
 
     &__rooms {
@@ -74,7 +79,8 @@
         gap: 20px;
         padding: 20px;
         border-radius: 4px;
-        background-color: fade(@ui-color[@orange][@1], 70%);
+        background-color: var(@ui-main-background__base);
+
     }
 
     &__room {

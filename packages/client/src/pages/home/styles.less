@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     gap: 30px;
-    color: @ui-color[@orange][@9];
+    color: var(@ui-main-color__base);
 
     &__subtitle {
         display: flex;
@@ -14,7 +14,7 @@
         gap: 20px;
         padding: 20px;
         border-radius: 4px;
-        background-color: fade(@ui-color[@orange][@1], 70%);
+        background-color: var(@ui-main-background__base);
 
         &_item {
             display: flex;
@@ -34,7 +34,8 @@
             gap: 20px;
             padding: 20px;
             border-radius: 4px;
-            background-color: fade(@ui-color[@orange][@1], 70%);
+            background-color: var(@ui-main-background__base);
+            opacity: 0.87;
         }
 
         &_link {

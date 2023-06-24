@@ -1,6 +1,19 @@
+.text-color () {
+    color: var(@ui-main-color__base);
+    opacity: 0.87;
+}
+.light-theme {
+    .thread{
+        background: var(@ui-secondary-background__base);
+    }
+}
+.dark-theme {
+    .thread{
+        background: var(@ui-main-background__base);
+    }
+}
 .thread {
     display: flex;
-    background: #D0D1CF;
     flex-direction: column;
     margin: 20px auto;
     border-radius: 4px;
@@ -10,7 +23,6 @@
     &__info {
         display: flex;
         justify-content: space-between;
-
         &__icon-back {
             margin-top: 6px;
             cursor: pointer;
@@ -20,20 +32,16 @@
     &__title {
         font-size: 24px;
         line-height: 28px;
-        color: rgba(0, 0, 0, 0.87);
-
+        .text-color();
     }
 
-    &__date {
+    &__date, &__text {
         line-height: 20px;
         letter-spacing: 0.25px;
-        color: rgba(0, 0, 0, 0.6);
+        .text-color();
     }
 
     &__text {
-        line-height: 20px;
-        letter-spacing: 0.25px;
-        color: rgba(0, 0, 0, 0.6);
         margin: 20px 0;
     }
 
@@ -42,8 +50,8 @@
         justify-content: space-between;
         line-height: 20px;
         letter-spacing: 0.25px;
-        color: rgba(0, 0, 0, 0.6);
         margin-bottom: 20px;
+        .text-color();
     }
 
     &__avatar {
@@ -53,13 +61,12 @@
     &__comments {
         display: flex;
         flex-direction: column;
-        background-color: #D0D1CF;
 
         &__title {
             font-size: 18px;
             line-height: 28px;
-            color: rgba(0, 0, 0, 0.87);
             margin-bottom: 10px;
+            .text-color();
         }
 
         &__form {
@@ -69,7 +76,7 @@
 
         &__input {
             display: flex;
-            background-color: #D0D1CF;
+            background-color: var(@ui-secondary-background__base);
             border-radius: 4px;
             height: 48px;
             margin: auto 0;
@@ -89,19 +96,19 @@
             }
 
             &__author {
-                color: rgba(0, 0, 0, 0.87);
                 margin-bottom: 8px;
+                .text-color();
             }
 
             &__text {
                 display: flex;
                 align-items: start;
-                color: rgba(0, 0, 0, 0.6);
+                .text-color();
             }
 
             &__date {
                 align-items: end;
-                color: #535453;
+                .text-color();
             }
         }
     }
