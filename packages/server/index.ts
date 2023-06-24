@@ -34,6 +34,8 @@ async function startServer() {
   const port = Number(process.env.SERVER_PORT) || 3001
 
   app.get('/api', (_, res) => {
+    res.setHeader('Content-Type', 'application/json')
+    res.contentType('application/json')
     res.json('👋 Howdy from the server :)')
   })
 
