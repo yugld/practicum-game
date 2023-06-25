@@ -4,6 +4,7 @@ import Board from './Board'
 import {
   CardType,
   GameProgress,
+  IEventListener,
   ResultMessageType,
   ResultMessageTypeEnum,
 } from '../types'
@@ -26,9 +27,11 @@ import {
 import CardDeck from './CardDeck'
 import { cardList, CHARACTER_VALUES } from '../../../constants/cardList'
 import { store } from '../../../store/store'
+
 class GameProgressModel {
   websocket: WebSocket | null = null
   board: Board | null = null
+  listeners: IEventListener[] = []
   constructor() {
     this.canvasClickHandler = this.canvasClickHandler.bind(this)
     this.startNewRound = this.startNewRound.bind(this)
@@ -43,10 +46,25 @@ class GameProgressModel {
     if (!board) {
       console.log('Board is undefined')
     }
-    board?.addEventListener('click', this.canvasClickHandler)
+    if (board) {
+      board?.addEventListener('click', this.canvasClickHandler)
+
+      this.listeners.push({
+        element: board,
+        eventName: 'click',
+        foo: this.canvasClickHandler,
+      })
+    }
 
     this.board = new Board(board)
     this.board?.setDimensionsCanvas()
+  }
+
+  unmountBoard() {
+    for (let i = 0; i < this.listeners.length; i++) {
+      const { element, eventName, foo } = this.listeners[i]
+      element.removeEventListener(eventName, foo)
+    }
   }
 
   initMessageListener(message: { data: any; type: string }) {
@@ -83,6 +101,10 @@ class GameProgressModel {
           this.startNewRound()
         }
 
+        return
+      }
+      if (!Array.isArray(data) && data?.content?.status === 'finish_game') {
+        this.redirectToEndGamePage(data.content.winUser)
         return
       }
 
@@ -435,8 +457,23 @@ class GameProgressModel {
       (gameState.activePlayer && gameState.activePlayer.numberOfTokens > 7) ||
       (gameState.rivalPlayer && gameState.rivalPlayer.numberOfTokens > 7)
     ) {
-      console.log('end game')
+      this.websocket?.send(
+        JSON.stringify({
+          type: 'message',
+          content: {
+            status: 'finish_game',
+            winUser: gameState.isFinishPrevRound.winUser,
+          },
+        })
+      )
       return true
+    }
+  }
+
+  redirectToEndGamePage(winUser: number) {
+    store.dispatch(updateFinishPrevRound({ winUser: winUser }))
+    if (window.pushpath) {
+      window.pushpath('/finish')
     }
   }
   discardCard(card?: CardType) {
@@ -457,8 +494,6 @@ class GameProgressModel {
           ) {
             if (!gameState.activePlayer) return
             // Выигрывает активный игрок
-            // activePlayer.numberOfTokens += 1
-
             store.dispatch(
               updateActivePlayer({
                 numberOfTokens: gameState.activePlayer.numberOfTokens + 1,
@@ -644,7 +679,7 @@ class GameProgressModel {
       }
     }
   }
-  canvasClickHandler(event: MouseEvent) {
+  canvasClickHandler(event: Event) {
     const returnedCard = this.board?.handleClickOnCard(event)
     if (returnedCard) {
       store.dispatch(updateDiscardedCard(returnedCard))

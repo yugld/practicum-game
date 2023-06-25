@@ -19,6 +19,7 @@ import { getUser } from './store/userSlice'
 import Thread from './pages/thread/Thread'
 
 import './App.less'
+import { GameEnd } from './pages/gameEnd/GameEnd'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -28,29 +29,31 @@ function App() {
     dispatch(getUser())
   }, [])
 
-
   const { isDarkTheme } = useContext(ThemeContext)
 
   if (isUserLoading) {
-    return <div>Загрузка...</div>;
+    return <div>Загрузка...</div>
   }
 
-  return <div className={ `app ${ isDarkTheme ? DARK_THEME : LIGHT_THEME }` }>
-    <MainHeader />
-    <Routes>
-      <Route path='*' element={ <NotFound /> } />
-      <Route path='/' element={ <Home /> } />
-      <Route path='/login' element={ <Login /> } />
-      <Route path='/registration' element={ <Registration /> } />
-      <Route path='/profile' element={ <Profile /> } />
-      <Route path='/leaderboard' element={ <Leaderboard /> } />
-      <Route path='/forum' element={ <Forum /> } />
-      <Route path='/thread' element={ <Thread /> } />
-      <Route path='/rules' element={ <GameRules /> } />
-      <Route path='/rooms' element={ <GameStart /> } />
-      <Route path='/rooms/:roomId/*' element={ <GameNavigation /> } />
-    </Routes>
-  </div>
+  return (
+    <div className={`app ${isDarkTheme ? DARK_THEME : LIGHT_THEME}`}>
+      <MainHeader />
+      <Routes>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/forum" element={<Forum />} />
+        <Route path="/thread" element={<Thread />} />
+        <Route path="/rules" element={<GameRules />} />
+        <Route path="/rooms" element={<GameStart />} />
+        <Route path="/finish" element={<GameEnd />} />
+        <Route path="/rooms/:roomId/*" element={<GameNavigation />} />
+      </Routes>
+    </div>
+  )
 }
 
 export default App

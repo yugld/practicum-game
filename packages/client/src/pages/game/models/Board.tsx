@@ -3,6 +3,7 @@ import {
   CardType,
   CoordinatesType,
   DimensionsType,
+  IEventListener,
 } from '../types'
 import { DiscardedCardType } from '../../../store/gameState.types'
 
@@ -22,6 +23,7 @@ export default class Board {
   areaCards: AreaCardType[] = []
   coordinates: CoordinatesType[] = []
   choiceCards: boolean[] = [false, false]
+  listeners: IEventListener[] = []
 
   constructor(canvasRef: HTMLCanvasElement | null) {
     this.canvas = canvasRef as HTMLCanvasElement
@@ -122,9 +124,10 @@ export default class Board {
     })
   }
 
-  handleClickOnCard(event: MouseEvent): CardType | undefined {
-    const mouseX: number = event.offsetX
-    const mouseY: number = event.offsetY
+  handleClickOnCard(event: Event): CardType | undefined {
+    const evn = event as MouseEvent
+    const mouseX: number = evn.offsetX
+    const mouseY: number = evn.offsetY
 
     function isIntersect(area: AreaCardType) {
       return (
@@ -170,12 +173,20 @@ export default class Board {
 
   // Стереть предыдущую карту
   clearCard() {
+    this.removeEventListeners()
     this.context.clearRect(
       this.canvas.width / 2 - this.cardDimensions.width - MARGIN,
       this.canvas.height / 2 - 60,
       this.canvas.width / 2 + this.cardDimensions.width + MARGIN,
       this.canvas.height / 2 - 40 + this.cardDimensions.height
     )
+  }
+
+  removeEventListeners() {
+    for (let i = 0; i < this.listeners.length; i++) {
+      const { element, eventName, foo } = this.listeners[i]
+      element.removeEventListener(eventName, foo)
+    }
   }
 
   // В зависимости от переданных размеров определить область клика
@@ -207,8 +218,7 @@ export default class Board {
     // src = src.replace('/images', '')
     console.log(src)
     image.src = src
-
-    image.addEventListener('load', () => {
+    const handlerImageLoad = () => {
       if (isDiscardedCard) {
         this.context.globalAlpha = 0.4
       }
@@ -221,6 +231,13 @@ export default class Board {
         dimensions.height
       )
       this.context.globalAlpha = 1.0
+    }
+
+    image.addEventListener('load', handlerImageLoad)
+    this.listeners.push({
+      element: image,
+      eventName: 'load',
+      foo: handlerImageLoad,
     })
   }
 

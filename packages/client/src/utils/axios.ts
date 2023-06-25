@@ -1,5 +1,6 @@
 import axios, {AxiosError, CancelTokenSource} from 'axios';
 import qs from 'qs';
+import { VITE_LOCAL_SERVER_HOST } from '../constants/env';
 
 export const RESOURCE_URL = 'https://ya-praktikum.tech/api/v2/resources';
 const BASE_URL = 'https://ya-praktikum.tech/api/v2';
@@ -62,5 +63,15 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(undefined, responseInterceptorError);
 axiosInstance.defaults.paramsSerializer = {
+    serialize: (params) => qs.stringify(params, {arrayFormat: 'repeat'})
+};
+
+export const axiosLocalApiInstance = axios.create({
+    baseURL: VITE_LOCAL_SERVER_HOST,
+    timeout: 3000,
+});
+
+axiosLocalApiInstance.interceptors.response.use(undefined, responseInterceptorError);
+axiosLocalApiInstance.defaults.paramsSerializer = {
     serialize: (params) => qs.stringify(params, {arrayFormat: 'repeat'})
 };

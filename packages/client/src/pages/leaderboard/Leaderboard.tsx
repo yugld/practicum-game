@@ -1,38 +1,58 @@
-import { Avatar, Icon, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
-import React, { cloneElement } from "react";
+import { useEffect, useState } from "react";
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { unwrapResult } from '@reduxjs/toolkit'
+import { useAppDispatch } from "../../store/store";
+import { getTopFiveUsers } from "../../store/leaderboardSlice";
+import { IUser } from "../../store/userSlice.types";
+import { LeaderboardUser } from "../../store/leaderboardSlice.types";
+import { getUserById } from "../../store/userSlice";
+import { withAuthorizationCheck } from "../../utils/authorizedPage";
+import { RESOURCE_URL } from "../../utils/axios";
 
 import './leaderboard.less'
-import { withAuthorizationCheck } from "../../utils/authorizedPage";
 
-function generate(element: React.ReactElement) {
-  return [0, 1, 2, 3, 5].map((value) =>
-    cloneElement(element, {
-      key: value,
-    }),
-  );
-}
+const Leaderboard = () => {
+  const dispatch = useAppDispatch();
+  const [leaderboardUsers, setLeaderboardUsers] = useState<IUser[]>([]);
 
-function Leaderboard() {
+  useEffect(() => {
+    dispatch(getTopFiveUsers())
+      .then(unwrapResult)
+      .then(async (users: LeaderboardUser[]) => await getLeaderboardUsersList(users));
+  }, []);
+
+  const getLeaderboardUsersList = async (topUsers: LeaderboardUser[]) => {
+    const tmpUserList: IUser[] = [];
+
+    for (const topUser of topUsers) {
+      await dispatch(getUserById(topUser.userId)).then(unwrapResult).then((user) => {
+        const leaderboardUser = {...user, winCount: topUser.winCount};
+        tmpUserList.push(leaderboardUser);
+      });
+    }
+
+    setLeaderboardUsers(tmpUserList);
+  };
+
   return (
     <main className="page leaderboard">
       <div className="leaderboard__title">Лидерборд</div>
       <List sx={{ width: '100%' }}>
-        {generate(
+        {leaderboardUsers.map((user) => (
           <ListItem sx={{ display: 'flex', }}>
             <ListItemAvatar>
-              <Avatar sx={{ width: 50, height: 50, mr: 3 }}>
-                <Icon />
-              </Avatar>
+              <Avatar
+                  src={user.avatar ? `${RESOURCE_URL}${user.avatar}` : ''}
+                  sx={{ width: 56, height: 56, mr: 3 }}
+                  alt="avatar"
+              />
             </ListItemAvatar>
-            <ListItemText
-              primary="Имя"
-              secondary='Фамилия'
-            />
+            <ListItemText primary={user.display_name || user.login} />
             <ListItemText style={{ display: 'flex', justifyContent: 'flex-end' }}
-              primary="100"
+              primary={user.winCount}
             />
           </ListItem>
-        )}
+        ))}
       </List>
     </main>
   )

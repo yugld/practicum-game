@@ -5,6 +5,7 @@ import { roomReducer } from './roomSlice'
 import { userReducer } from './userSlice'
 import { addUserDialogReducer } from './addUserDialogSlice'
 import { gameStateReducer } from './gameState'
+import { leaderboardReducer } from './leaderboardSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     user: userReducer,
     addUserDialog: addUserDialogReducer,
     gameState: gameStateReducer,
+    leaderboard: leaderboardReducer
   },
 })
 
