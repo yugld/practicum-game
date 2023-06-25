@@ -1,0 +1,22 @@
+.add_reaction {
+    cursor: pointer;
+    position: relative;
+
+    .emoji_popup {
+        position: absolute;
+        font-size: 20px;
+        display: none;
+        top: 40px;
+        right: 3px;
+
+        .emoji {
+            margin: 0;
+        }
+    }
+
+    &:hover {
+        .emoji_popup {
+            display: flex;
+        }
+    }
+}
