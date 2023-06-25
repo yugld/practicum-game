@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Dispatch } from "react";
 import "./EmojiItem.less";
+import {IEmoji} from "../emoji.types"
 
 type Props = {
     emoji: IEmoji;

@@ -3,6 +3,7 @@ import { Dispatch } from "react";
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import { EmojiList } from "../EmojiList";
 import "./addReaction.less";
+import {IEmoji} from "../emoji.types"
 
 type Props = {
     emojis: IEmoji[];

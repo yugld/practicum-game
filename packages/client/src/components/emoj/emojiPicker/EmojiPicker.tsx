@@ -5,7 +5,7 @@ import { Store } from "../../../store/store.types";
 import { EmojiItem } from "../emojiItem/EmojiItem";
 import { AddReaction } from "../addReaction/AddReaction";
 import "./emojiPicker.less";
-
+import { IEmoji } from "../emoji.types"
 
 interface Props {
     emojis: IEmoji[];
