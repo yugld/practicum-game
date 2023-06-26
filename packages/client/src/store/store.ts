@@ -6,6 +6,7 @@ import { userReducer } from './userSlice'
 import { addUserDialogReducer } from './addUserDialogSlice'
 import { gameStateReducer } from './gameState'
 import { leaderboardReducer } from './leaderboardSlice'
+import { themeReducer } from './theme'
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ export const store = configureStore({
     user: userReducer,
     addUserDialog: addUserDialogReducer,
     gameState: gameStateReducer,
-    leaderboard: leaderboardReducer
+    leaderboard: leaderboardReducer,
+    theme: themeReducer,
   },
 })
 
