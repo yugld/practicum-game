@@ -5,6 +5,7 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import IconSend from "./components/icons/IconSend";
 import { useNavigate } from "react-router-dom";
+import { EmojiPicker } from "../../components/emoj/emojiPicker/EmojiPicker";
 import { getUserCoordinates } from "../../utils/geolocationAPI";
 
 const Thread = () => {
@@ -29,6 +30,15 @@ const Thread = () => {
                         <Avatar className='thread__avatar' sx={{ width: 20, height: 20 }} />
                         <div className='thread__author'>Haaaaaaaa Haaaaaaaaa</div>
                     </div>
+                    <EmojiPicker emojis={
+                        [{
+                            "content": "🐧",
+                            "users": [565757, 45454]
+                        },
+                        {
+                            "content": "🐱",
+                            "users": [565757]
+                        }]} />
                 </div>
             </div>
             <div className='thread__comments'>
