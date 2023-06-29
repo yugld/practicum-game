@@ -9,6 +9,7 @@ import { validateForm } from '../../utils/formValidation';
 import { useAuthentification } from '../../utils/useAuthentification';
 import { useAppDispatch } from '../../store/store';
 import { getUser, signinUser } from '../../store/userSlice';
+import { getServiceId } from '../../store/oAuthSlice';
 
 import './styles.less';
 
@@ -45,6 +46,11 @@ const Login = () => {
         .then(() => dispatch(getUser()))
         .catch((reason) => setFormError(reason));
     }
+  }
+
+  function handleYandexLogin(e: FormEvent) {
+    e.preventDefault();
+    dispatch(getServiceId());
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -92,6 +98,7 @@ const Login = () => {
           actions={
             <>
               <CustomizedButton text={<span>Авторизация</span>} onClick={handleSubmit} />
+              <CustomizedButton text={<span>Войти через Яндекс ID</span>} onClick={handleYandexLogin} />
               <Link href="/registration" text="Нет аккаунта?" />
             </>
           }

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import MainHeader from './layout/header/MainHeader'
 import GameNavigation from './modules/gameNavigation/GameNavigation'
@@ -16,18 +16,31 @@ import { useAppDispatch } from './store/store'
 import { Store } from './store/store.types'
 import { getUser } from './store/userSlice'
 import Thread from './pages/thread/Thread'
-
-import './App.less'
 import { GameEnd } from './pages/gameEnd/GameEnd'
 import { ThemeEnum } from './store/ThemeSlice.types'
+import { login } from './store/oAuthSlice'
+
+import './App.less'
 
 function App() {
+  const [params] = useSearchParams();
+  const oAuthCode = params.get("code");
   const dispatch = useAppDispatch()
   const isUserLoading = useSelector((state: Store) => state.user.isUserLoading)
 
   useEffect(() => {
     dispatch(getUser())
   }, [])
+
+  useEffect(() => {
+    if (!oAuthCode)
+      return;
+
+    window.history.pushState({}, "", window.location.origin);
+
+    dispatch(login(oAuthCode))
+      .then(() => dispatch(getUser()));
+  }, [oAuthCode])
 
   const theme = useSelector((state: Store) => state.theme.theme)
 

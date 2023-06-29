@@ -7,6 +7,7 @@ import { addUserDialogReducer } from './addUserDialogSlice'
 import { gameStateReducer } from './gameState'
 import { leaderboardReducer } from './leaderboardSlice'
 import { themeReducer } from './theme'
+import { oAuthReducer } from './oAuthSlice'
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     gameState: gameStateReducer,
     leaderboard: leaderboardReducer,
     theme: themeReducer,
+    oauth: oAuthReducer
   },
 })
 

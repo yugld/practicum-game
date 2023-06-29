@@ -5,6 +5,7 @@ import { UserSlice } from './userSlice.types'
 import { GameStateSlice } from './gameState.types'
 import { LeaderboardSlice } from './leaderboardSlice.types'
 import { ThemeStateSlice } from './ThemeSlice.types'
+import { OAuthSlice } from './oAuthSlice.types'
 
 export interface Store {
   rooms: RoomsSlice
@@ -13,5 +14,6 @@ export interface Store {
   addUserDialog: AddUserDialogSlice
   gameState: GameStateSlice
   leaderboard: LeaderboardSlice
-  theme: ThemeStateSlice
+  theme: ThemeStateSlice,
+  oauth: OAuthSlice
 }
