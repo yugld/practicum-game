@@ -1,20 +1,47 @@
 import dotenv from 'dotenv'
 import cors from 'cors'
-dotenv.config()
 
 import express from 'express'
-import { createClientAndConnect } from './db'
+import morgan from 'morgan'
+import { dbConnect } from './db/init'
+import router from './routes/index'
 
-const app = express()
-app.use(cors())
-const port = Number(process.env.SERVER_PORT) || 3001
+if (process.env.NODE_ENV === 'development') {
+  dotenv.config({ path: __dirname + '/./../../.env' })
+}
 
-createClientAndConnect()
+async function startServer() {
+  const app = express()
+  app.use(cors())
+  app.use(express.json())
 
-app.get('/', (_, res) => {
-  res.json('👋 Howdy from the server :)')
-})
+  app.use((req, res, next) => {
+    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+    )
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-Requested-With,content-type'
+    )
+    res.contentType('application/json')
 
-app.listen(port, () => {
-  console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
-})
+    next()
+  })
+  app.use(morgan('tiny')).use(router)
+  const port = Number(process.env.SERVER_PORT) || 3001
+
+  app.get('/api', (_, res) => {
+    res.setHeader('Content-Type', 'application/json')
+    res.contentType('application/json')
+    res.json('👋 Howdy from the server :)')
+  })
+
+  app.listen(port, () => {
+    console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
+  })
+}
+
+dbConnect().then(async () => startServer())

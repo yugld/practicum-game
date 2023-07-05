@@ -1,0 +1,6 @@
+dist/
+.github/
+docs/
+node_modules/
+.idea/
+tmp/

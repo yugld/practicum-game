@@ -1,0 +1,115 @@
+.text-color () {
+    color: var(@ui-main-color__base);
+    opacity: 0.87;
+}
+.light-theme {
+    .thread{
+        background: var(@ui-secondary-background__base);
+    }
+}
+.dark-theme {
+    .thread{
+        background: var(@ui-main-background__base);
+    }
+}
+.thread {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    border-radius: 4px;
+    padding: 20px;
+    width: 60vw;
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        &__icon-back {
+            margin-top: 6px;
+            cursor: pointer;
+        }
+    }
+
+    &__title {
+        font-size: 24px;
+        line-height: 28px;
+        .text-color();
+    }
+
+    &__date, &__text {
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        .text-color();
+    }
+
+    &__text {
+        margin: 20px 0;
+    }
+
+    &__info-comment {
+        display: flex;
+        justify-content: space-between;
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        margin-bottom: 20px;
+        .text-color();
+    }
+
+    &__avatar {
+        margin: 0 10px;
+    }
+
+    &__comments {
+        display: flex;
+        flex-direction: column;
+
+        &__title {
+            font-size: 18px;
+            line-height: 28px;
+            margin-bottom: 10px;
+            .text-color();
+        }
+
+        &__form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        &__input {
+            display: flex;
+            background-color: var(@ui-secondary-background__base);
+            border-radius: 4px;
+            height: 48px;
+            margin: auto 0;
+        }
+    }
+
+    &__comments__history {
+        .comment {
+            display: flex;
+            margin-bottom: 25px;
+
+            &__info{
+                display: flex;
+                flex-direction: column;
+                margin-left: 15px;
+                width: 45vw;
+            }
+
+            &__author {
+                margin-bottom: 8px;
+                .text-color();
+            }
+
+            &__text {
+                display: flex;
+                align-items: start;
+                .text-color();
+            }
+
+            &__date {
+                align-items: end;
+                .text-color();
+            }
+        }
+    }
+}

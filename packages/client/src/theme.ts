@@ -1,40 +1,64 @@
 import { Theme, createTheme } from '@mui/material/styles'
 
 const basicTheme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      light: '#AFBABE',
+      main: '#AFBABE',
+      dark: '#3C3532',
+      contrastText: '#383339',
+    },
+    secondary: {
+      light: '#D0D1CF',
+      main: '#D0D1CF',
+      dark: '#77584C',
+      contrastText: '#ffffff',
+    },
+  },
   components: {
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState, theme }) => ({
           borderRadius: '30px',
           textTransform: 'none',
-          color: 'rgba(34, 58, 71, 1)'
-        },
+          color: theme.palette.primary[theme.palette.mode],
+        }),
 
-        containedPrimary: {
-          backgroundColor: 'rgba(175, 186, 190, 1)',
+        containedPrimary: ({ ownerState, theme }) => ({
+          backgroundColor: theme.palette.secondary[theme.palette.mode],
 
           '&:hover': {
-            backgroundColor: 'rgba(157, 167, 173, 1)'
-          }
-        }
-      }
+            backgroundColor: theme.palette.secondary[theme.palette.mode],
+            opacity: 0.87,
+          },
+        }),
+      },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          marginBottom: '40px'
-        }
-      }
+          marginBottom: '40px',
+        },
+      },
     },
     MuiAppBar: {
       styleOverrides: {
-        colorPrimary: {
-          backgroundColor: 'rgba(175, 186, 190, 1)',
-          color: 'rgba(34, 58, 71, 1)'
-        }
-      }
-    }
-  }
+        colorPrimary: ({ ownerState, theme }) => ({
+          backgroundColor: theme.palette.primary[theme.palette.mode],
+          color: theme.palette.primary.contrastText,
+        }),
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        colorDefault: ({ ownerState, theme }) => ({
+          backgroundColor: theme.palette.secondary[theme.palette.mode],
+          color: theme.palette.secondary.contrastText,
+        }),
+      },
+    },
+  },
 })
 
 const theme: Theme = createTheme(basicTheme)

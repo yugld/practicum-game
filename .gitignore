@@ -8,3 +8,4 @@ package-lock.json
 yarn.lock
 lerna-debug.log
 .DS_Store
+ssr-dist
