@@ -3,7 +3,7 @@ import { axiosInstance } from "../utils/axios";
 import { OAuthLoginRequestData, OAuthServiceRequestData, OAuthSlice } from "./oAuthSlice.types";
 
 const OAUTH_URI_AUTHORIZE = "https://oauth.yandex.ru/authorize?response_type=code";
-const REDIRECT_URI = `${window.location.origin}/`;
+const REDIRECT_URI = 'https://meeples.ya-praktikum.tech/';
 
 export const initialState: OAuthSlice = {
     loading: false,
