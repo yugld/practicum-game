@@ -16,6 +16,9 @@ services:
       - server
     networks:
       - app
+    volumes:
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
 
   server:
     container_name: prakticum-server
@@ -58,6 +61,11 @@ services:
     restart: always
     networks:
       - app
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/
 
 networks:
   app:
