@@ -4,8 +4,10 @@ import express from 'express'
 import morgan from 'morgan'
 import { dbConnect } from './db/init'
 import router from './routes/index'
-import cookieParser from 'cookie-parser';
-import { checkAuthMiddleware, proxyMiddleware } from './middleware/checkAuthMiddleware'
+import {
+  checkAuthMiddleware,
+  proxyMiddleware,
+} from './middleware/checkAuthMiddleware'
 
 if (process.env.NODE_ENV === 'development') {
   dotenv.config({ path: __dirname + '/./../../.env' })
@@ -21,11 +23,8 @@ async function startServer() {
     })
   )
   app.use(express.json())
-  app.use(cookieParser())
-  
+
   app.use('/api/v2', proxyMiddleware())
-  app.use('/api/userRating/top', checkAuthMiddleware)
-  app.use('/api/theme', checkAuthMiddleware)
 
   app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json')
