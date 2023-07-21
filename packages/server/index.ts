@@ -4,10 +4,6 @@ import express from 'express'
 import morgan from 'morgan'
 import { dbConnect } from './db/init'
 import router from './routes/index'
-import {
-  checkAuthMiddleware,
-  proxyMiddleware,
-} from './middleware/checkAuthMiddleware'
 
 if (process.env.NODE_ENV === 'development') {
   dotenv.config({ path: __dirname + '/./../../.env' })
@@ -23,8 +19,6 @@ async function startServer() {
     })
   )
   app.use(express.json())
-
-  app.use('/api/v2', proxyMiddleware())
 
   app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json')
