@@ -7,19 +7,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.client
+    restart: always
     ports:
-      - 80:80
-      - 443:443
+      - '${CLIENT_PORT}:80'
     environment:
       env_file: .env
     depends_on:
       - server
     networks:
       - app
-    volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - /etc/letsencrypt/:/etc/nginx/ssl/:ro
 
   server:
     container_name: prakticum-server
@@ -63,13 +59,5 @@ services:
     networks:
       - app
 
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
-
 networks:
   app:
-    name: app
-    external: true
