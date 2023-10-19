@@ -1,0 +1,18 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-size:cover;
+    background-repeat: repeat;
+    color: var(@ui-main-color__base);
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    &.light-theme {
+        background-image: url('./assets/images/background.svg');
+
+    }
+    &.dark-theme{
+        background-image: url('./assets/images/background-dark.svg');
+
+    }
+}

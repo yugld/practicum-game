@@ -57,11 +57,16 @@
 Откройте issue, я приду :)
 
 ## Автодеплой статики на vercel
-Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
-Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
-В качестве `root directory` укажите `packages/client`
 
-Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
+[//]: # (Зарегистрируйте аккаунт на [vercel]&#40;https://vercel.com/&#41;)
+
+[//]: # (Следуйте [инструкции]&#40;https://vitejs.dev/guide/static-deploy.html#vercel-for-git&#41;)
+
+[//]: # (В качестве `root directory` укажите `packages/client`)
+
+[//]: # ()
+[//]: # (Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот)
+Проект деплоится на [Vercel](https://vercel.com/mariashamonova/practicum-game-client/BSejq6CggDV8WhfQS4GQSRT4J3ok)
 
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`

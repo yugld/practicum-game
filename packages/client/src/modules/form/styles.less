@@ -1,0 +1,40 @@
+@import '../../assets/base/variables.less';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  background-color: var(@ui-main-background__base);
+  color: var(@ui-main-color__base);
+  border-radius: 4px;
+  box-shadow: 0 2px 13px 0 @ui-form-shadow-color;
+  padding: 50px;
+
+  &__title {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+
+  &__body {
+    width: 100%;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+
+    .button {
+      margin-bottom: 10px;
+    }
+  }
+}

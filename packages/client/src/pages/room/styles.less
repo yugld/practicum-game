@@ -1,0 +1,55 @@
+@import '../../assets/base/colors.less';
+@import '../../assets/base/variables.less';
+
+.room-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(@ui-main-color__base);
+    height: 100%;
+    gap: 100px;
+
+    &__header {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        &-buttons {
+            width: 70%;
+            display: flex;
+            gap: 30px;
+        }
+    }
+
+    &__players {
+        width: 30%;
+        border-radius: 4px;
+        background-color: var(@ui-secondary-background__base);
+    }
+
+    &__player {
+        display: flex;
+        gap: 20px;
+    }
+
+    &__dialog {
+        min-width: 500px;
+
+        &_input {
+            width: 100%;
+        }
+
+        &_player {
+            display: flex;
+            gap: 20px;
+        }
+
+        &_footer {
+            display: flex;
+            gap: 20px;
+            padding: 16px 24px;
+        }
+    }
+}

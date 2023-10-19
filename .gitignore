@@ -4,3 +4,8 @@ node_modules/
 .vscode
 dist
 tmp
+package-lock.json
+yarn.lock
+lerna-debug.log
+.DS_Store
+ssr-dist
